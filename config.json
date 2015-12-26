@@ -1,0 +1,23 @@
+{
+	"serviceUrl": "/server/server.php",
+	"navigation": [
+		{
+			"id": 0,
+			"label": "Начать боевое дежурство",
+			"states": ["initialState"],
+			"command": "startDuty"
+		},
+		{
+			"id": 1,
+			"label": "Журнал дежурств",
+			"states": ["initialState"],
+			"command": "showJournal"
+		},
+		{
+			"id": 2,
+			"label": "Управление данными",
+			"states": ["initialState"],
+			"command": "showDataManager"
+		}
+	]
+}

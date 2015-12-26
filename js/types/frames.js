@@ -1,0 +1,1 @@
+var JOURNAL_GRID_FRAME = 'journalGridFrame';
