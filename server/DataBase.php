@@ -33,7 +33,7 @@ class DataBase {
      * Получение информации о последнем завершённом дежурстве.
      */
     public function getLastCompleteDuty () {
-        $sql = 'SELECT * FROM duty_tbl WHERE duty_end_date = null';
+        $sql = 'SELECT * FROM duty_tbl WHERE duty_end_date IS NOT NULL';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }

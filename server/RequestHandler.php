@@ -25,10 +25,11 @@ class RequestHandler {
         $lastCompleteDuty = $this->db->getLastCompleteDuty();
 		$result = array();
         if (!empty($lastCompleteDuty)) {
-
+			//array('date' => null, 'duration' => null);
+			//array('startDate' => null);
         } else {
-			$result['lastDuty'] = null;//array('date' => null, 'duration' => null);
-			$result['activeDuty'] = null;//array('startDate' => null);
+			$result['lastDuty'] = null;
+			$result['activeDuty'] = null;
 		}
 
         return $result;
@@ -39,7 +40,7 @@ class RequestHandler {
 	 */
 	public function createDuty () {
 		$startDate = date('Y-m-d H:i:s');
-		$name = 'Боевое дежурство ' . date('d.m.Y');
+		$name = 'Боевое дежурство ' . $startDate;
 
 		$dutyId = $this->db->createDuty($startDate, $name);
 		$result = array('dutyId' => $dutyId, 'name' => $name);
