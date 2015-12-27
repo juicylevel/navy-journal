@@ -18,6 +18,7 @@ var scripts = [
 
 	'components/DataGrid',
 	'components/JournalLayout',
+	'components/Notifier',
 
 	'service/Service',
 
