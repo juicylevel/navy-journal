@@ -1,6 +1,8 @@
 * {
 	margin: 0px;
 	padding: 0px;
+	font-family: sans-serif;
+	font-size: 12px;
 }
 
 nav, section, footer {
@@ -24,13 +26,14 @@ nav, section, footer {
 	position: fixed;
 	left: 50%;
 	top: 50%;
+	width: 280px;
 	margin-left: -140px;
 	text-align: center;
 
-	border-width: 1px;
+	/*border-width: 1px;
 	border-style: solid;
-	border-color: #000000;
-	padding: 5px;
+	border-color: #000000;*/
+	/*padding: 5px;*/
 }
 
 #layoutBody {
@@ -44,7 +47,7 @@ nav, section, footer {
 #header {
 	margin: 5px;
 	padding: 3px;
-	
+
 	border-width: 1px;
 	border-style: solid;
 	border-color: #CC0000;
@@ -105,4 +108,46 @@ nav, section, footer {
 
 .dataGrid .paggingTools input[type="text"] {
 	width: 25px;
+}
+
+#notifications {
+	position: fixed;
+	left: 50%;
+	top: 0;
+	width: 400px;
+	margin-left: -200px;
+	border: 1px solid gray;
+	background-color: #EEEEEE;
+	padding: 3px;
+}
+
+#notifications .error {
+	border: 1px solid gray;
+	background-color: #F7BAA6;
+	margin: 5px;
+	padding: 3px;
+}
+
+#notifications .showDetailsButton {
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#notifications .messageContainer {
+	float: left;
+	width: 350px;
+}
+
+#notifications .closeButton {
+	float: right;
+	background: url('../img/closeIcon.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+.clearBoth {
+	clear: both;
+	height: 0px;
 }

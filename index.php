@@ -32,5 +32,7 @@ if (!$validated) {
 		<script src="js/scripts.js"></script>
 	</head>
 	<body>
+		<div id="content"></div>
+		<div id="notifications"></div>
 	</body>
 </html>
