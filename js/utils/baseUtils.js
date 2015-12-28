@@ -36,7 +36,7 @@ function createUrl (parameters) {
 /**
  * Получение элементов по значению атрибута.
  */
-function getElementsByAttribute (attributeName, attributeValue, context) {
+function getElementsByAttribute (context, attributeName, attributeValue, all) {
 	var selector = !isEmpty(attributeValue) ?
 		'[' + attributeName + '=' + attributeValue + ']' :
 		'[' + attributeName + ']';
@@ -45,7 +45,18 @@ function getElementsByAttribute (attributeName, attributeValue, context) {
 		context = document;
 	}
 
-	return context.querySelectorAll(selector);
+	var elements = context.querySelectorAll(selector);
+	var result = null;
+
+	if (!isEmpty(elements)) {
+		if (all) {
+			result = elements;
+		} else {
+			result = elements[0];
+		}
+	}
+
+	return result;
 };
 
 /**

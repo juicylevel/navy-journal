@@ -24,7 +24,7 @@ JournalView.prototype.getHandlers = function () {
  * Отрисовка компонента.
  */
 JournalView.prototype.render = function () {
-    this.domElement = document.getElementsByTagName('body')[0];
+    this.domElement = document.getElementById('content');
     this.sendNotification(new Notification(VIEW_READY));
 };
 
@@ -42,8 +42,8 @@ JournalView.prototype.showStartDutyDialog = function () {
     startDutyDialogEl.className = 'startDutyDialog';
     startDutyDialogEl.innerHTML = startDutyDialogHtml;
 
-    var startDutyButton = getElementsByAttribute('button', 'startDuty', startDutyDialogEl)[0];
-    var showJournalButton = getElementsByAttribute('button', 'showJournal', startDutyDialogEl)[0];
+    var startDutyButton = getElementsByAttribute(startDutyDialogEl, 'button', 'startDuty');
+    var showJournalButton = getElementsByAttribute(startDutyDialogEl, 'button', 'showJournal');
 
     startDutyButton.addEventListener('click', (function () {
         this.sendNotification(new Notification(CALL_START_DUTY));
@@ -66,9 +66,9 @@ JournalView.prototype.renderJournalUI = function () {
         '<div id="layoutBody">' +
             '<header id="header">'+
                 '<div class="lastDutyInfo">' +
-                    '<span style="font-weight: bold;">Последнее дежурство:</span>&nbsp;' +
+                    '<span>Последнее дежурство:</span>&nbsp;' +
                     '<span output="lastDutyDate"> - </span>&nbsp;' +
-                    '<span style="font-weight: bold;">Длительность:</span>&nbsp;' +
+                    '<span>Длительность:</span>&nbsp;' +
                     '<span output="lastDutyDuration"> - </span>&nbsp;' +
                 '</div>' +
             '</header>' +
@@ -103,8 +103,8 @@ JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
     var lastDutyInfoEl = this.domElement.getElementsByClassName('lastDutyInfo');
     if (!isEmpty(lastDutyInfoEl) && lastDutyInfoEl.length > 0) {
         lastDutyInfoEl = lastDutyInfoEl[0];
-        var lastDutyDateEl = getElementsByAttribute('output', 'lastDutyDate', this.domElement)[0];
-        var lastDutyDurationEl = getElementsByAttribute('output', 'lastDutyDuration', this.domElement)[0];
+        var lastDutyDateEl = getElementsByAttribute(this.domElement, 'output', 'lastDutyDate');
+        var lastDutyDurationEl = getElementsByAttribute(this.domElement, 'output', 'lastDutyDuration');
         lastDutyDateEl.innerHTML = this.lastDutyDate;
         lastDutyDurationEl.innerHTML = this.lastDutyDuration;
     }

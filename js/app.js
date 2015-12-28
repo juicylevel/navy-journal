@@ -12,6 +12,8 @@ function windowLoadEventHandler (event) {
  * Инициализация приложения.
  */
 function initApplication () {
+	Notifier.getInstance().init();
+
 	var journalModule = new Module(JournalModel, JournalView, JournalController);
 	journalModule.view.render();
 };
