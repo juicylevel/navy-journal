@@ -121,9 +121,30 @@ nav, section, footer {
 	padding: 3px;
 }
 
+#notifications .progress {
+	border: 1px solid gray;
+	background-color: #FFFFFF;
+	margin: 5px;
+	padding: 3px;
+}
+
+#notifications .preloader {
+	float: right;
+	background: url('../img/preloader.gif') no-repeat;
+	width: 24px;
+	height: 24px;
+}
+
 #notifications .error {
 	border: 1px solid gray;
 	background-color: #F7BAA6;
+	margin: 5px;
+	padding: 3px;
+}
+
+#notifications .success {
+	border: 1px solid gray;
+	background-color: #EEFAC7;
 	margin: 5px;
 	padding: 3px;
 }

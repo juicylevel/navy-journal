@@ -1,5 +1,8 @@
 {
 	"serviceUrl": "/server/server.php",
+	"ui": {
+		"showNotificationTime": 5
+	},
 	"navigation": [
 		{
 			"id": 0,
