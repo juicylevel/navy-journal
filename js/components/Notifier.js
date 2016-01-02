@@ -27,6 +27,59 @@ var Notifier = (function (document) {
             this.rootDomElement = document.getElementById('notifications');
         },
 
+		/**
+		 * Показ прогресса выполнения операции.
+		 * @param message Текст сообщения (описание операции).
+		 */
+		showProgress: function (message) {
+			var progressEl = document.createElement('div');
+			progressEl.setAttribute('progress', null);
+			progressEl.className = 'progress';
+
+			var progressHtml = '' +
+				'<div message-container class="messageContainer">' +
+					'<div message-text>' + message + '</div>' +
+					'<div progress-time style="color: #AAAAAA; font-style: italic;"></div>' +
+				'</div>' +
+				'<div class="preloader"></div>' +
+				'<div class="clearBoth"></div>';
+
+			progressEl.innerHTML = progressHtml;
+
+			var updateTimer = function () {
+				var progressTimeEl = getElementsByAttribute(progressEl, 'progress-time');
+				progressTimeEl.innerHTML = 'выполняется: ' + progressEl.progressTime++ + ' сек';
+			};
+
+			progressEl.progressTime = 0;
+			updateTimer();
+			progressEl.progressTimer = setInterval(updateTimer, 1000);
+
+			this.rootDomElement.appendChild(progressEl);
+			return progressEl;
+		},
+
+		/**
+		 * Скрытие прогресса выполнения операции.
+		 * @param progressEl DOM-элемент прогресса выполнения операции.
+		 */
+		hideProgress: function (progressEl) {
+			clearInterval(progressEl.progressTimer);
+			this.rootDomElement.removeChild(progressEl);
+		},
+
+		/**
+		 * Показ сообщения об успешном завершении операции.
+		 * @param message Теекст сообщения.
+		 */
+		showSuccess: function (message) {
+			var notificationItem = this.createNotificationItem('success', message);
+			notificationItem.showTimer = setTimeout((function () {
+				this.removeNotificationItem(notificationItem);
+			}).bind(this), Settings.getInstance().config.ui.showNotificationTime * 1000);
+			this.rootDomElement.appendChild(notificationItem);
+		},
+
         /**
          * Показ сообщения об ошибке.
          * @param message Теекст сообщения.
@@ -64,7 +117,7 @@ var Notifier = (function (document) {
 
 			var closeEl = getElementsByAttribute(itemEl, 'close-button');
 			closeEl.addEventListener('click', (function () {
-				this.rootDomElement.removeChild(itemEl);
+				this.removeNotificationItem(itemEl);
 			}).bind(this));
 
             return itemEl;
@@ -95,6 +148,15 @@ var Notifier = (function (document) {
 			});
 
 			return detailsEl;
+		},
+
+		/**
+		 * Удаление элемента оповещения.
+		 * @param DOM-элемент оповещения.
+		 */
+		removeNotificationItem: function (itemEl) {
+			clearTimeout(itemEl.showTimer);
+			this.rootDomElement.removeChild(itemEl);
 		}
 	};
 

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'utils.php';
 require_once 'DataBase.php';
 
 /**
@@ -24,12 +25,19 @@ class RequestHandler {
     public function getJournalStatus () {
         $lastCompleteDuty = $this->db->getLastCompleteDuty();
 		$result = array();
+
         if (!empty($lastCompleteDuty)) {
-			//array('date' => null, 'duration' => null);
-			//array('startDate' => null);
+			$startDate = new DateTime($lastCompleteDuty->duty_start_date);
+			$endDate = new DateTime($lastCompleteDuty->duty_end_date);
+
+			$duration = date_diff($startDate, $endDate);
+
+			$result['lastDuty'] = array(
+				'date' => $startDate->format('U'),
+				'duration' => dateIntervalToSeconds($duration)
+			);
         } else {
 			$result['lastDuty'] = null;
-			$result['activeDuty'] = null;
 		}
 
         return $result;

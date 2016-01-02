@@ -49,8 +49,7 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
  * Обработка события запуска боевого дежурства.
  */
 JournalController.prototype.onCallStartDuty = function () {
-	//this.service.createDuty();
-	Notifier.getInstance().showError('Произошла ошибка, приносим свои извинения.', 'Ошибка на сервере.');
+	this.service.createDuty();
 };
 
 /**

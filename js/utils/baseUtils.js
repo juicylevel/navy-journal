@@ -68,3 +68,41 @@ function removeChilds (node) {
 		node.removeChild(last);
 	}
 };
+
+/**
+ * Получение строки даты в формате d.m.Y
+ * @param date Объект Date или timestamp.
+ */
+function getDateString (date) {
+	if (typeof date === 'number') {
+		date = new Date(date * 1000);
+	}
+
+	var day     = formatDoubleDigit(date.getDate());
+	var month   = formatDoubleDigit(date.getMonth() + 1);
+	var year    = date.getFullYear();
+	var hours   = formatDoubleDigit(date.getHours());
+	var minutes = formatDoubleDigit(date.getMinutes());
+
+	return day + '.' + month + '.' + year + ' ' + hours + ':' + minutes;
+};
+
+/**
+ * Получение строки времени длительности (H.m.i).
+ * @param time Длительность в секундах.
+ */
+function getDurationString (time) {
+	var date = new Date(time * 1000);
+	var hours   = formatDoubleDigit(date.getUTCHours());
+	var minutes = formatDoubleDigit(date.getMinutes());
+	var seconds = formatDoubleDigit(date.getSeconds());
+
+	return hours + ':' + minutes + ':' + seconds;
+};
+
+/**
+ * Форматирование двузначного числового значения.
+ */
+function formatDoubleDigit (number) {
+	return number < 10 ? '0' + number : number;
+};

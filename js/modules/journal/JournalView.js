@@ -5,6 +5,9 @@
  */
 function JournalView (domElement) {
     View.apply(this, arguments);
+
+    this.lastDutyDate = '-';
+    this.lastDutyDuration = '-';
 };
 
 extend(JournalView, View);
@@ -67,9 +70,9 @@ JournalView.prototype.renderJournalUI = function () {
             '<header id="header">'+
                 '<div class="lastDutyInfo">' +
                     '<span>Последнее дежурство:</span>&nbsp;' +
-                    '<span output="lastDutyDate"> - </span>&nbsp;' +
+                    '<span output="lastDutyDate">' + this.lastDutyDate + '</span>&nbsp;' +
                     '<span>Длительность:</span>&nbsp;' +
-                    '<span output="lastDutyDuration"> - </span>&nbsp;' +
+                    '<span output="lastDutyDuration">' + this.lastDutyDuration + '</span>&nbsp;' +
                 '</div>' +
             '</header>' +
             '<nav id="navigationPanel">' +
@@ -93,8 +96,8 @@ JournalView.prototype.renderJournalUI = function () {
  */
 JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
     if (!isEmpty(lastDutyInfo)) {
-        this.lastDutyDate = lastDutyInfo.date;
-        this.lastDutyDuration = lastDutyInfo.duration;
+        this.lastDutyDate = getDateString(lastDutyInfo.date);
+        this.lastDutyDuration = getDurationString(lastDutyInfo.duration);
     } else {
         this.lastDutyDate = '-';
         this.lastDutyDuration = '-';

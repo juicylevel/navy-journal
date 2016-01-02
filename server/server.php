@@ -56,6 +56,8 @@ switch ($request) {
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }
 
+sleep(1);
+
 // формирование ответа при успешном выполнении запроса
 $response = array('apiMethod' => $request, 'result' => $result);
 echo json_encode($response, JSON_NUMERIC_CHECK);

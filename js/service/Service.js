@@ -11,7 +11,11 @@ extend(Service, Dispatcher);
  * Загрузка конфигурации приложения.
  */
 Service.prototype.loadConfig = function (url) {
-	this.sendRequest('GET', LOAD_CONFIG_COMPLETE, {request: 'loadFile', url: url});
+	this.sendRequest('GET', LOAD_CONFIG_COMPLETE, {
+		request: 'loadFile',
+		url: url,
+		message: 'Загрузка файла конфигурации'
+	});
 };
 
 /**
@@ -43,14 +47,20 @@ Service.prototype.getJournalStatus = function () {
 
 	// this.sendNotification(new Notification(LOAD_JOURNAL_STATUS, journalStatus));
 
-	this.sendRequest('GET', LOAD_JOURNAL_STATUS, {request: 'getJournalStatus'})
+	this.sendRequest('GET', LOAD_JOURNAL_STATUS, {
+		request: 'getJournalStatus',
+		message: 'Определение статуса журнала'
+	})
 };
 
 /**
  * Создание боевого дежурства.
  */
 Service.prototype.createDuty = function () {
-	this.sendRequest('POST', CREATE_DUTY_COMPLETE, {request: 'createDuty'});
+	this.sendRequest('POST', CREATE_DUTY_COMPLETE, {
+		request: 'createDuty',
+		message: 'Создание боевого дежурства'
+	});
 };
 
 /**
@@ -91,7 +101,14 @@ Service.prototype.sendRequest = function (method, notification, parameters) {
 		url = Settings.getInstance().config.serviceUrl;
 	}
 
-	var url, request, sendData = null;
+	var url, request, message, sendData = null;
+
+	if (!isEmpty(parameters.message)) {
+		message = parameters.message;
+		delete parameters.message;
+	} else {
+		message = 'Загрузка данных';
+	}
 
 	parameters.time = new Date().getTime();
 
@@ -114,14 +131,15 @@ Service.prototype.sendRequest = function (method, notification, parameters) {
 	xhr.onreadystatechange = function() {
 		// TODO: handle error response
 		if (this.readyState == 4 && this.status == 200) {
+			Notifier.getInstance().hideProgress(this.progressEl);
+
     		var response = JSON.parse(this.responseText);
 			if (!isEmpty(response.result)) {
 				self.sendNotification(new Notification(this.notification, response.result));
 			} else if (parameters.request == 'loadFile') {
 				self.sendNotification(new Notification(this.notification, response));
 			} else {
-				// TODO: show error message by journal ui
-				alert(response.error);
+				Notifier.getInstance().showError('Произошла ошибка, приносим свои извинения.', response.error);
 			}
     	}
 	}
@@ -130,6 +148,8 @@ Service.prototype.sendRequest = function (method, notification, parameters) {
 	if (method == 'POST') {
 		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 	}
+
+	xhr.progressEl = Notifier.getInstance().showProgress(message);
 
 	xhr.send(sendData);
 }
