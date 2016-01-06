@@ -39,7 +39,7 @@ var Notifier = (function (document) {
 			var progressHtml = '' +
 				'<div message-container class="messageContainer">' +
 					'<div message-text>' + message + '</div>' +
-					'<div progress-time style="color: #AAAAAA; font-style: italic;"></div>' +
+					'<div progress-time class="progressTime"></div>' +
 				'</div>' +
 				'<div class="preloader"></div>' +
 				'<div class="clearBoth"></div>';
@@ -47,7 +47,7 @@ var Notifier = (function (document) {
 			progressEl.innerHTML = progressHtml;
 
 			var updateTimer = function () {
-				var progressTimeEl = getElementsByAttribute(progressEl, 'progress-time');
+				var progressTimeEl = getEl(progressEl, 'progress-time');
 				progressTimeEl.innerHTML = 'выполняется: ' + progressEl.progressTime++ + ' сек';
 			};
 
@@ -111,11 +111,11 @@ var Notifier = (function (document) {
 
 			if (!isEmpty(details)) {
 				var detailsEl = this.createDetails(details);
-				var messageTextEl = getElementsByAttribute(itemEl, 'message-text');
+				var messageTextEl = getEl(itemEl, 'message-text');
 				messageTextEl.parentNode.insertBefore(detailsEl, messageTextEl.nextSibling);
 			}
 
-			var closeEl = getElementsByAttribute(itemEl, 'close-button');
+			var closeEl = getEl(itemEl, 'close-button');
 			closeEl.addEventListener('click', (function () {
 				this.removeNotificationItem(itemEl);
 			}).bind(this));
@@ -135,9 +135,9 @@ var Notifier = (function (document) {
 
 			detailsEl.innerHTML = detailsHtml;
 
-			var detailsButtonEl = getElementsByAttribute(detailsEl, 'details-button');
+			var detailsButtonEl = getEl(detailsEl, 'details-button');
 			detailsButtonEl.addEventListener('click', function () {
-				var detailsTextEl = getElementsByAttribute(detailsEl, 'details-text');
+				var detailsTextEl = getEl(detailsEl, 'details-text');
 				if (detailsTextEl.style.display == 'none') {
 					detailsTextEl.style.display = 'block';
 					detailsButtonEl.innerHTML = 'скрыть';

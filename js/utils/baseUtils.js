@@ -34,9 +34,14 @@ function createUrl (parameters) {
 };
 
 /**
- * Получение элементов по значению атрибута.
+ * Получение DOM-элементов по значению атрибута.
+ * @param context Элемент, в который вложен целевой с наименованием атрибута attributeName.
+ * @param attributeName Наименование атрибута искомого элемента.
+ * @param attributeValue Значение атрибута attributeName (необязательный).
+ * @param all Если true - функция вернёт все элементы с атрибутом attributeName
+ * (у которого значение attributeValue, если указано). По умолчанию возвращает первый элемент.
  */
-function getElementsByAttribute (context, attributeName, attributeValue, all) {
+function getEl (context, attributeName, attributeValue, all) {
 	var selector = !isEmpty(attributeValue) ?
 		'[' + attributeName + '=' + attributeValue + ']' :
 		'[' + attributeName + ']';
@@ -70,10 +75,12 @@ function removeChilds (node) {
 };
 
 /**
- * Получение строки даты в формате d.m.Y
+ * Получение строки даты в формате d.m.Y H:i
  * @param date Объект Date или timestamp.
  */
 function getDateString (date) {
+	if (isEmpty(date)) return '-';
+
 	if (typeof date === 'number') {
 		date = new Date(date * 1000);
 	}
@@ -92,10 +99,14 @@ function getDateString (date) {
  * @param time Длительность в секундах.
  */
 function getDurationString (time) {
-	var date = new Date(time * 1000);
-	var hours   = formatDoubleDigit(date.getUTCHours());
-	var minutes = formatDoubleDigit(date.getMinutes());
-	var seconds = formatDoubleDigit(date.getSeconds());
+	if (isEmpty(time)) return '-';
+
+	var totalSeconds = time;
+
+	var hours     = formatDoubleDigit(Math.floor(totalSeconds / 3600));
+	totalSeconds %= 3600;
+	var minutes   = formatDoubleDigit(Math.floor(totalSeconds / 60));
+	var seconds   = formatDoubleDigit(totalSeconds % 60);
 
 	return hours + ':' + minutes + ':' + seconds;
 };

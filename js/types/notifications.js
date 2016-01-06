@@ -10,6 +10,7 @@ var CALL_SHOW_JOURNAL = 'callShowJournal';
 
 // оповещения от модели журнала.
 var CHANGE_LAST_DUTY_INFO = 'changeLastDutyInfo';
+var CHANGE_ACTIVE_DUTY_INFO = 'changeActiveDutyInfo';
 
 // оповещения от сервиса
 var LOAD_CONFIG_COMPLETE = 'loadConfigComplete';

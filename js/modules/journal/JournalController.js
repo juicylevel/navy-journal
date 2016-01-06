@@ -14,6 +14,7 @@ JournalController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
 		{type: LOAD_CONFIG_COMPLETE, handler: this.onLoadConfig},
 		{type: LOAD_JOURNAL_STATUS, handler: this.onLoadJournalStatus},
+		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
 		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
 		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal}
 	]);
@@ -39,10 +40,13 @@ JournalController.prototype.onLoadConfig = function (config) {
  */
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setJournalStatus(journalStatus);
+};
 
-	if (isEmpty(journalStatus.activeDuty)) {
-		this.view.showStartDutyDialog();
-	}
+/**
+ * Обработка оповещения о завершении создания боевого дежурства.
+ */
+JournalController.prototype.onCreateDutyComplete = function (duty) {
+
 };
 
 /**
@@ -56,5 +60,5 @@ JournalController.prototype.onCallStartDuty = function () {
  * Обработка события показа интерфейса журнала.
  */
 JournalController.prototype.onCallShowJournal = function () {
-	this.view.renderJournalUI();
+	
 };

@@ -23,21 +23,31 @@ class RequestHandler {
      * Получение статуса журнала.
      */
     public function getJournalStatus () {
+		$result = array('lastDuty' => null, 'activeDuty' => null);
+
         $lastCompleteDuty = $this->db->getLastCompleteDuty();
-		$result = array();
+		$activeDuty = $this->db->getActiveDuty();
 
         if (!empty($lastCompleteDuty)) {
 			$startDate = new DateTime($lastCompleteDuty->duty_start_date);
 			$endDate = new DateTime($lastCompleteDuty->duty_end_date);
-
 			$duration = date_diff($startDate, $endDate);
-
 			$result['lastDuty'] = array(
 				'date' => $startDate->format('U'),
 				'duration' => dateIntervalToSeconds($duration)
 			);
-        } else {
-			$result['lastDuty'] = null;
+        }
+
+		if (!empty($activeDuty)) {
+			$startDate = new DateTime($activeDuty->duty_start_date);
+			$duration = date_diff($startDate, new DateTime());
+			$runUpTime = $activeDuty->duty_runup_time;
+			$result['activeDuty'] = array(
+				'dutyId' => $activeDuty->duty_id,
+				'date' => $startDate->format('U'),
+				'duration' => dateIntervalToSeconds($duration),
+				'runUpTime' => strtotime('1970-01-01 $runUpTime UTC')
+			);
 		}
 
         return $result;
@@ -47,11 +57,16 @@ class RequestHandler {
 	 * Создание боевого дежурства.
 	 */
 	public function createDuty () {
-		$startDate = date('Y-m-d H:i:s');
-		$name = 'Боевое дежурство ' . $startDate;
+		$startDate = new DateTime();
+		$startDateString = $startDate->format('Y-m-d H:i:s');
+		$name = 'Боевое дежурство ' . $startDateString;
 
-		$dutyId = $this->db->createDuty($startDate, $name);
-		$result = array('dutyId' => $dutyId, 'name' => $name);
+		$dutyId = $this->db->createDuty($startDateString, $name);
+		$result = array(
+			'dutyId' => $dutyId,
+			'name' => $name,
+			'startDate' => $startDate->format('U')
+		);
 
 		return $result;
 	}
