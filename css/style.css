@@ -59,6 +59,7 @@ nav, section, footer {
 
 #navigationPanel {
 	float: left;
+	min-width: 200px;
 	margin: 0px 5px 5px 5px;
 
 	border-width: 1px;
@@ -72,6 +73,10 @@ nav, section, footer {
 	border-width: 1px;
 	border-style: solid;
 	border-color: #000000;
+}
+
+#navigation .menuItem {
+	padding: 3px 3px;
 }
 
 #frameContainer {

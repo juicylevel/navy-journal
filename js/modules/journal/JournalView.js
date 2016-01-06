@@ -18,7 +18,8 @@ extend(JournalView, View);
 JournalView.prototype.getHandlers = function () {
 	return [
 		{type: CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
-        {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo}
+        {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
+        {type: CHANGE_JOURNAL_MENU, handler: this.onChangeJournalMenu}
 	];
 };
 
@@ -49,7 +50,7 @@ JournalView.prototype.render = function () {
                 '<div class="clearBoth"></div>' +
             '</header>' +
             '<nav id="navigationPanel">' +
-                '<div id="navigation">' +
+                '<div id="navigation" menu>' +
 
                 '</div>' +
             '</nav>' +
@@ -108,4 +109,35 @@ JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
     } else {
         activeDutyInfoEl.style.display = 'none';
     }
-}
+};
+
+/**
+ * Обработка оповещения об изенении состава меню приложения.
+ */
+JournalView.prototype.onChangeJournalMenu = function (menu) {
+    var menuEl = getEl(this.domElement, 'menu');
+    removeChilds(menuEl);
+
+    var menuItem, menuItemEl, i, itemsCount = menu.length, self = this;
+    for (i = 0; i < itemsCount; i++) {
+        menuItem = menu[i];
+        menuItemEl = this.createMenuItemElement(menuItem);
+        menuItemEl.menuItem = menuItem;
+        menuItemEl.addEventListener('click', function () {
+            self.sendNotification(new Notification(SELECT_MENU_ITEM, this.menuItem));
+        });
+        menuEl.appendChild(menuItemEl);
+    }
+};
+
+/**
+ * Создание пункта меню панели навигации.
+ * @param menuItem Конфигурация пункта меню.
+ */
+JournalView.prototype.createMenuItemElement = function (menuItem) {
+	var menuItemHtml = '<a href="#' + menuItem.command + '">' + menuItem.label + '</a>';
+    var menuItemEl = document.createElement('div');
+    menuItemEl.className = 'menuItem';
+    menuItemEl.innerHTML = menuItemHtml;
+	return menuItemEl;
+};

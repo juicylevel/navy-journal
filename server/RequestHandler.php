@@ -70,6 +70,13 @@ class RequestHandler {
 
 		return $result;
 	}
+
+	/**
+	 * Завершение подготовки к дежурству.
+	 */
+	public function completeRunUp () {
+		return array('soGood' => true);
+	}
 }
 
 ?>

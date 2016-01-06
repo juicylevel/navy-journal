@@ -15,8 +15,9 @@ JournalController.prototype.getHandlers = function () {
 		{type: LOAD_CONFIG_COMPLETE, handler: this.onLoadConfig},
 		{type: LOAD_JOURNAL_STATUS, handler: this.onLoadJournalStatus},
 		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
-		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
-		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal}
+		{type: START_DUTY, handler: this.onStartDuty},
+		{type: SHOW_JOURNAL, handler: this.onShowJournal},
+		{type: SELECT_MENU_ITEM, handler: this.onSelectMenuItem}
 	]);
 };
 
@@ -40,6 +41,9 @@ JournalController.prototype.onLoadConfig = function (config) {
  */
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setJournalStatus(journalStatus);
+
+	var journalMenu = this.model.getModuleMenu();
+	this.model.createCurrentMenu(journalMenu);
 };
 
 /**
@@ -52,13 +56,32 @@ JournalController.prototype.onCreateDutyComplete = function (duty) {
 /**
  * Обработка события запуска боевого дежурства.
  */
-JournalController.prototype.onCallStartDuty = function () {
+JournalController.prototype.onStartDuty = function () {
 	this.service.createDuty();
 };
 
 /**
  * Обработка события показа интерфейса журнала.
  */
-JournalController.prototype.onCallShowJournal = function () {
-	
+JournalController.prototype.onShowJournal = function () {
+	console.log('onShowJournal');
+};
+
+/**
+ * Обработка события завершения подготовки к дежурству.
+ */
+JournalController.prototype.onCompleteRunUp = function () {
+	this.service.completeRunUp();
+};
+
+/**
+ * Обработка события выбора пункта меню.
+ */
+JournalController.prototype.onSelectMenuItem = function (menuItem) {
+	if (!isEmpty(menuItem.system)) {
+		var handlerName = 'on' + capitalize(menuItem.command);
+		this[handlerName].call(this);
+	} else {
+
+	}
 };

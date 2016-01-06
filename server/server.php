@@ -69,6 +69,9 @@ switch ($request) {
 	case 'createDuty':
 		$result = $requestHandler->createDuty();
 		break;
+	case 'completeRunUp':
+		$result = $requestHandler->completeRunUp();
+		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }

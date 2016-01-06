@@ -22,31 +22,6 @@ Service.prototype.loadConfig = function (url) {
  * Получение статуса журнала.
  */
 Service.prototype.getJournalStatus = function () {
-	// var active = false;
-	// var journalStatus;
-	//
-	// if (active) {
-	// 	journalStatus = {
-	// 		activeDuty: {
-	// 			startDate: '15.11.2015 10:30'
-	// 		},
-	// 		lastDuty: {
-	// 			date: '08.11.2015',
-	// 			duration: '06:25'
-	// 		}
-	// 	};
-	// } else {
-	// 	journalStatus = {
-	// 		activeDuty: null,
-	// 		lastDuty: {
-	// 			date: '08.11.2015',
-	// 			duration: '06:25'
-	// 		}
-	// 	};
-	// }
-
-	// this.sendNotification(new Notification(LOAD_JOURNAL_STATUS, journalStatus));
-
 	this.sendRequest('GET', LOAD_JOURNAL_STATUS, {
 		request: 'getJournalStatus',
 		message: 'Определение статуса журнала'
@@ -60,6 +35,16 @@ Service.prototype.createDuty = function () {
 	this.sendRequest('POST', CREATE_DUTY_COMPLETE, {
 		request: 'createDuty',
 		message: 'Создание боевого дежурства'
+	});
+};
+
+/**
+ * Завершение подготовки к дежурству.
+ */
+Service.prototype.completeRunUp = function () {
+	this.sendRequest('POST', RUN_UP_COMPLETE, {
+		request: 'completeRunUp',
+		message: 'Завершение подготовки к дежурству'
 	});
 };
 

@@ -75,6 +75,15 @@ function removeChilds (node) {
 };
 
 /**
+ * Клонирование объекта.
+ * @param source Целевой объект.
+ * @return Object Клон целевого объекта source.
+ */
+function clone (source) {
+	return JSON.parse(JSON.stringify(source));
+}
+
+/**
  * Получение строки даты в формате d.m.Y H:i
  * @param date Объект Date или timestamp.
  */
