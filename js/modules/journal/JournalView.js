@@ -95,7 +95,7 @@ JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
         dutyDurationEl.innerHTML = getDurationString(duration);
 
         var runUpTimeEl = getEl(this.domElement, 'run-up-time');
-        runUpTimeEl.innerHTML = getDurationString(duration);
+        runUpTimeEl.innerHTML = getDurationString(activeDutyInfo.runUpTime);
 
         this.durationTimer = setInterval(function () {
             duration++;
@@ -118,7 +118,12 @@ JournalView.prototype.onChangeJournalMenu = function (menu) {
     var menuEl = getEl(this.domElement, 'menu');
     removeChilds(menuEl);
 
-    var menuItem, menuItemEl, i, itemsCount = menu.length, self = this;
+    var menuItem,
+        menuItemEl,
+        i,
+        itemsCount = menu.length,
+        self = this;
+
     for (i = 0; i < itemsCount; i++) {
         menuItem = menu[i];
         menuItemEl = this.createMenuItemElement(menuItem);

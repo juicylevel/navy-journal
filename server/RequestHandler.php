@@ -46,7 +46,7 @@ class RequestHandler {
 				'dutyId' => $activeDuty->duty_id,
 				'date' => $startDate->format('U'),
 				'duration' => dateIntervalToSeconds($duration),
-				'runUpTime' => strtotime('1970-01-01 $runUpTime UTC')
+				'runUpTime' => timeStringToSeconds($runUpTime)
 			);
 		}
 
@@ -75,7 +75,13 @@ class RequestHandler {
 	 * Завершение подготовки к дежурству.
 	 */
 	public function completeRunUp () {
-		return array('soGood' => true);
+		$activeDuty = $this->db->getActiveDuty();
+		$startDate = new DateTime($activeDuty->duty_start_date);
+		$runUpTime = time() - $startDate->format('U');
+
+		$this->db->saveRunUpTime($activeDuty->duty_id, secondsToTimeString($runUpTime));
+
+		return array('dutyId' => $activeDuty->duty_id, 'runUpTime' => secondsToTimeString($runUpTime));
 	}
 }
 

@@ -51,6 +51,9 @@ class DataBase {
 
     /**
      * Создание боевого дежурства.
+     * @param $startDate Время начала боевого дежурства.
+     * @param $name Наименование боевого дежурства.
+     * @return int Ижентификатор созданного боевого дежурства.
      */
     public function createDuty ($startDate, $name) {
         $sql = 'INSERT INTO duty_tbl (duty_start_date, duty_name) VALUES (:startDate, :name)';
@@ -58,6 +61,18 @@ class DataBase {
         $data = array(':startDate' => $startDate, ':name' => $name);
         $result = $stmt->execute($data);
         return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Сохранение времени подготовки к боевому дежурству.
+     * @param $dutyId Идентификатор боевого дежурства.
+     * @param $runUpTime Время подготовки к боевому дежурству.
+     */
+    public function saveRunUpTime ($dutyId, $runUpTime) {
+        $sql = 'UPDATE duty_tbl SET duty_runup_time = ? WHERE duty_id = ?';
+        $stmt = $this->pdo->prepare($sql);
+        $data = array($runUpTime, $dutyId);
+        return $stmt->execute($data);
     }
 }
 

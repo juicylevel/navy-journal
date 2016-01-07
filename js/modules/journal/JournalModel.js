@@ -90,7 +90,9 @@ JournalModel.prototype.setJournalStatus = function (journalStatus) {
     if (!isEmpty(journalStatus.activeDuty)) {
         var activeDuty = journalStatus.activeDuty;
         var runUpTime = activeDuty.runUpTime;
-        var duration = Math.floor(new Date().getTime() / 1000) - activeDuty.date;
+        var duration = activeDuty.duration;
+
+        // Math.floor(new Date().getTime() / 1000) - activeDuty.date;
 
         this.activeDutyInfo = {
             date: activeDuty.date,
