@@ -86,17 +86,25 @@ JournalModel.prototype.setCurrentModuleMenu = function (moduleMenu) {
 
 /**
  * Установка статуса журнала.
+ * @param journalStatus Информация о статусе журнала
+ * (последнее завершённое и активное дежурство).
  */
 JournalModel.prototype.setJournalStatus = function (journalStatus) {
     this.lastDutyInfo = journalStatus.lastDuty;
     this.sendNotification(new Notification(CHANGE_LAST_DUTY_INFO, this.lastDutyInfo));
 
-    if (!isEmpty(journalStatus.activeDuty)) {
-        var activeDuty = journalStatus.activeDuty;
+    this.setActiveDuty(journalStatus.activeDuty);
+    this.sendNotification(new Notification(CHANGE_ACTIVE_DUTY_INFO, this.activeDutyInfo));
+};
+
+/**
+ * Установка активного (текущего) дежурства.
+ * @param activeDuty Информация об активном (текущем) дежурстве.
+ */
+JournalModel.prototype.setActiveDuty = function (activeDuty) {
+    if (!isEmpty(activeDuty)) {
         var runUpTime = activeDuty.runUpTime;
         var duration = activeDuty.duration;
-
-        // Math.floor(new Date().getTime() / 1000) - activeDuty.date;
 
         this.activeDutyInfo = {
             date: activeDuty.date,

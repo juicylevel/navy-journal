@@ -23,34 +23,10 @@ class RequestHandler {
      * Получение статуса журнала.
      */
     public function getJournalStatus () {
-		$result = array('lastDuty' => null, 'activeDuty' => null);
-
-        $lastCompleteDuty = $this->db->getLastCompleteDuty();
-		$activeDuty = $this->db->getActiveDuty();
-
-        if (!empty($lastCompleteDuty)) {
-			$startDate = new DateTime($lastCompleteDuty->duty_start_date);
-			$endDate = new DateTime($lastCompleteDuty->duty_end_date);
-			$duration = date_diff($startDate, $endDate);
-			$result['lastDuty'] = array(
-				'date' => $startDate->format('U'),
-				'duration' => dateIntervalToSeconds($duration)
-			);
-        }
-
-		if (!empty($activeDuty)) {
-			$startDate = new DateTime($activeDuty->duty_start_date);
-			$duration = date_diff($startDate, new DateTime());
-			$runUpTime = $activeDuty->duty_runup_time;
-			$result['activeDuty'] = array(
-				'dutyId' => $activeDuty->duty_id,
-				'date' => $startDate->format('U'),
-				'duration' => dateIntervalToSeconds($duration),
-				'runUpTime' => timeStringToSeconds($runUpTime)
-			);
-		}
-
-        return $result;
+		return array(
+			'lastDuty' => $this->getLastCompleteDuty(),
+			'activeDuty' => $this->getActiveDuty()
+		);
     }
 
 	/**
@@ -81,7 +57,49 @@ class RequestHandler {
 
 		$this->db->saveRunUpTime($activeDuty->duty_id, secondsToTimeString($runUpTime));
 
-		return array('dutyId' => $activeDuty->duty_id, 'runUpTime' => secondsToTimeString($runUpTime));
+		return $this->getActiveDuty();
+	}
+
+	/**
+	 * Получение последнего завершённого боевого дежурства.
+	 */
+	private function getLastCompleteDuty () {
+		$result = null;
+		$lastCompleteDuty = $this->db->getLastCompleteDuty();
+
+		if (!empty($lastCompleteDuty)) {
+			$startDate = new DateTime($lastCompleteDuty->duty_start_date);
+			$endDate = new DateTime($lastCompleteDuty->duty_end_date);
+			$duration = date_diff($startDate, $endDate);
+			$result = array(
+				'date' => $startDate->format('U'),
+				'duration' => dateIntervalToSeconds($duration)
+			);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Получение активного (текущего) боевого дежурства.
+	 */
+	private function getActiveDuty () {
+		$result = null;
+		$activeDuty = $this->db->getActiveDuty();
+
+		if (!empty($activeDuty)) {
+			$startDate = new DateTime($activeDuty->duty_start_date);
+			$duration = date_diff($startDate, new DateTime());
+			$runUpTime = $activeDuty->duty_runup_time;
+			$result = array(
+				'dutyId' => $activeDuty->duty_id,
+				'date' => $startDate->format('U'),
+				'duration' => dateIntervalToSeconds($duration),
+				'runUpTime' => timeStringToSeconds($runUpTime)
+			);
+		}
+
+		return $result;
 	}
 }
 

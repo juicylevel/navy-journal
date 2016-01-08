@@ -82,11 +82,14 @@ JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
 };
 
 /**
+ * TODO !!!!!!!!! ВЫЗЫВАЕТСЯ 2 РАЗА ПРИ ИНИЦИАЛИЗАЦИИ
+ *
  * Обработка события изенения информации об активном (текущем) дежурстве.
  * @param activeDutyInfo Информация об активном (текущем) дежурстве.
  */
 JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
     var activeDutyInfoEl = getEl(this.domElement, 'active-duty-info');
+    clearInterval(this.durationTimer);
 
     if (!isEmpty(activeDutyInfo)) {
         var activeDutyStartDateEl = getEl(this.domElement, 'active-duty-start-date');

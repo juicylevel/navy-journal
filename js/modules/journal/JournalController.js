@@ -16,6 +16,7 @@ JournalController.prototype.getHandlers = function () {
 		{type: LOAD_JOURNAL_STATUS, handler: this.onLoadJournalStatus},
 		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
 		{type: START_DUTY, handler: this.onStartDuty},
+		{type: RUN_UP_COMPLETE, handler: this.onRunUpComplete},
 		{type: SHOW_JOURNAL, handler: this.onShowJournal},
 		{type: SELECT_SYSTEM_MENU_ITEM, handler: this.onSelectSystemMenuItem},
 		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem}
@@ -47,6 +48,11 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 
 	var moduleMenu = this.model.getModuleMenu();
 	this.model.setCurrentModuleMenu(moduleMenu);
+};
+
+JournalController.prototype.onRunUpComplete = function (activeDuty) {
+	this.model.setActiveDuty(activeDuty);
+	this.model.updateSystemMenu();
 };
 
 /**
