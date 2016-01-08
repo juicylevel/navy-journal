@@ -25,7 +25,6 @@ JournalView.prototype.getHandlers = function () {
 };
 
 /**
- * @public
  * Отрисовка компонента.
  */
 JournalView.prototype.render = function () {
@@ -71,6 +70,7 @@ JournalView.prototype.render = function () {
 
 /**
  * Обработка оповещения об изенении информации о последнем дежурстве.
+ * @param lastDutyInfo Информация о последнем завершённом дежурстве.
  */
 JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
     if (!isEmpty(lastDutyInfo)) {
@@ -82,7 +82,8 @@ JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
 };
 
 /**
- * Обработка оповещения об изенении информации об активном (текущем) дежурстве.
+ * Обработка события изенения информации об активном (текущем) дежурстве.
+ * @param activeDutyInfo Информация об активном (текущем) дежурстве.
  */
 JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
     var activeDutyInfoEl = getEl(this.domElement, 'active-duty-info');
@@ -115,6 +116,7 @@ JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
 
 /**
  * Обработка оповещения об изенении состава системного меню приложения.
+ * @param moduleMenu Список пунктов системного меню.
  */
 JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
     var systemMenuEl = getEl(this.domElement, 'system-menu');
@@ -123,6 +125,7 @@ JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
 
 /**
  * Обработка оповещения об изенении состава меню модуля приложения.
+ * @param moduleMenu Список пунктов меню модуля.
  */
 JournalView.prototype.onChangeModuleMenu = function (moduleMenu) {
     var moduleMenuEl = getEl(this.domElement, 'module-menu');
@@ -131,7 +134,9 @@ JournalView.prototype.onChangeModuleMenu = function (moduleMenu) {
 
 /**
  * Создание меню.
- * @param menuEl DOM-элемен контейнера меню.
+ * @param menu Информация о пункте меню.
+ * @param menuEl DOM-элемент контейнера меню.
+ * @param notificationType Тип оповещения при выборе пункта меню.
  */
 JournalView.prototype.createMenu = function (menu, menuEl, notificationType) {
     removeChilds(menuEl);
@@ -156,6 +161,7 @@ JournalView.prototype.createMenu = function (menu, menuEl, notificationType) {
 /**
  * Создание пункта меню панели навигации.
  * @param menuItem Конфигурация пункта меню.
+ * @return menuItemEl DOM-элемент пункта меню.
  */
 JournalView.prototype.createMenuItemElement = function (menuItem) {
 	var menuItemHtml = '<a href="#' + menuItem.command + '">' + menuItem.label + '</a>';
