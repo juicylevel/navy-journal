@@ -19,7 +19,8 @@ JournalView.prototype.getHandlers = function () {
 	return [
 		{type: CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
         {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
-        {type: CHANGE_JOURNAL_MENU, handler: this.onChangeJournalMenu}
+        {type: CHANGE_SYSTEM_MENU, handler: this.onChangeSystemMenu},
+        {type: CHANGE_MODULE_MENU, handler: this.onChangeModuleMenu}
 	];
 };
 
@@ -51,7 +52,8 @@ JournalView.prototype.render = function () {
             '</header>' +
             '<nav id="navigationPanel">' +
                 '<div id="navigation" menu>' +
-
+                    '<div system-menu></div>' +
+                    '<div module-menu></div>' +
                 '</div>' +
             '</nav>' +
             '<section id="frameContainer">' +
@@ -112,10 +114,26 @@ JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
 };
 
 /**
- * Обработка оповещения об изенении состава меню приложения.
+ * Обработка оповещения об изенении состава системного меню приложения.
  */
-JournalView.prototype.onChangeJournalMenu = function (menu) {
-    var menuEl = getEl(this.domElement, 'menu');
+JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
+    var systemMenuEl = getEl(this.domElement, 'system-menu');
+    this.createMenu(systemMenu, systemMenuEl, SELECT_SYSTEM_MENU_ITEM);
+};
+
+/**
+ * Обработка оповещения об изенении состава меню модуля приложения.
+ */
+JournalView.prototype.onChangeModuleMenu = function (moduleMenu) {
+    var moduleMenuEl = getEl(this.domElement, 'module-menu');
+    this.createMenu(moduleMenu, moduleMenuEl, SELECT_MODULE_MENU_ITEM);
+};
+
+/**
+ * Создание меню.
+ * @param menuEl DOM-элемен контейнера меню.
+ */
+JournalView.prototype.createMenu = function (menu, menuEl, notificationType) {
     removeChilds(menuEl);
 
     var menuItem,
@@ -129,7 +147,7 @@ JournalView.prototype.onChangeJournalMenu = function (menu) {
         menuItemEl = this.createMenuItemElement(menuItem);
         menuItemEl.menuItem = menuItem;
         menuItemEl.addEventListener('click', function () {
-            self.sendNotification(new Notification(SELECT_MENU_ITEM, this.menuItem));
+            self.sendNotification(new Notification(notificationType, this.menuItem));
         });
         menuEl.appendChild(menuItemEl);
     }

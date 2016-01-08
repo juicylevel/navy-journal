@@ -11,6 +11,48 @@ function JournalModel () {
 extend(JournalModel, Model);
 
 /**
+ * Обновление системного меню.
+ */
+JournalModel.prototype.updateSystemMenu = function () {
+    var systemMenu = [];
+
+    // нет активного дежурства, отображаем кнопку запуска боевого дежурства
+    if (isEmpty(this.activeDutyInfo)) {
+        systemMenu.unshift(
+            {
+                label: 'Начать дежурство',
+                icon: 'img/',
+                command: START_DUTY
+            }
+        );
+    }
+    // есть активное дежурство, но подготовка не завершена, отображаем
+    // кнопку завершения подготовки к боевому дежурству
+    else if (this.activeDutyInfo.runUp) {
+        systemMenu.unshift(
+            {
+                label: 'Завершить подготовку',
+                icon: 'img/',
+                command: COMPLETE_RUN_UP
+            }
+        );
+    }
+    // есть активное дежурство, подготовка к дежурству завершена, отображаем
+    // кнопку завершения боевого дежурства
+    else {
+        systemMenu.unshift(
+            {
+                label: 'Завершить дежурство',
+                icon: 'img/',
+                command: COMPLETE_DUTY
+            }
+        );
+    }
+
+    this.sendNotification(new Notification(CHANGE_SYSTEM_MENU, systemMenu));
+};
+
+/**
  * Получение меню модуля.
  */
 JournalModel.prototype.getModuleMenu = function () {
@@ -38,46 +80,8 @@ JournalModel.prototype.getModuleMenu = function () {
 /**
  * Получение меню для текущего контекста.
  */
-JournalModel.prototype.createCurrentMenu = function (moduleMenu) {
-    var menu = clone(moduleMenu);
-
-    // нет активного дежурства, отображаем кнопку запуска боевого дежурства
-    if (isEmpty(this.activeDutyInfo)) {
-        menu.unshift(
-            {
-                label: 'Начать дежурство',
-                icon: 'img/',
-                command: START_DUTY,
-                system: true
-            }
-        );
-    }
-    // есть активное дежурство, но подготовка не завершена, отображаем
-    // кнопку завершения подготовки к боевому дежурству
-    else if (this.activeDutyInfo.runUp) {
-        menu.unshift(
-            {
-                label: 'Завершить подготовку',
-                icon: 'img/',
-                command: COMPLETE_RUN_UP,
-                system: true
-            }
-        );
-    }
-    // есть активное дежурство, подготовка к дежурству завершена, отображаем
-    // кнопку завершения боевого дежурства
-    else {
-        menu.unshift(
-            {
-                label: 'Завершить дежурство',
-                icon: 'img/',
-                command: COMPLETE_DUTY,
-                system: true
-            }
-        );
-    }
-
-    this.sendNotification(new Notification(CHANGE_JOURNAL_MENU, menu));
+JournalModel.prototype.setCurrentModuleMenu = function (moduleMenu) {
+    this.sendNotification(new Notification(CHANGE_MODULE_MENU, moduleMenu));
 };
 
 /**

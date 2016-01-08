@@ -21,8 +21,10 @@ var CREATE_DUTY_COMPLETE = 'createDutyComplete';
 var RUN_UP_COMPLETE = 'runUpComplete';
 
 // оповещения для навигации
-var CHANGE_JOURNAL_MENU = 'changeJournalMenu';
-var SELECT_MENU_ITEM = 'selectMenuItem';
+var CHANGE_SYSTEM_MENU = 'changeSystemMenu';
+var CHANGE_MODULE_MENU = 'changeModuleMenu';
+var SELECT_SYSTEM_MENU_ITEM = 'selectSystemMenuItem';
+var SELECT_MODULE_MENU_ITEM = 'selectModuleMenuItem';
 
 // оповещения для контейнера фреймов
 var CHANGE_FRAME = 'changeFrame';

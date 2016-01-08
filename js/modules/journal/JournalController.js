@@ -17,7 +17,8 @@ JournalController.prototype.getHandlers = function () {
 		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
 		{type: START_DUTY, handler: this.onStartDuty},
 		{type: SHOW_JOURNAL, handler: this.onShowJournal},
-		{type: SELECT_MENU_ITEM, handler: this.onSelectMenuItem}
+		{type: SELECT_SYSTEM_MENU_ITEM, handler: this.onSelectSystemMenuItem},
+		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem}
 	]);
 };
 
@@ -42,8 +43,10 @@ JournalController.prototype.onLoadConfig = function (config) {
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setJournalStatus(journalStatus);
 
-	var journalMenu = this.model.getModuleMenu();
-	this.model.createCurrentMenu(journalMenu);
+	this.model.updateSystemMenu();
+
+	var moduleMenu = this.model.getModuleMenu();
+	this.model.setCurrentModuleMenu(moduleMenu);
 };
 
 /**
@@ -51,6 +54,23 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
  */
 JournalController.prototype.onCreateDutyComplete = function (duty) {
 
+};
+
+/**
+ * Обработка события выбора пункта системного меню.
+ * @param menuItem Выбранный пункт меню.
+ */
+JournalController.prototype.onSelectSystemMenuItem = function (menuItem) {
+	var handlerName = 'on' + capitalize(menuItem.command);
+	this[handlerName].call(this);
+};
+
+/**
+ * Обработка события выбора пункта меню модуля.
+ * @param menuItem Выбранный пункт меню.
+ */
+JournalController.prototype.onSelectModuleMenuItem = function (menuItem) {
+	console.log('onSelectModuleMenuItem', menuItem.label, menuItem.command);
 };
 
 /**
@@ -75,13 +95,8 @@ JournalController.prototype.onCompleteRunUp = function () {
 };
 
 /**
- * Обработка события выбора пункта меню.
+ * Обработка события завершения дежурства.
  */
-JournalController.prototype.onSelectMenuItem = function (menuItem) {
-	if (!isEmpty(menuItem.system)) {
-		var handlerName = 'on' + capitalize(menuItem.command);
-		this[handlerName].call(this);
-	} else {
-
-	}
+JournalController.prototype.onCompleteDuty = function () {
+	console.log('onCompleteDuty');
 };
