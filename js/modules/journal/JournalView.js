@@ -82,8 +82,6 @@ JournalView.prototype.onChangeLastDutyInfo = function (lastDutyInfo) {
 };
 
 /**
- * TODO !!!!!!!!! ВЫЗЫВАЕТСЯ 2 РАЗА ПРИ ИНИЦИАЛИЗАЦИИ
- *
  * Обработка события изенения информации об активном (текущем) дежурстве.
  * @param activeDutyInfo Информация об активном (текущем) дежурстве.
  */
