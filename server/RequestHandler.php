@@ -58,6 +58,12 @@ class RequestHandler {
 		$activeDuty = $this->db->getActiveDuty();
 		$endDate = new DateTime();
 		$endDateString = $endDate->format('Y-m-d H:i:s');
+
+		$runUpTime = timeStringToSeconds($activeDuty->duty_runup_time);
+		if ($runUpTime == 0) {
+			$this->completeRunUp();
+		}
+
 		$this->db->saveDutyEndDate($activeDuty->duty_id, $endDateString);
 		return $this->getJournalStatus();
 	}
