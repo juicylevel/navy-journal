@@ -36,15 +36,8 @@ class RequestHandler {
 		$startDate = new DateTime();
 		$startDateString = $startDate->format('Y-m-d H:i:s');
 		$name = 'Боевое дежурство ' . $startDateString;
-
-		$dutyId = $this->db->createDuty($startDateString, $name);
-		$result = array(
-			'dutyId' => $dutyId,
-			'name' => $name,
-			'startDate' => $startDate->format('U')
-		);
-
-		return $result;
+		$this->db->createDuty($startDateString, $name);
+		return $this->getActiveDuty();
 	}
 
 	/**
@@ -54,10 +47,19 @@ class RequestHandler {
 		$activeDuty = $this->db->getActiveDuty();
 		$startDate = new DateTime($activeDuty->duty_start_date);
 		$runUpTime = time() - $startDate->format('U');
-
 		$this->db->saveRunUpTime($activeDuty->duty_id, secondsToTimeString($runUpTime));
-
 		return $this->getActiveDuty();
+	}
+
+	/**
+	 * Завершение боевого дежурства.
+	 */
+	public function completeDuty() {
+		$activeDuty = $this->db->getActiveDuty();
+		$endDate = new DateTime();
+		$endDateString = $endDate->format('Y-m-d H:i:s');
+		$this->db->saveDutyEndDate($activeDuty->duty_id, $endDateString);
+		return $this->getJournalStatus();
 	}
 
 	/**

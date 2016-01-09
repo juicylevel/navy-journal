@@ -12,14 +12,19 @@ extend(JournalController, Controller);
  */
 JournalController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
+		// service handlers
 		{type: LOAD_CONFIG_COMPLETE, handler: this.onLoadConfig},
 		{type: LOAD_JOURNAL_STATUS, handler: this.onLoadJournalStatus},
 		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
-		{type: START_DUTY, handler: this.onStartDuty},
 		{type: RUN_UP_COMPLETE, handler: this.onRunUpComplete},
-		{type: SHOW_JOURNAL, handler: this.onShowJournal},
+		{type: DUTY_COMPLETE, handler: this.onDutyComplete},
+
+		// view handlers
 		{type: SELECT_SYSTEM_MENU_ITEM, handler: this.onSelectSystemMenuItem},
-		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem}
+		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem},
+		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
+		{type: CALL_COMPLETE_DUTY, handler: this.onCallCompleteDuty},
+		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal}
 	]);
 };
 
@@ -30,8 +35,13 @@ JournalController.prototype.init = function () {
 	this.service.loadConfig('config.json');
 };
 
+//------------------------------------------------------------------------------
+// service handlers
+//------------------------------------------------------------------------------
+
 /**
  * Обработка оповещения о загрузки конфигурации приложения.
+ * @param config Конфигурация приложения.
  */
 JournalController.prototype.onLoadConfig = function (config) {
 	Settings.getInstance().config = config;
@@ -40,6 +50,7 @@ JournalController.prototype.onLoadConfig = function (config) {
 
 /**
  * Обработка оповещения о загрузки статуса журнала.
+ * @param journalStatus Статус журнала.
  */
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setJournalStatus(journalStatus);
@@ -50,17 +61,35 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setCurrentModuleMenu(moduleMenu);
 };
 
+/**
+ * Обработка оповещения о завершении создания боевого дежурства на сервере.
+ * @param createdDuty Информация созданном дежурстве.
+ */
+JournalController.prototype.onCreateDutyComplete = function (createdDuty) {
+	this.model.setActiveDuty(createdDuty);
+	this.model.updateSystemMenu();
+};
+
+/**
+ * Обработка события завершения подготовки к дежурству на сервере.
+ * @param activeDuty Информация об активном (текущем) дежурстве.
+ */
 JournalController.prototype.onRunUpComplete = function (activeDuty) {
 	this.model.setActiveDuty(activeDuty);
 	this.model.updateSystemMenu();
 };
 
 /**
- * Обработка оповещения о завершении создания боевого дежурства.
+ * Обработка события завершения дежурства на сервере.
+ * @param journalStatus Статус журнала.
  */
-JournalController.prototype.onCreateDutyComplete = function (duty) {
-
+JournalController.prototype.onDutyComplete = function (journalStatus) {
+	this.onLoadJournalStatus(journalStatus);
 };
+
+//------------------------------------------------------------------------------
+// view handlers
+//------------------------------------------------------------------------------
 
 /**
  * Обработка события выбора пункта системного меню.
@@ -82,27 +111,27 @@ JournalController.prototype.onSelectModuleMenuItem = function (menuItem) {
 /**
  * Обработка события запуска боевого дежурства.
  */
-JournalController.prototype.onStartDuty = function () {
+JournalController.prototype.onCallStartDuty = function () {
 	this.service.createDuty();
-};
-
-/**
- * Обработка события показа интерфейса журнала.
- */
-JournalController.prototype.onShowJournal = function () {
-	console.log('onShowJournal');
 };
 
 /**
  * Обработка события завершения подготовки к дежурству.
  */
-JournalController.prototype.onCompleteRunUp = function () {
+JournalController.prototype.onCallCompleteRunUp = function () {
 	this.service.completeRunUp();
 };
 
 /**
  * Обработка события завершения дежурства.
  */
-JournalController.prototype.onCompleteDuty = function () {
-	console.log('onCompleteDuty');
+JournalController.prototype.onCallCompleteDuty = function () {
+	this.service.completeDuty();
+};
+
+/**
+ * Обработка события показа модуля с таблицей боевых дежурств.
+ */
+JournalController.prototype.onCallShowJournal = function () {
+	console.log('onShowJournal');
 };

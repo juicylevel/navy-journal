@@ -74,6 +74,18 @@ class DataBase {
         $data = array($runUpTime, $dutyId);
         return $stmt->execute($data);
     }
+
+    /**
+     * Сохранение времени завершения боевого дежурства.
+     * @param $dutyId Идентификатор боевого дежурства.
+     * @param $endDate Время завершения боевого дежурства.
+     */
+    public function saveDutyEndDate ($dutyId, $endDate) {
+        $sql = 'UPDATE duty_tbl SET duty_end_date = ? WHERE duty_id = ?';
+        $stmt = $this->pdo->prepare($sql);
+        $data = array($endDate, $dutyId);
+        return $stmt->execute($data);
+    }
 }
 
 ?>

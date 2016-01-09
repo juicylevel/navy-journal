@@ -49,6 +49,16 @@ Service.prototype.completeRunUp = function () {
 };
 
 /**
+ * Завершение боевого дежурства.
+ */
+Service.prototype.completeDuty = function () {
+	this.sendRequest('POST', DUTY_COMPLETE, {
+		request: 'completeDuty',
+		message: 'Завершение боевого дежурства'
+	});
+};
+
+/**
  * Загрузка данных таблицы журнала.
  */
 Service.prototype.getJournalTable = function (parameters) {
