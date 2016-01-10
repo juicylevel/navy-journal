@@ -126,3 +126,19 @@ function getDurationString (time) {
 function formatDoubleDigit (number) {
 	return number < 10 ? '0' + number : number;
 };
+
+/**
+ * // TODO: учесть отступы и рамки.
+ * Получение границ элемента.
+ * @param element DOM-элемент.
+ * @return Object {x: int, y: int, width: int, height: int}
+ */
+function getBounds (element) {
+	var elementStyle = document.defaultView.getComputedStyle(element, null);
+	return {
+		x: elementStyle.left == 'auto' ? 0 : parseInt(elementStyle.left),
+		y: elementStyle.top == 'auto' ? 0 : parseInt(elementStyle.top),
+		width: parseInt(elementStyle.width),
+		height: parseInt(elementStyle.height)
+	};
+};

@@ -42,6 +42,7 @@ JournalLayout.prototype.calculate = function () {
 };
 
 /**
+ * // TODO: use getBounds in baseUtils.js
  * Получение высоты элемента.
  */
 JournalLayout.prototype.getElementHeight = function (element) {

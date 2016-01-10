@@ -33,6 +33,7 @@ if (!$validated) {
 	</head>
 	<body>
 		<div id="content"></div>
+		<div id="popup"></div>
 		<div id="notifications"></div>
 	</body>
 </html>

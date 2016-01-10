@@ -119,14 +119,26 @@ JournalController.prototype.onCallStartDuty = function () {
  * Обработка события завершения подготовки к дежурству.
  */
 JournalController.prototype.onCallCompleteRunUp = function () {
-	this.service.completeRunUp();
+	Dialog.getInstance().show(Settings.getInstance().config.dialogs.completeRunUp, {
+		context: this,
+		'Да': function () {
+			this.service.completeRunUp();
+		},
+		'Нет': null
+	});
 };
 
 /**
  * Обработка события завершения дежурства.
  */
 JournalController.prototype.onCallCompleteDuty = function () {
-	this.service.completeDuty();
+	Dialog.getInstance().show(Settings.getInstance().config.dialogs.completeDuty, {
+		context: this,
+		'Да': function () {
+			this.service.completeDuty();
+		},
+		'Нет': null
+	});
 };
 
 /**

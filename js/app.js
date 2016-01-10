@@ -13,6 +13,7 @@ function windowLoadEventHandler (event) {
  */
 function initApplication () {
 	Notifier.getInstance().init();
+	Dialog.getInstance().init();
 
 	var journalModule = new Module(JournalModel, JournalView, JournalController);
 	journalModule.view.render();
