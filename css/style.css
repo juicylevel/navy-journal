@@ -200,7 +200,17 @@ nav, section, footer {
 	right: 0px;
 	bottom: 0px;
 	background-color: #000000;
-	opacity: 0.5;
+	opacity: 0.3;
+}
+
+.blur {
+	/*
+	-webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+	*/
 }
 
 .dialogBody {

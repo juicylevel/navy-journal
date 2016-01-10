@@ -56,6 +56,9 @@ var Dialog = (function (window, document) {
             var tintEl = document.createElement('div');
             tintEl.className = 'tint';
             this.rootDomElement.appendChild(tintEl);
+
+			var contentEl = document.getElementById('content');
+			contentEl.classList.add('blur');
         },
 
         /**
@@ -67,6 +70,9 @@ var Dialog = (function (window, document) {
                 this.rootDomElement.removeChild(tintEl);
                 this.rootDomElement.style.right = '';
                 this.rootDomElement.style.bottom = '';
+
+				var contentEl = document.getElementById('content');
+				contentEl.classList.remove('blur');
             }
         },
 

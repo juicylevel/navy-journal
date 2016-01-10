@@ -30,6 +30,10 @@ var scripts = [
 	'modules/journal/JournalModel',
 	'modules/journal/JournalController',
 
+	'modules/duty/DutyView',
+	'modules/duty/DutyModel',
+	'modules/duty/DutyController',
+
 	'app'
 ];
 
