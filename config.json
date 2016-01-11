@@ -6,25 +6,4 @@
 	"dialogs": {
 		"completeRunUp": "Проверьте, выполнены ли следующие требования:<ul style=\"margin:5px 0px 7px 23px;list-style-type:decimal;\"><li>Установлен ли аккумулятор лазерной установки?</li><li>Лазерная установка работает без системы управления?</li><li>Установлен ли силовой аккумулятор?</li><liУстановлен ли сигнализатор заряда силового аккуулятора?</li><li>Объектив камеры слеженя расчехлён?</li></ul>",
 		"completeDuty": "Вы точно хотите завершить дежурство?"
-	},
-	"navigation": [
-		{
-			"id": 0,
-			"label": "Начать боевое дежурство",
-			"states": ["initialState"],
-			"command": "startDuty"
-		},
-		{
-			"id": 1,
-			"label": "Журнал дежурств",
-			"states": ["initialState"],
-			"command": "showJournal"
-		},
-		{
-			"id": 2,
-			"label": "Управление данными",
-			"states": ["initialState"],
-			"command": "showDataManager"
-		}
-	]
-}
+	}

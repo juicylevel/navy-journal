@@ -1,3 +1,9 @@
+// Наименования модулей
+var JOURNAL = 'journal';
+var DUTY = 'duty';
+var STATISTICS = 'statistics';
+var DATA_MANAGEMENT = 'dataManagement';
+
 var DEFAULT_GRID_PAGE_SIZE = 10;
 
 var JOURNAL_GRID_DATA = {
@@ -21,7 +27,7 @@ var JOURNAL_GRID_DATA = {
 			label: 'Причина завершения',
 			index: 'reasonEnd',
 			dataType: 'number'
-		}		
+		}
 	],
 	rows: [
 		{

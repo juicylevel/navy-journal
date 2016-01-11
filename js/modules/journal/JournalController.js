@@ -24,7 +24,9 @@ JournalController.prototype.getHandlers = function () {
 		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem},
 		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
 		{type: CALL_COMPLETE_DUTY, handler: this.onCallCompleteDuty},
-		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal}
+		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal},
+		{type: CALL_SHOW_STATISTICS, handler: this.onCallShowStatistics},
+		{type: CALL_SHOW_DATA_MANAGEMENT, handler: this.onCallShowDataManagement}
 	]);
 };
 
@@ -105,7 +107,7 @@ JournalController.prototype.onSelectSystemMenuItem = function (menuItem) {
  * @param menuItem Выбранный пункт меню.
  */
 JournalController.prototype.onSelectModuleMenuItem = function (menuItem) {
-	console.log('onSelectModuleMenuItem', menuItem.label, menuItem.command);
+	Bus.getInstance().sendNotification(new Notification(menuItem.command));
 };
 
 /**
@@ -145,5 +147,19 @@ JournalController.prototype.onCallCompleteDuty = function () {
  * Обработка события показа модуля с таблицей боевых дежурств.
  */
 JournalController.prototype.onCallShowJournal = function () {
-	console.log('onShowJournal');
+	ModuleManager.getInstance().getModule(DUTY);
+};
+
+/**
+ * Обработка события показа модуля статистики.
+ */
+JournalController.prototype.onCallShowStatistics = function () {
+	ModuleManager.getInstance().getModule(STATISTICS);
+};
+
+/**
+ * Обработка события показа модуля управления данными.
+ */
+JournalController.prototype.onCallShowDataManagement = function () {
+	ModuleManager.getInstance().getModule(DATA_MANAGEMENT);
 };

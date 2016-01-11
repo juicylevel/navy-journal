@@ -6,9 +6,11 @@ var LOAD_JOURNAL_STATUS = 'loadJournalStatus';
 
 // оповещения от меню приложения
 var CALL_START_DUTY = 'callStartDuty';
-var CALL_SHOW_JOURNAL = 'callShowJournal';
 var CALL_COMPLETE_RUN_UP = 'callCompleteRunUp';
 var CALL_COMPLETE_DUTY = 'callCompleteDuty';
+var CALL_SHOW_JOURNAL = 'callShowJournal';
+var CALL_SHOW_STATISTICS = 'callShowStatistics';
+var CALL_SHOW_DATA_MANAGEMENT = 'callShowDataManagment';
 
 // оповещения от модели журнала.
 var CHANGE_LAST_DUTY_INFO = 'changeLastDutyInfo';

@@ -25,6 +25,8 @@ var scripts = [
 
 	'modules/base/Settings',
 	'modules/base/Module',
+	'modules/base/Bus',
+	'modules/base/ModuleManager',
 
 	'modules/journal/JournalView',
 	'modules/journal/JournalModel',

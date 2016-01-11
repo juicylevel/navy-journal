@@ -18,4 +18,6 @@ Module.prototype.mapComponents = function () {
     this.model.addReceiver(this.controller);
     this.view.addReceiver(this.controller);
     this.service.addReceiver(this.controller);
+
+    Bus.getInstance().addReceiver(this.controller);
 };

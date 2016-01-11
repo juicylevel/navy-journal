@@ -41,12 +41,12 @@ JournalModel.prototype.getModuleMenu = function () {
         {
             label: 'Статистика',
             icon: 'img/',
-            command: null
+            command: CALL_SHOW_STATISTICS
         },
         {
             label: 'Управление данными',
             icon: 'img/',
-            command: null
+            command: CALL_SHOW_DATA_MANAGEMENT
         }
     ];
 
