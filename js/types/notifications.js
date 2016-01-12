@@ -8,9 +8,10 @@ var LOAD_JOURNAL_STATUS = 'loadJournalStatus';
 var CALL_START_DUTY = 'callStartDuty';
 var CALL_COMPLETE_RUN_UP = 'callCompleteRunUp';
 var CALL_COMPLETE_DUTY = 'callCompleteDuty';
-var CALL_SHOW_JOURNAL = 'callShowJournal';
-var CALL_SHOW_STATISTICS = 'callShowStatistics';
-var CALL_SHOW_DATA_MANAGEMENT = 'callShowDataManagment';
+
+var CALL_DUTY_MODULE = 'callDutyModule';
+var CALL_STATISTICS_MODULE = 'callStatisticsModule';
+var CALL_DATA_MANAGEMENT_MODULE = 'callDataManagmentModule';
 
 // оповещения от модели журнала.
 var CHANGE_LAST_DUTY_INFO = 'changeLastDutyInfo';
@@ -26,8 +27,6 @@ var DUTY_COMPLETE = 'dutyComplete';
 // оповещения для навигации
 var CHANGE_SYSTEM_MENU = 'changeSystemMenu';
 var CHANGE_MODULE_MENU = 'changeModuleMenu';
-var SELECT_SYSTEM_MENU_ITEM = 'selectSystemMenuItem';
-var SELECT_MODULE_MENU_ITEM = 'selectModuleMenuItem';
 
 // оповещения от модели фрейма с таблицей журналов
 var CHANGE_JOURNAL_GRID_COLUMNS = 'changeJournalGridColumns';

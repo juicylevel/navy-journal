@@ -7,19 +7,19 @@ function JournalModel () {
     this.startDutyMenuItem = {
         label: 'Начать дежурство',
         icon: 'img/',
-        command: CALL_START_DUTY
+        notificationType: CALL_START_DUTY
     };
 
     this.completeRunUpMenuItem = {
         label: 'Завершить подготовку',
         icon: 'img/',
-        command: CALL_COMPLETE_RUN_UP
+        notificationType: CALL_COMPLETE_RUN_UP
     };
 
     this.completeDutyMenuItem = {
         label: 'Завершить дежурство',
         icon: 'img/',
-        command: CALL_COMPLETE_DUTY
+        notificationType: CALL_COMPLETE_DUTY
     };
 
     this.lastDutyInfo = null;
@@ -34,19 +34,19 @@ extend(JournalModel, Model);
 JournalModel.prototype.getModuleMenu = function () {
     var menu = [
         {
-            label: 'Журнал дежурств',
+            label: 'Боевые дежурства',
             icon: 'img/',
-            command: CALL_SHOW_JOURNAL
+            notificationType: CALL_DUTY_MODULE
         },
         {
             label: 'Статистика',
             icon: 'img/',
-            command: CALL_SHOW_STATISTICS
+            notificationType: CALL_STATISTICS_MODULE
         },
         {
             label: 'Управление данными',
             icon: 'img/',
-            command: CALL_SHOW_DATA_MANAGEMENT
+            notificationType: CALL_DATA_MANAGEMENT_MODULE
         }
     ];
 

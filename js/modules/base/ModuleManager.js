@@ -52,6 +52,9 @@ var ModuleManager = (function () {
                 case JOURNAL:
                     module = new Module(JournalModel, JournalView, JournalController);
                     break;
+				case DUTY:
+					module = new Module(DutyModel, DutyView, DutyController);
+					break;
                 case STATISTICS:
                 case DATA_MANAGEMENT:
                 default:

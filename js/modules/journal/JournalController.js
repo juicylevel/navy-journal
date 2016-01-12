@@ -19,14 +19,15 @@ JournalController.prototype.getHandlers = function () {
 		{type: RUN_UP_COMPLETE, handler: this.onRunUpComplete},
 		{type: DUTY_COMPLETE, handler: this.onDutyComplete},
 
-		// view handlers
-		{type: SELECT_SYSTEM_MENU_ITEM, handler: this.onSelectSystemMenuItem},
-		{type: SELECT_MODULE_MENU_ITEM, handler: this.onSelectModuleMenuItem},
+		// system menu handlers
 		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
+		{type: CALL_COMPLETE_RUN_UP, handler: this.onCallCompleteRunUp},
 		{type: CALL_COMPLETE_DUTY, handler: this.onCallCompleteDuty},
-		{type: CALL_SHOW_JOURNAL, handler: this.onCallShowJournal},
-		{type: CALL_SHOW_STATISTICS, handler: this.onCallShowStatistics},
-		{type: CALL_SHOW_DATA_MANAGEMENT, handler: this.onCallShowDataManagement}
+
+		// module menu handlers
+		{type: CALL_DUTY_MODULE, handler: this.onCallDutyModule},
+		{type: CALL_STATISTICS_MODULE, handler: this.onCallStatisticsModule},
+		{type: CALL_DATA_MANAGEMENT_MODULE, handler: this.onCallDataManagementModule}
 	]);
 };
 
@@ -90,25 +91,8 @@ JournalController.prototype.onDutyComplete = function (journalStatus) {
 };
 
 //------------------------------------------------------------------------------
-// view handlers
+// system menu handlers
 //------------------------------------------------------------------------------
-
-/**
- * Обработка события выбора пункта системного меню.
- * @param menuItem Выбранный пункт меню.
- */
-JournalController.prototype.onSelectSystemMenuItem = function (menuItem) {
-	var handlerName = 'on' + capitalize(menuItem.command);
-	this[handlerName].call(this);
-};
-
-/**
- * Обработка события выбора пункта меню модуля.
- * @param menuItem Выбранный пункт меню.
- */
-JournalController.prototype.onSelectModuleMenuItem = function (menuItem) {
-	Bus.getInstance().sendNotification(new Notification(menuItem.command));
-};
 
 /**
  * Обработка события запуска боевого дежурства.
@@ -143,10 +127,14 @@ JournalController.prototype.onCallCompleteDuty = function () {
 	});
 };
 
+//------------------------------------------------------------------------------
+// module menu handlers
+//------------------------------------------------------------------------------
+
 /**
  * Обработка события показа модуля с таблицей боевых дежурств.
  */
-JournalController.prototype.onCallShowJournal = function () {
+JournalController.prototype.onCallDutyModule = function () {
 	ModuleManager.getInstance().getModule(DUTY);
 };
 

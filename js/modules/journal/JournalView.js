@@ -121,7 +121,7 @@ JournalView.prototype.onChangeActiveDutyInfo = function (activeDutyInfo) {
  */
 JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
     var systemMenuEl = getEl(this.domElement, 'system-menu');
-    this.createMenu(systemMenu, systemMenuEl, SELECT_SYSTEM_MENU_ITEM);
+    this.createMenu(systemMenu, systemMenuEl);
 };
 
 /**
@@ -130,30 +130,29 @@ JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
  */
 JournalView.prototype.onChangeModuleMenu = function (moduleMenu) {
     var moduleMenuEl = getEl(this.domElement, 'module-menu');
-    this.createMenu(moduleMenu, moduleMenuEl, SELECT_MODULE_MENU_ITEM);
+    this.createMenu(moduleMenu, moduleMenuEl);
 };
 
 /**
  * Создание меню.
- * @param menu Информация о пункте меню.
+ * @param menuItems Список пунктов меню.
  * @param menuEl DOM-элемент контейнера меню.
- * @param notificationType Тип оповещения при выборе пункта меню.
  */
-JournalView.prototype.createMenu = function (menu, menuEl, notificationType) {
+JournalView.prototype.createMenu = function (menuItems, menuEl) {
     removeChilds(menuEl);
 
     var menuItem,
         menuItemEl,
         i,
-        itemsCount = menu.length,
+        itemsCount = menuItems.length,
         self = this;
 
     for (i = 0; i < itemsCount; i++) {
-        menuItem = menu[i];
+        menuItem = menuItems[i];
         menuItemEl = this.createMenuItemElement(menuItem);
         menuItemEl.menuItem = menuItem;
         menuItemEl.addEventListener('click', function () {
-            self.sendNotification(new Notification(notificationType, this.menuItem));
+            self.sendNotification(new Notification(this.menuItem.notificationType, this.menuItem));
         });
         menuEl.appendChild(menuItemEl);
     }
