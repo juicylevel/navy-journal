@@ -170,3 +170,11 @@ JournalView.prototype.createMenuItemElement = function (menuItem) {
     menuItemEl.innerHTML = menuItemHtml;
 	return menuItemEl;
 };
+
+/**
+ * TODO: write method description
+ */
+JournalView.prototype.addModuleEl = function (moduleEl) {
+    var frameContainerEl = document.getElementById('frameContainer');
+    frameContainerEl.appendChild(moduleEl);
+}

@@ -62,6 +62,8 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 
 	var moduleMenu = this.model.getModuleMenu();
 	this.model.setCurrentModuleMenu(moduleMenu);
+
+	this.onCallDutyModule();
 };
 
 /**
@@ -135,7 +137,9 @@ JournalController.prototype.onCallCompleteDuty = function () {
  * Обработка события показа модуля с таблицей боевых дежурств.
  */
 JournalController.prototype.onCallDutyModule = function () {
-	ModuleManager.getInstance().getModule(DUTY);
+	var dutyModule = ModuleManager.getInstance().getModule(DUTY);
+	var dutyModuleEl = dutyModule.view.render();
+	this.view.addModuleEl(dutyModuleEl);
 };
 
 /**

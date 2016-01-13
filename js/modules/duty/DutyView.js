@@ -1,10 +1,11 @@
 /**
- * Фрейм с таблицей боевых дежурств.
+ * TODO: write class description
  */
 function DutyView () {
-	this.super(arguments);
+	View.apply(this, arguments);
 
-	this.journalGrid = null;
+	this.dutyGrid = null;
+	this.paginator = null;
 };
 
 extend(DutyView, View);
@@ -13,9 +14,10 @@ extend(DutyView, View);
  * Получение списка обработчиков оповещений.
  */
 DutyView.prototype.getHandlers = function () {
-	return [
+	/*return [
 		{type: LOAD_JOURNAL_GRID_DATA, handler: this.loadJournalGridDataHandler}
-	];
+	];*/
+	return [];
 };
 
 /**
@@ -25,34 +27,33 @@ DutyView.prototype.render = function () {
 	this.domElement = document.createElement('div');
 
 	this.createTools();
-	this.createGrid();
+	//this.createGrid();
+	this.createPaginator();
+
 	this.sendNotification(new Notification(VIEW_READY));
 
 	return this.domElement;
-}
+};
 
-/**
- * @private
- * Создание панели инструментов.
- */
 DutyView.prototype.createTools = function () {
 	var html = '<div style="font-weight: bold;">Боевые дежурства:</div>';
 	this.domElement.insertAdjacentHTML('afterbegin', html);
-}
+};
 
-/**
- * @private
- * Создание таблицы боевых дежурств.
- */
 DutyView.prototype.createGrid = function () {
-	this.journalGrid = new DataGrid();
-	this.add(this.journalGrid);
+	this.dutyGrid = new DataGrid();
 
-	var gridElement = this.journalGrid.domElement;
-	gridElement.addEventListener(CHANGE_PAGE, this.onChangePage.bind(this));
-}
+	var dutyGridEl = this.dutyGrid.domElement;
+	this.domElement.appendChild(dutyGridEl);
+	//gridEl.addEventListener(CHANGE_PAGE, this.onChangePage.bind(this));
+};
 
-DutyView.prototype.loadGridData = function () {
+DutyView.prototype.createPaginator = function () {
+	this.paginator = new Paginator();
+	this.domElement.appendChild(this.paginator.getDomElement());
+};
+
+/*DutyView.prototype.loadGridData = function () {
 	var parameters = {
 		offset: 0,
 		pageSize: DEFAULT_GRID_PAGE_SIZE,
@@ -76,10 +77,7 @@ DutyView.prototype.onChangePage = function (event) {
 	this.sendNotification(new Notification(GET_JOURNAL_TABLE_CMD, parameters));
 }
 
-/**
- * Обновление состояния фрейма таблицы журнала.
- * @param notification Объект оповещения JournalNotification {type: 'тип события', data: 'данные'}.
- */
 DutyView.prototype.loadJournalGridDataHandler = function (gridData) {
 	this.journalGrid.setGridData(gridData);
 }
+*/

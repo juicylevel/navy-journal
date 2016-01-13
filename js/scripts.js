@@ -16,10 +16,12 @@ var scripts = [
 	'core/View',
 	'core/Controller',
 
-	'components/DataGrid',
 	'components/JournalLayout',
 	'components/Notifier',
 	'components/Dialog',
+	'components/Widget',
+	'components/Paginator',
+	'components/DataGrid',
 
 	'service/Service',
 

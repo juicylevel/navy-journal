@@ -19,8 +19,8 @@ function DataGrid () {
 DataGrid.prototype.render = function () {
 	this.domElement = document.createElement('div');
 	this.domElement.className = 'dataGrid';
-	var tableElement = document.createElement('table');
 
+	var tableElement = document.createElement('table');
 	this.domElement.appendChild(tableElement);
 
 	var paggingTools = this.createPaggingTools();

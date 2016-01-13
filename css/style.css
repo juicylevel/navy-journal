@@ -106,16 +106,16 @@ nav, section, footer {
 	padding: 5px;
 }
 
-.dataGrid .paggingTools {
+.paginator {
 	padding: 5px 0px;
 }
 
-.dataGrid .paggingTools div {
+.paginator div {
 	display: inline;
 	margin-right: 10px;
 }
 
-.dataGrid .paggingTools input[type="text"] {
+.paginator input[type="text"] {
 	width: 25px;
 }
 
