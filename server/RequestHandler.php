@@ -54,7 +54,7 @@ class RequestHandler {
 	/**
 	 * Завершение боевого дежурства.
 	 */
-	public function completeDuty() {
+	public function completeDuty () {
 		$activeDuty = $this->db->getActiveDuty();
 		$endDate = new DateTime();
 		$endDateString = $endDate->format('Y-m-d H:i:s');
@@ -66,6 +66,20 @@ class RequestHandler {
 
 		$this->db->saveDutyEndDate($activeDuty->duty_id, $endDateString);
 		return $this->getJournalStatus();
+	}
+
+	/**
+	 * Получение списка боевых дежурств.
+	 * @param $offset
+	 * @param $pageSize
+	 */
+	public function getDutyList ($offset, $pageSize) {
+		return array (
+			'dutyList' => array (
+				'count' => $this->db->getDutyCount(),
+				'data' => $this->db->getDutyList($offset, $pageSize)
+			)
+		);
 	}
 
 	/**

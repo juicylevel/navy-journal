@@ -6,6 +6,10 @@
 function JournalView (domElement) {
     View.apply(this, arguments);
 
+    this.frames = {
+        JOURNAL_GRID_FRAME: 'journalGrid'
+    };
+
     this.durationTimer;
 };
 
@@ -20,7 +24,8 @@ JournalView.prototype.getHandlers = function () {
 		{type: CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
         {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
         {type: CHANGE_SYSTEM_MENU, handler: this.onChangeSystemMenu},
-        {type: CHANGE_MODULE_MENU, handler: this.onChangeModuleMenu}
+        {type: CHANGE_MODULE_MENU, handler: this.onChangeModuleMenu},
+        {type: CHANGE_DUTY_LIST, handler: this.onChangeDutyList}
 	];
 };
 
@@ -55,13 +60,14 @@ JournalView.prototype.render = function () {
                     '<div module-menu></div>' +
                 '</div>' +
             '</nav>' +
-            '<section id="frameContainer">' +
+            '<section id="frameContainer" frameContainer>' +
 
             '</section>' +
             '<footer id="footer"></footer>' +
         '</div>';
 
     this.domElement.innerHTML = journalUIHtml;
+    this.frameContainerEl = getEl(this.domElement, 'frameContainer');
 
     new JournalLayout();
 
@@ -172,9 +178,43 @@ JournalView.prototype.createMenuItemElement = function (menuItem) {
 };
 
 /**
- * TODO: write method description
+ * Создание фрейма с таблицей боевых дежурств.
+ * @return DOM-элемент фрейма.
  */
-JournalView.prototype.addModuleEl = function (moduleEl) {
-    var frameContainerEl = document.getElementById('frameContainer');
-    frameContainerEl.appendChild(moduleEl);
-}
+JournalView.prototype.createJournalGridFrame = function () {
+    var journalGridFrame = new JournalGridFrame(this.domElement);
+    journalGridFrame.render();
+
+    var journalGridFrameEl = journalGridFrame.getDomElement();
+    journalGridFrameEl.addEventListener(CHANGE_PAGE, (function (event) {
+        event.stopPropagation();
+        this.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
+            offset: event.detail.offset,
+            pageSize: event.detail.pageSize
+        }));
+    }).bind(this));
+
+    return journalGridFrame;
+};
+
+/**
+ * Показ фрейма.
+ * @param frameName Наименование фрейма.
+ */
+JournalView.prototype.showFrame = function (frameName) {
+    var frame = View.prototype.showFrame.apply(this, arguments);
+
+    if (frameName == JOURNAL_GRID_FRAME) {
+        frame.init();
+    }
+
+    return frame;
+};
+
+/**
+ * Обработка события обновления списка боевых дежурств.
+ * @param dutyList Список боевых дежурств.
+ */
+JournalView.prototype.onChangeDutyList = function (dutyList) {
+    this.getFrame(JOURNAL_GRID_FRAME).setDutyList(dutyList);
+};

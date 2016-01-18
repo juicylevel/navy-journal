@@ -1,1 +1,1 @@
-var JOURNAL_GRID_FRAME = 'journalGridFrame';
+var JOURNAL_GRID_FRAME = 'journalGrid';

@@ -86,6 +86,24 @@ class DataBase {
         $data = array($endDate, $dutyId);
         return $stmt->execute($data);
     }
+
+    /**
+     * Получение общего количества боевых дежурств.
+     */
+    public function getDutyCount () {
+        $sql = 'SELECT * FROM duty_tbl';
+        $stmt = $this->pdo->query($sql);
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Получение списка боевых дежурств.
+     */
+    public function getDutyList ($offset, $pageSize) {
+        $sql = 'SELECT * FROM duty_tbl LIMIT ' . $offset . ',' . $pageSize;
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>

@@ -18,6 +18,8 @@ JournalController.prototype.getHandlers = function () {
 		{type: CREATE_DUTY_COMPLETE, handler: this.onCreateDutyComplete},
 		{type: RUN_UP_COMPLETE, handler: this.onRunUpComplete},
 		{type: DUTY_COMPLETE, handler: this.onDutyComplete},
+		{type: DUTY_COMPLETE, handler: this.onDutyComplete},
+		{type: LOAD_DUTY_LIST, handler: this.onLoadDutyList},
 
 		// system menu handlers
 		{type: CALL_START_DUTY, handler: this.onCallStartDuty},
@@ -27,7 +29,10 @@ JournalController.prototype.getHandlers = function () {
 		// module menu handlers
 		{type: CALL_DUTY_MODULE, handler: this.onCallDutyModule},
 		{type: CALL_STATISTICS_MODULE, handler: this.onCallStatisticsModule},
-		{type: CALL_DATA_MANAGEMENT_MODULE, handler: this.onCallDataManagementModule}
+		{type: CALL_DATA_MANAGEMENT_MODULE, handler: this.onCallDataManagementModule},
+
+		// view handlers
+		{type: CALL_LOAD_DUTY_LIST, handler: this.onCallLoadDutyList}
 	]);
 };
 
@@ -56,14 +61,13 @@ JournalController.prototype.onLoadConfig = function (config) {
  * @param journalStatus Статус журнала.
  */
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
-	this.model.setJournalStatus(journalStatus);
+	this.view.showFrame(this.view.frames.JOURNAL_GRID_FRAME);
 
+	this.model.setJournalStatus(journalStatus);
 	this.model.updateSystemMenu();
 
 	var moduleMenu = this.model.getModuleMenu();
 	this.model.setCurrentModuleMenu(moduleMenu);
-
-	this.onCallDutyModule();
 };
 
 /**
@@ -90,6 +94,14 @@ JournalController.prototype.onRunUpComplete = function (activeDuty) {
  */
 JournalController.prototype.onDutyComplete = function (journalStatus) {
 	this.onLoadJournalStatus(journalStatus);
+};
+
+/**
+ * Обработка события завершения загрузки списка боевых дежурств.
+ * @param dutyList Список боевых дежурств.
+ */
+JournalController.prototype.onLoadDutyList = function (dutyList) {
+	this.model.setDutyList(dutyList);
 };
 
 //------------------------------------------------------------------------------
@@ -137,9 +149,9 @@ JournalController.prototype.onCallCompleteDuty = function () {
  * Обработка события показа модуля с таблицей боевых дежурств.
  */
 JournalController.prototype.onCallDutyModule = function () {
-	var dutyModule = ModuleManager.getInstance().getModule(DUTY);
-	var dutyModuleEl = dutyModule.view.render();
-	this.view.addModuleEl(dutyModuleEl);
+	//var dutyModule = ModuleManager.getInstance().getModule(DUTY);
+	//var dutyModuleEl = dutyModule.view.render();
+	//this.view.addModuleEl(dutyModuleEl);
 };
 
 /**
@@ -154,4 +166,15 @@ JournalController.prototype.onCallShowStatistics = function () {
  */
 JournalController.prototype.onCallShowDataManagement = function () {
 	ModuleManager.getInstance().getModule(DATA_MANAGEMENT);
+};
+
+//------------------------------------------------------------------------------
+// view handlers
+//------------------------------------------------------------------------------
+
+/**
+ * Загрузка списка боевых дежурств.
+ */
+JournalController.prototype.onCallLoadDutyList = function (dutyListOptions) {
+	this.service.getDutyList(dutyListOptions.offset, dutyListOptions.pageSize);
 };

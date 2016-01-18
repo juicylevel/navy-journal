@@ -9,6 +9,8 @@ var scripts = [
 	'types/consts',
 	'types/notifications',
 
+	'settings/Settings',
+
 	'core/Dispatcher',
 	'core/Receiver',
 	'core/Notification',
@@ -25,7 +27,6 @@ var scripts = [
 
 	'service/Service',
 
-	'modules/base/Settings',
 	'modules/base/Module',
 	'modules/base/Bus',
 	'modules/base/ModuleManager',
@@ -33,6 +34,7 @@ var scripts = [
 	'modules/journal/JournalView',
 	'modules/journal/JournalModel',
 	'modules/journal/JournalController',
+	'modules/journal/frames/JournalGridFrame',
 
 	'modules/duty/DutyView',
 	'modules/duty/DutyModel',

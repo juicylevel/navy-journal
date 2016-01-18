@@ -13,6 +13,8 @@ var CALL_DUTY_MODULE = 'callDutyModule';
 var CALL_STATISTICS_MODULE = 'callStatisticsModule';
 var CALL_DATA_MANAGEMENT_MODULE = 'callDataManagmentModule';
 
+var CALL_LOAD_DUTY_LIST = 'callLoadDutyList';
+
 // оповещения от модели журнала.
 var CHANGE_LAST_DUTY_INFO = 'changeLastDutyInfo';
 var CHANGE_ACTIVE_DUTY_INFO = 'changeActiveDutyInfo';
@@ -23,6 +25,7 @@ var LOAD_JOURNAL_GRID_DATA = 'loadJournalGridData';
 var CREATE_DUTY_COMPLETE = 'createDutyComplete';
 var RUN_UP_COMPLETE = 'runUpComplete';
 var DUTY_COMPLETE = 'dutyComplete';
+var LOAD_DUTY_LIST = 'loadDutyList';
 
 // оповещения для навигации
 var CHANGE_SYSTEM_MENU = 'changeSystemMenu';
@@ -31,3 +34,5 @@ var CHANGE_MODULE_MENU = 'changeModuleMenu';
 // оповещения от модели фрейма с таблицей журналов
 var CHANGE_JOURNAL_GRID_COLUMNS = 'changeJournalGridColumns';
 var CHANGE_JOURNAL_GRID_ROWS = 'changeJournalGridRows';
+
+var CHANGE_DUTY_LIST = 'changeDutyList';

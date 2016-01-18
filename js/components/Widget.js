@@ -3,7 +3,6 @@
  */
 function Widget () {
     this.domElement = null;
-    this.render();
 };
 
 /**
@@ -18,4 +17,11 @@ Widget.prototype.getDomElement = function () {
  */
 Widget.prototype.render = function () {
 
+};
+
+/**
+ * Инициализация виджета.
+ */
+Widget.prototype.init = function () {
+    
 };

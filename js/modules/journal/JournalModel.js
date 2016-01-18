@@ -24,6 +24,7 @@ function JournalModel () {
 
     this.lastDutyInfo = null;
     this.activeDutyInfo = null;
+    this.dutyList = null;
 };
 
 extend(JournalModel, Model);
@@ -99,6 +100,15 @@ JournalModel.prototype.setActiveDuty = function (activeDuty) {
     }
 
     this.sendNotification(new Notification(CHANGE_ACTIVE_DUTY_INFO, this.activeDutyInfo));
+};
+
+/**
+ * Установка списка боевых дежурств.
+ * @param dutyList Список боевых дежурств.
+ */
+JournalModel.prototype.setDutyList = function (dutyList) {
+    this.dutyList = dutyList;
+    this.sendNotification(new Notification(CHANGE_DUTY_LIST, this.dutyList));
 };
 
 /**

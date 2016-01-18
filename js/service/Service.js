@@ -25,7 +25,7 @@ Service.prototype.getJournalStatus = function () {
 	this.sendRequest('GET', LOAD_JOURNAL_STATUS, {
 		request: 'getJournalStatus',
 		message: 'Определение статуса журнала'
-	})
+	});
 };
 
 /**
@@ -59,34 +59,18 @@ Service.prototype.completeDuty = function () {
 };
 
 /**
- * Загрузка данных таблицы журнала.
+ * Загрузка списка боевых дежурств.
+ * @param offset
+ * @param pageSize
  */
-Service.prototype.getJournalTable = function (parameters) {
-	// var offset = parameters.offset;
-	// var pageSize = parameters.pageSize;
-	// var includeColumns = parameters.includeColumns;
-	//
-	// var gridData = null;
-	//
-	// if (includeColumns) {
-	// 	gridData = {
-	// 		columns: JOURNAL_GRID_DATA.columns,
-	// 		rows: []
-	// 	};
-	// }
-	// else {
-	// 	gridData = {
-	// 		rows: []
-	// 	};
-	// }
-	//
-	// gridData.rows = JOURNAL_GRID_DATA.rows.slice(offset, offset + pageSize);
-	//
-	// var self = this;
-	// setTimeout(function () {
-	// 	self.sendNotification(new Notification(LOAD_JOURNAL_GRID_DATA, gridData));
-	// }, 500);
-}
+Service.prototype.getDutyList = function (offset, pageSize) {
+	this.sendRequest('GET', LOAD_DUTY_LIST, {
+		request: 'getDutyList',
+		offset: offset,
+		pageSize: pageSize,
+		message: 'Загрузка списка боевых дежурств'
+	});
+};
 
 /**
  * Отправка запроса на сервер.

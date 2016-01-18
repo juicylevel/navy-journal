@@ -75,6 +75,9 @@ switch ($request) {
 	case 'completeDuty':
 		$result = $requestHandler->completeDuty();
 		break;
+	case 'getDutyList':
+		$result = $requestHandler->getDutyList($offset, $pageSize);
+		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }
