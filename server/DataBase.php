@@ -98,9 +98,13 @@ class DataBase {
 
     /**
      * Получение списка боевых дежурств.
+     * @param $dutyListColumns Список колонок таблицы боевых дежурств.
+     * @param $offset Номер записи, с которой начинается выборка.
+     * @param $pageSize Номер записи, которой заканчивается выборка.
      */
-    public function getDutyList ($offset, $pageSize) {
-        $sql = 'SELECT * FROM duty_tbl LIMIT ' . $offset . ',' . $pageSize;
+    public function getDutyList ($dutyListColumns, $offset, $pageSize) {
+        $columns = implode(', ', $dutyListColumns);
+        $sql = 'SELECT ' . $columns . ' FROM duty_tbl LIMIT ' . $offset . ',' . $pageSize;
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -14,6 +14,8 @@ var Settings = (function () {
 		if (!(this instanceof Settings)) {
 			return new Settings();
 		}
+
+		this.config = null;
 	};
 
     /**
@@ -23,8 +25,13 @@ var Settings = (function () {
         // константы
         DEFAULT_GRID_PAGE_SIZE: 10,
 
-        // параметры
-        config: {}
+		/**
+		 * Получение колонок таблицы боевых дежурств.
+		 * @return {column: label} Список боевых дежкрств.
+		 */
+		getDutyListColumns: function () {
+			return this.config.meta.dutyGridColumns;
+		}
 	};
 
 	/**

@@ -2,6 +2,7 @@
 
 require_once 'utils.php';
 require_once 'DataBase.php';
+require_once 'Settings.php';
 
 /**
  * Обработка запросов с клиента.
@@ -74,10 +75,11 @@ class RequestHandler {
 	 * @param $pageSize
 	 */
 	public function getDutyList ($offset, $pageSize) {
+		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
 		return array (
 			'dutyList' => array (
 				'count' => $this->db->getDutyCount(),
-				'data' => $this->db->getDutyList($offset, $pageSize)
+				'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize)
 			)
 		);
 	}

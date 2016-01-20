@@ -216,5 +216,6 @@ JournalView.prototype.showFrame = function (frameName) {
  * @param dutyList Список боевых дежурств.
  */
 JournalView.prototype.onChangeDutyList = function (dutyList) {
-    this.getFrame(JOURNAL_GRID_FRAME).setDutyList(dutyList);
+    var journalGridFrame = this.getFrame(JOURNAL_GRID_FRAME);
+    journalGridFrame.paginator.setData(dutyList.data, dutyList.count);
 };

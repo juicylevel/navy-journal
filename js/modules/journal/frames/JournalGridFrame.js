@@ -5,6 +5,7 @@ function JournalGridFrame () {
     Widget.apply(this, arguments);
 
     this.paginator = null;
+    this.grid = null;
 };
 
 extend(JournalGridFrame, Widget);
@@ -16,6 +17,7 @@ JournalGridFrame.prototype.render = function () {
     this.domElement = document.createElement('div');
 
 	this.createTools();
+    this.createGrid();
 	this.createPaginator();
 
 	return this.domElement;
@@ -37,6 +39,15 @@ JournalGridFrame.prototype.createTools = function () {
 };
 
 /**
+ * Создание таблицы боевых дежурств.
+ */
+JournalGridFrame.prototype.createGrid = function () {
+    this.grid = new DataGrid();
+    this.grid.render();
+    this.domElement.appendChild(this.grid.getDomElement());
+};
+
+/**
  * Создания компонента для постраничного просмотра элементов таблицы.
  */
 JournalGridFrame.prototype.createPaginator = function () {
@@ -44,11 +55,3 @@ JournalGridFrame.prototype.createPaginator = function () {
     this.paginator.render();
 	this.domElement.appendChild(this.paginator.getDomElement());
 };
-
-/**
- * Установка списка боевых дежурств.
- * @param dutyList Список боевых дежурств.
- */
-JournalGridFrame.prototype.setDutyList = function (dutyList) {
-    this.paginator.setData(dutyList.data, dutyList.count);
-}
