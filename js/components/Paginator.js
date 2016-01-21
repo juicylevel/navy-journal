@@ -37,6 +37,9 @@ Paginator.prototype.render = function () {
 	    '</div>' +
 	    '<div>' +
 	    	'Записи с <span fromRecord></span> по <span toRecord></span>' +
+	    '</div>' +
+        '<div>' +
+	    	'Всего: <span total></span>' +
 	    '</div>';
 
 	this.domElement = document.createElement('div');
@@ -195,6 +198,9 @@ Paginator.prototype.updateCurrentPage = function () {
 	this.currentPage = Math.ceil((this.offset + 1) / this.getPageSize());
 	var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
 	currentPageInputEl.value = this.currentPage;
+
+    var totalEl = getEl(this.domElement, 'total');
+    totalEl.innerHTML = this.total;
 }
 
 /**

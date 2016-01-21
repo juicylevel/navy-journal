@@ -104,7 +104,13 @@ class DataBase {
      */
     public function getDutyList ($dutyListColumns, $offset, $pageSize) {
         $columns = implode(', ', $dutyListColumns);
-        $sql = 'SELECT ' . $columns . ' FROM duty_tbl LIMIT ' . $offset . ',' . $pageSize;
+        // сортировка: сначала идёт текущее оевое дежурство
+        // (то, у которого duty_end_date = NULL), затем идут
+        // завершённые дежурства, отосортированные по duty_end_date
+        // по убыванию
+        $sql = 'SELECT ' . $columns . ' FROM duty_tbl ' .
+               'ORDER BY ISNULL(duty_end_date) DESC, duty_end_date DESC ' .
+               'LIMIT ' . $offset . ',' . $pageSize;
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

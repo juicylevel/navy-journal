@@ -30,11 +30,16 @@ JournalGridFrame.prototype.init = function () {
     this.paginator.init();
 };
 
+JournalGridFrame.prototype.setDutyList = function (dutyList) {
+    this.paginator.setData(dutyList.data, dutyList.count);
+    this.grid.setData(dutyList.data);
+};
+
 /**
  * Создание панели инструментов.
  */
 JournalGridFrame.prototype.createTools = function () {
-	var html = '<div style="font-weight: bold;">Боевые дежурства:</div>';
+	var html = '<div style="font-weight: bold; margin-bottom: 5px;">Боевые дежурства:</div>';
 	this.domElement.insertAdjacentHTML('afterbegin', html);
 };
 
@@ -42,8 +47,10 @@ JournalGridFrame.prototype.createTools = function () {
  * Создание таблицы боевых дежурств.
  */
 JournalGridFrame.prototype.createGrid = function () {
-    this.grid = new DataGrid();
+    var columns = Settings.getInstance().getDutyListColumns();
+    this.grid = new DataGrid('column', 'name', 'Список боевых дежурств пуст'); // TODO: get column field name from config
     this.grid.render();
+    this.grid.setColumns(columns);
     this.domElement.appendChild(this.grid.getDomElement());
 };
 

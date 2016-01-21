@@ -217,5 +217,5 @@ JournalView.prototype.showFrame = function (frameName) {
  */
 JournalView.prototype.onChangeDutyList = function (dutyList) {
     var journalGridFrame = this.getFrame(JOURNAL_GRID_FRAME);
-    journalGridFrame.paginator.setData(dutyList.data, dutyList.count);
+    journalGridFrame.setDutyList(dutyList);
 };

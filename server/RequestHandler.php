@@ -77,10 +77,8 @@ class RequestHandler {
 	public function getDutyList ($offset, $pageSize) {
 		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
 		return array (
-			'dutyList' => array (
-				'count' => $this->db->getDutyCount(),
-				'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize)
-			)
+			'count' => $this->db->getDutyCount(),
+			'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize)
 		);
 	}
 

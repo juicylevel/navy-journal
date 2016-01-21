@@ -15,7 +15,7 @@ var Settings = (function () {
 			return new Settings();
 		}
 
-		this.config = null;
+		this.config = {};
 	};
 
     /**
@@ -30,7 +30,12 @@ var Settings = (function () {
 		 * @return {column: label} Список боевых дежкрств.
 		 */
 		getDutyListColumns: function () {
-			return this.config.meta.dutyGridColumns;
+			var dutyGridColumns = this.config.meta.dutyGridColumns;
+			var columns = [];
+			for (var column in dutyGridColumns) {
+				columns.push({column: column, name: dutyGridColumns[column]});
+			}
+			return columns;
 		}
 	};
 

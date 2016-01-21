@@ -23,5 +23,13 @@ Widget.prototype.render = function () {
  * Инициализация виджета.
  */
 Widget.prototype.init = function () {
-    
+
+};
+
+/**
+ * Данные виджета.
+ * @param data Данные.
+ */
+Widget.prototype.setData = function (data) {
+
 };
