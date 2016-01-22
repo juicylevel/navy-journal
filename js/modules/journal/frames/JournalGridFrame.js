@@ -35,6 +35,10 @@ JournalGridFrame.prototype.setDutyList = function (dutyList) {
     this.grid.setData(dutyList.data);
 };
 
+JournalGridFrame.prototype.refreshDutyList = function () {
+    this.paginator.onClickRefreshGridButton(); //TODO: bad method
+};
+
 /**
  * Создание панели инструментов.
  */

@@ -83,7 +83,7 @@ Paginator.prototype.addEventListeners = function (eventElementsConfig) {
 Paginator.prototype.setData = function (data, total) {
     this.data = data;
     this.total = total;
-    this.updateCurrentPage();
+    this.updateDisplayValues();
 };
 
 /**
@@ -91,7 +91,7 @@ Paginator.prototype.setData = function (data, total) {
  */
 Paginator.prototype.onClickFirstPageButton = function () {
 	this.offset = 0;
-	this.updateCurrentPage();
+	this.updateDisplayValues();
 	this.dispatchChangePageEvent();
 };
 
@@ -103,7 +103,7 @@ Paginator.prototype.onClickBackPageButton = function () {
 	var newOffset = this.offset - pageSize;
 	if (newOffset >= 0) {
 		this.offset = newOffset;
-		this.updateCurrentPage();
+		this.updateDisplayValues();
 		this.dispatchChangePageEvent();
 	}
 };
@@ -116,7 +116,7 @@ Paginator.prototype.onClickNextPageButton = function () {
 	var newOffset = this.offset + pageSize;
 	if (newOffset <= this.total - 1) {
 		this.offset = newOffset;
-		this.updateCurrentPage();
+		this.updateDisplayValues();
 		this.dispatchChangePageEvent();
 	}
 };
@@ -127,7 +127,7 @@ Paginator.prototype.onClickNextPageButton = function () {
 Paginator.prototype.onClickLastPageButton = function () {
 	var pages = Math.ceil(this.total / this.getPageSize());
 	this.offset = (pages - 1) * this.getPageSize();
-	this.updateCurrentPage();
+	this.updateDisplayValues();
 	this.dispatchChangePageEvent();
 };
 
@@ -136,7 +136,7 @@ Paginator.prototype.onClickLastPageButton = function () {
  */
 Paginator.prototype.onClickRefreshGridButton = function () {
 	this.offset = 0;
-	this.updateCurrentPage();
+	this.updateDisplayValues();
 	this.dispatchChangePageEvent();
 };
 
@@ -165,7 +165,7 @@ Paginator.prototype.onClickGoToPageButton = function () {
 
 	this.offset = (page * this.getPageSize()) - this.getPageSize();
 
-	this.updateCurrentPage();
+	this.updateDisplayValues();
 	this.dispatchChangePageEvent();
 };
 
@@ -176,8 +176,8 @@ Paginator.prototype.onClickGoToPageButton = function () {
  */
 Paginator.prototype.onKeypressPageSizeInput = function (event) {
 	if (event.keyCode == 13) {
-		this.onRefreshGridButton();
-		this.updateCurrentPage();
+		this.onClickRefreshGridButton();
+		this.updateDisplayValues();
 	}
 };
 
@@ -187,20 +187,27 @@ Paginator.prototype.onKeypressPageSizeInput = function (event) {
  */
 Paginator.prototype.onKeypressCurrentPageInput = function (event) {
 	if (event.keyCode == 13) {
-		this.onGoToPageButton();
+		this.onClickGoToPageButton();
 	}
 };
 
 /**
- * Обновление текущей страницы.
+ * Обновление отображаемых значений на панели компонента.
  */
-Paginator.prototype.updateCurrentPage = function () {
+Paginator.prototype.updateDisplayValues = function () {
 	this.currentPage = Math.ceil((this.offset + 1) / this.getPageSize());
 	var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
 	currentPageInputEl.value = this.currentPage;
 
     var totalEl = getEl(this.domElement, 'total');
     totalEl.innerHTML = this.total;
+
+    var fromRecordEl = getEl(this.domElement, 'fromRecord');
+    fromRecordEl.innerHTML = this.offset + 1;
+
+    var toRecordEl = getEl(this.domElement, 'toRecord');
+    var currentRecordsCount = !isEmpty(this.data) ? this.data.length : 0;
+    toRecordEl.innerHTML = this.offset + currentRecordsCount;
 }
 
 /**

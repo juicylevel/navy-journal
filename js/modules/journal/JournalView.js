@@ -212,6 +212,14 @@ JournalView.prototype.showFrame = function (frameName) {
 };
 
 /**
+ * Обновление списка боевых дежурств.
+ */
+JournalView.prototype.refreshDutyList = function () {
+    var journalGridFrame = this.getFrame(JOURNAL_GRID_FRAME);
+    journalGridFrame.refreshDutyList();
+};
+
+/**
  * Обработка события обновления списка боевых дежурств.
  * @param dutyList Список боевых дежурств.
  */

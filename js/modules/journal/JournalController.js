@@ -77,6 +77,7 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 JournalController.prototype.onCreateDutyComplete = function (createdDuty) {
 	this.model.setActiveDuty(createdDuty);
 	this.model.updateSystemMenu();
+	this.view.refreshDutyList();
 };
 
 /**
@@ -86,14 +87,17 @@ JournalController.prototype.onCreateDutyComplete = function (createdDuty) {
 JournalController.prototype.onRunUpComplete = function (activeDuty) {
 	this.model.setActiveDuty(activeDuty);
 	this.model.updateSystemMenu();
+	this.view.refreshDutyList();
 };
 
+// TODO: почему-то 2 раза шлётся запрос на обновления таблицы боевых дежурств после завершения текущего боевого дежурства
 /**
  * Обработка события завершения дежурства на сервере.
  * @param journalStatus Статус журнала.
  */
 JournalController.prototype.onDutyComplete = function (journalStatus) {
 	this.onLoadJournalStatus(journalStatus);
+	this.view.refreshDutyList();
 };
 
 /**
