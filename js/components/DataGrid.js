@@ -1,5 +1,8 @@
 /**
  * Компонент таблицы.
+ * @param emptyGridMessage Текст, который отображается когда записей в таблице нет.
+ * @param columnName Наименование ключа (кода) колонки.
+ * @param columnField Подпись (название) колонки.
  */
 function DataGrid (emptyGridMessage, columnName, columnField) {
 	Widget.apply(this, arguments);
@@ -130,7 +133,7 @@ DataGrid.prototype.createRows = function () {
 	var rowsElements = [];
 	for (var i = 0; i < this.rowsData.length; i++) {
 		var rowEl = document.createElement('tr');
-		rowEl.setAttribute(this.ROW_ATTR, 'row-' + (i + 1));
+		rowEl.setAttribute(this.ROW_ATTR, this.getRowAttributeValue(i));
 		rowEl.className = 'gridRow';
 		var rowData = this.rowsData[i];
 		for (var j = 0; j < this.columnsData.length; j++) {
@@ -142,6 +145,15 @@ DataGrid.prototype.createRows = function () {
 		rowsElements.push(rowEl);
 	}
 	return rowsElements;
+};
+
+/**
+ * Получение значения атрибута ряда таблицы.
+ * @param rowIndex Индекс ряда таблицы.
+ * @return Значение атрибута.
+ */
+DataGrid.prototype.getRowAttributeValue = function (rowIndex) {
+	return this.ROW_ATTR + '-' + (rowIndex + 1);
 };
 
 /**
