@@ -22,8 +22,13 @@ var Settings = (function () {
      * Настройки приложения (константы и конфигурация).
      */
 	Settings.prototype = {
-        // константы
-        DEFAULT_GRID_PAGE_SIZE: 10,
+        /**
+		 * Получение максимального размера страницы в таблице боевых дежурств.
+		 * @return Размер страницы.
+		 */
+		getDutyListPageSize: function () {
+			return this.config.ui.dutyListPageSize;
+		},
 
 		/**
 		 * Получение колонок таблицы боевых дежурств.

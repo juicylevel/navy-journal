@@ -1,12 +1,22 @@
 /**
  * Компонент таблицы.
  */
-function DataGrid (columnName, columnField, emptyGridMessage) {
+function DataGrid (emptyGridMessage, columnName, columnField) {
 	Widget.apply(this, arguments);
 
-	this.emptyGridMessage = emptyGridMessage;
-	this.columnName = columnName;
-	this.columnField = columnField;
+	this.TABLE_ATTR = 'table';
+	this.COLUMNS_ATTR = 'columns';
+	this.COLUMN_ATTR = 'column';
+	this.ROW_ATTR = 'row';
+	this.CELL_ATTR = 'cell';
+
+	this.EMPTY_ROW = 'emptyRow';
+	this.EMPTY_CELL = 'emptyCell';
+	this.EMPTY_ROW_TEXT = emptyGridMessage || 'Список пуст';
+
+	this.COLUMN_NAME = columnName || 'column';
+	this.COLUMN_FIELD = columnField || 'name';
+
 	this.columnsData = [];
 	this.rowsData = [];
 };
@@ -20,137 +30,137 @@ DataGrid.prototype.render = function () {
 	this.domElement = document.createElement('div');
 	this.domElement.className = 'dataGrid';
 
-	var tableElement = document.createElement('table');
-	this.domElement.appendChild(tableElement);
+	var tableEl = document.createElement('table');
+	tableEl.setAttribute(this.TABLE_ATTR, '');
+	this.domElement.appendChild(tableEl);
 
 	return this.domElement;
 };
 
+/**
+ * Установка колонок.
+ * @param columns Список колонок.
+ */
 DataGrid.prototype.setColumns = function (columns) {
-	var tableElement = this.domElement.getElementsByTagName('table')[0];
+	var tableEl = this.getTableEl();
 	this.columnsData = columns;
 
-	var columnsElement = this.createColumns();
-	tableElement.appendChild(columnsElement);
+	removeEl(tableEl, this.COLUMN_ATTR, null, true);
 
-	this.showEmptyRow(this.emptyGridMessage);//TODO: call from x ?
+	var columnsElement = this.createColumns();
+	tableEl.appendChild(columnsElement);
+
+	this.showEmptyRow();
 };
 
-DataGrid.prototype.showEmptyRow = function (message) {
-	var tableElement = this.domElement.getElementsByTagName('table')[0];
+/**
+ * Отображение пустого ряда.
+ */
+DataGrid.prototype.showEmptyRow = function () {
+	var tableEl = this.getTableEl();
+
 	var rowEl = document.createElement('tr');
+	rowEl.setAttribute(this.ROW_ATTR, this.EMPTY_ROW);
 	rowEl.className = 'gridRow';
+
 	var cellEl = document.createElement('td');
-	cellEl.style.textAlign = 'center';//TODO: to css
-	var messageEl = document.createTextNode(message);
+	cellEl.setAttribute(this.CELL_ATTR, this.EMPTY_CELL);
+	cellEl.className = 'emptyCell';
+
+	var messageEl = document.createTextNode(this.EMPTY_ROW_TEXT);
 	cellEl.appendChild(messageEl);
 	cellEl.setAttribute('colspan', this.columnsData.length);
+
 	rowEl.appendChild(cellEl);
-	tableElement.appendChild(rowEl);
+	tableEl.appendChild(rowEl);
 };
 
+/**
+ * Установка записей таблицы.
+ * @param data Список записей таблицы.
+ */
 DataGrid.prototype.setData = function (data) {
-	var tableElement = this.domElement.getElementsByTagName('table')[0];
+	var tableEl = this.getTableEl();
 	if (!isEmpty(data)) {
 		this.rowsData = data;
-		this.removeElements('gridRow', tableElement);
+		removeEl(tableEl, this.ROW_ATTR, null, true);
 
-		var rowsElements = this.createRows();
-		for (var i = 0; i < rowsElements.length; i++) {
-			var rowElement = rowsElements[i];
-			tableElement.appendChild(rowElement);
-		}
-	}
-};
-
-/**
- * Установка данных таблицы.
- */
-//  DataGrid.prototype.setGridData = function (data) {
-// 	var tableElement = this.domElement.getElementsByTagName('table')[0];
-//
-// 	if (!isEmpty(data.columns)) {
-// 		this.columnsData = data.columns;
-//
-// 		var columnsElement = this.createColumns();
-// 		tableElement.appendChild(columnsElement);
-// 	}
-//
-// 	if (!isEmpty(data.rows)) {
-// 		this.rowsData = data.rows;
-// 		this.removeElements('gridRow', tableElement);
-// 	}
-//
-// 	var columnElements = this.domElement.getElementsByClassName('gridHead');
-// 	if (!isEmpty(columnElements)) {
-//
-// 	}
-//
-// 	var rowsElements = this.createRows();
-// 	for (var i = 0; i < rowsElements.length; i++) {
-// 		var rowElement = rowsElements[i];
-// 		tableElement.appendChild(rowElement);
-// 	}
-//
-// 	console.log('DataGrid.prototype.setGridData', data);
-// };
-
-/**
- * Удаление элементов.
- */
-DataGrid.prototype.removeElements = function (className, parentElement) {
-	var elements = parentElement.getElementsByClassName(className);
-	if (!isEmpty(elements)) {
-		var targetElements = Array.prototype.slice.call(elements, 0);
-		var length = targetElements.length;
-		for (var i = 0; i < length; i++) {
-		    parentElement.removeChild(targetElements[i]);
+		var rowEls = this.createRows();
+		for (var i = 0; i < rowEls.length; i++) {
+			var rowEl = rowEls[i];
+			tableEl.appendChild(rowEl);
 		}
 	}
 };
 
 /**
  * Создание колонок таблицы.
+ * @return Список DOM-элементов колонок таблицы.
  */
 DataGrid.prototype.createColumns = function () {
-	var columnsElement = document.createElement('tr');
-	columnsElement.className = 'gridHead';
+	var columnEls = document.createElement('tr');
+	columnEls.setAttribute(this.COLUMNS_ATTR, '');
+	columnEls.className = 'gridHead';
 	for (var i = 0; i < this.columnsData.length; i++) {
 		var columnData = this.columnsData[i];
-		var columnElement = this.createColumn(columnData);
-		columnsElement.appendChild(columnElement);
+		var columnEl = this.createColumn(columnData);
+		columnEls.appendChild(columnEl);
 	}
-	return columnsElement;
+	return columnEls;
 };
 
 /**
  * Создание колоноки таблицы.
+ * @param columnData Данные колонки таблицы.
+ * @return DOM-элемент колонки таблицы.
  */
 DataGrid.prototype.createColumn = function (columnData) {
-	var columnElement = document.createElement('td');
-	var labelElement = document.createTextNode(columnData[this.columnField]);
-	columnElement.appendChild(labelElement);
-	return columnElement;
+	var columnEl = document.createElement('td');
+	columnEl.setAttribute(this.COLUMN_ATTR, columnData[this.COLUMN_NAME])
+	var labelEl = document.createTextNode(columnData[this.COLUMN_FIELD]);
+	columnEl.appendChild(labelEl);
+	return columnEl;
 };
 
 /**
  * Создание рядов таблицы.
+ * @return Список DOM-элементов рядов таблицы.
  */
 DataGrid.prototype.createRows = function () {
 	var rowsElements = [];
 	for (var i = 0; i < this.rowsData.length; i++) {
-		var rowElement = document.createElement('tr');
-		rowElement.className = 'gridRow';
+		var rowEl = document.createElement('tr');
+		rowEl.setAttribute(this.ROW_ATTR, 'row-' + (i + 1));
+		rowEl.className = 'gridRow';
 		var rowData = this.rowsData[i];
 		for (var j = 0; j < this.columnsData.length; j++) {
 			var columnData = this.columnsData[j];
-			var value = rowData[columnData[this.columnName]];
-			var cellElement = document.createElement('td');
-			var valueElement = document.createTextNode(value);
-			cellElement.appendChild(valueElement);
-			rowElement.appendChild(cellElement);
+			var value = rowData[columnData[this.COLUMN_NAME]];
+			var cellEl = this.createCell(value);
+			rowEl.appendChild(cellEl);
 		}
-		rowsElements.push(rowElement);
+		rowsElements.push(rowEl);
 	}
 	return rowsElements;
+};
+
+/**
+ * Создание DOM-элемента ячейки таблицы.
+ * @param value Значение ячейки.
+ * @return DOM-элемент ячейки таблицы.
+ */
+DataGrid.prototype.createCell = function (value) {
+	var cellEl = document.createElement('td');
+	cellEl.setAttribute(this.CELL_ATTR, '');
+	var valueEl = document.createTextNode(value);
+	cellEl.appendChild(valueEl);
+	return cellEl;
+};
+
+/**
+ * Получение DOM-элемента таблицы.
+ * @return DOM-элемент таблиуы.
+ */
+DataGrid.prototype.getTableEl = function () {
+	return getEl(this.domElement, this.TABLE_ATTR);
 };

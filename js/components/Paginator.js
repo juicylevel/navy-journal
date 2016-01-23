@@ -6,7 +6,7 @@ function Paginator (pageSize) {
 
     this.data = null;
     this.total = null;
-    this.pageSize = pageSize;
+    this.pageSize = pageSize || 10;
 	this.offset = 0;
 	this.currentPage = 1;
 };
@@ -58,8 +58,11 @@ Paginator.prototype.render = function () {
 	});
 };
 
-Paginator.prototype.init = function () {
-    this.dispatchChangePageEvent();
+/**
+ * Обновление.
+ */
+Paginator.prototype.refresh = function () {
+	this.dispatchChangePageEvent();
 };
 
 /**
@@ -135,9 +138,7 @@ Paginator.prototype.onClickLastPageButton = function () {
  * Обработка события клика на кнопку "Обновить".
  */
 Paginator.prototype.onClickRefreshGridButton = function () {
-	this.offset = 0;
-	this.updateDisplayValues();
-	this.dispatchChangePageEvent();
+	this.refresh();
 };
 
 /**
@@ -195,19 +196,16 @@ Paginator.prototype.onKeypressCurrentPageInput = function (event) {
  * Обновление отображаемых значений на панели компонента.
  */
 Paginator.prototype.updateDisplayValues = function () {
-	this.currentPage = Math.ceil((this.offset + 1) / this.getPageSize());
-	var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
-	currentPageInputEl.value = this.currentPage;
-
+    var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
     var totalEl = getEl(this.domElement, 'total');
-    totalEl.innerHTML = this.total;
-
     var fromRecordEl = getEl(this.domElement, 'fromRecord');
-    fromRecordEl.innerHTML = this.offset + 1;
-
     var toRecordEl = getEl(this.domElement, 'toRecord');
-    var currentRecordsCount = !isEmpty(this.data) ? this.data.length : 0;
-    toRecordEl.innerHTML = this.offset + currentRecordsCount;
+
+    this.currentPage = Math.ceil((this.offset + 1) / this.getPageSize());
+    currentPageInputEl.value = this.currentPage;
+    totalEl.innerHTML = this.total;
+    fromRecordEl.innerHTML = this.offset + 1;
+    toRecordEl.innerHTML = this.offset + (!isEmpty(this.data) ? this.data.length : 0);
 }
 
 /**

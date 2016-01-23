@@ -15,6 +15,7 @@ extend(JournalGridFrame, Widget);
  */
 JournalGridFrame.prototype.render = function () {
     this.domElement = document.createElement('div');
+    this.domElement.className = 'journalGridFrame';
 
 	this.createTools();
     this.createGrid();
@@ -27,16 +28,25 @@ JournalGridFrame.prototype.render = function () {
  * Инициализация фрейма.
  */
 JournalGridFrame.prototype.init = function () {
-    this.paginator.init();
+    this.paginator.refresh();
 };
 
+/**
+ * Установка списка боевых дежурств.
+ * @paran dutyList Список боевых дежурств.
+ */
 JournalGridFrame.prototype.setDutyList = function (dutyList) {
     this.paginator.setData(dutyList.data, dutyList.count);
     this.grid.setData(dutyList.data);
+
+    this.paginator.setVisible(!isEmpty(dutyList.data));
 };
 
+/**
+ * Обновление списка боевых дежурств.
+ */
 JournalGridFrame.prototype.refreshDutyList = function () {
-    this.paginator.onClickRefreshGridButton(); //TODO: bad method
+    this.paginator.refresh();
 };
 
 /**
@@ -52,7 +62,7 @@ JournalGridFrame.prototype.createTools = function () {
  */
 JournalGridFrame.prototype.createGrid = function () {
     var columns = Settings.getInstance().getDutyListColumns();
-    this.grid = new DataGrid('column', 'name', 'Список боевых дежурств пуст'); // TODO: get column field name from config
+    this.grid = new DataGrid('Список боевых дежурств пуст');
     this.grid.render();
     this.grid.setColumns(columns);
     this.domElement.appendChild(this.grid.getDomElement());
@@ -62,7 +72,8 @@ JournalGridFrame.prototype.createGrid = function () {
  * Создания компонента для постраничного просмотра элементов таблицы.
  */
 JournalGridFrame.prototype.createPaginator = function () {
-	this.paginator = new Paginator(3/*Settings.getInstance().config.ui.journalGridPageSize*/);
+	this.paginator = new Paginator(Settings.getInstance().getDutyListPageSize());
     this.paginator.render();
+    this.paginator.setVisible(false);
 	this.domElement.appendChild(this.paginator.getDomElement());
 };

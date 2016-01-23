@@ -80,7 +80,7 @@ nav, section, footer {
 }
 
 #frameContainer {
-	float: left;
+	overflow: hidden;
 	margin: 0px 5px 5px 0px;
 	padding: 5px;
 
@@ -94,7 +94,7 @@ nav, section, footer {
 }
 
 .dataGrid table {
-	width: 700px;
+	width: 100%;
 	border-collapse:collapse;
 }
 
@@ -117,6 +117,10 @@ nav, section, footer {
 
 .paginator input[type="text"] {
 	width: 25px;
+}
+
+.emptyCell {
+	text-align: center;
 }
 
 #notifications {
@@ -240,4 +244,8 @@ nav, section, footer {
 	margin-right: 3px;
 	padding: 0px 4px;
 	cursor: pointer;
+}
+
+.journalGridFrame {
+
 }

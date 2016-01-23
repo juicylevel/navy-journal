@@ -33,3 +33,12 @@ Widget.prototype.init = function () {
 Widget.prototype.setData = function (data) {
 
 };
+
+/**
+ * Изменение видимости виджета.
+ * @param visible Флаг видимости.
+ */
+Widget.prototype.setVisible = function (visible) {
+    var display = visible ? 'block' : 'none';
+    this.domElement.style.display = display;
+};

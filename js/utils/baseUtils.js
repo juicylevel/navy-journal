@@ -75,6 +75,23 @@ function removeChilds (node) {
 };
 
 /**
+ * Удаление элемента/ов по атрибуту.
+ * @see getEl function
+ */
+function removeEl (context, attributeName, attributeValue, all) {
+	var elements = getEl(context, attributeName, attributeValue, all);
+	if (!isEmpty(elements)) {
+		elements = !(elements instanceof NodeList) ? [elements] : elements;
+		var length = elements.length,
+			removedEl;
+		for (var i = 0; i < length; i++) {
+			removedEl = elements[i];
+		    removedEl.parentNode.removeChild(removedEl);
+		}
+	}
+};
+
+/**
  * Клонирование объекта.
  * @param source Целевой объект.
  * @return Object Клон целевого объекта source.
