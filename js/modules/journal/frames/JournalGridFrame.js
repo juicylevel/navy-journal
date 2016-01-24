@@ -62,10 +62,26 @@ JournalGridFrame.prototype.createTools = function () {
  */
 JournalGridFrame.prototype.createGrid = function () {
     var columns = Settings.getInstance().getDutyListColumns();
-    this.grid = new DataGrid('Список боевых дежурств пуст');
+    this.grid = new DataGrid('Список боевых дежурств пуст', actionColumns);
     this.grid.render();
-    this.grid.setColumns(columns);
+
+    var actionColumns = new ActionColumnsConfig(null, [
+        new EditColumn(this.grid),
+        new RemoveColumn(this.grid)
+    ]);
+
+    this.grid.setColumns(columns, actionColumns);
     this.domElement.appendChild(this.grid.getDomElement());
+
+    this.grid.getDomElement().addEventListener(EDITT_DUTY, function (event) {
+        event.stopPropagation();
+        alert('Редактирование боевого дежурства: ' + event.detail.dutyId);
+    });
+
+    this.grid.getDomElement().addEventListener(REMOVE_DUTY, function (event) {
+        event.stopPropagation();
+        alert('Удаление боевого дежурства: ' + event.detail.dutyId);
+    });
 };
 
 /**

@@ -43,17 +43,36 @@ DataGrid.prototype.render = function () {
 /**
  * Установка колонок.
  * @param columns Список колонок.
+ * @param actionColumns Конфигурация расположения специальных колонок в таблице.
  */
-DataGrid.prototype.setColumns = function (columns) {
-	var tableEl = this.getTableEl();
-	this.columnsData = columns;
+DataGrid.prototype.setColumns = function (columns, actionColumns) {
+	this.configureColumnsData(columns, actionColumns);
 
+	var tableEl = this.getTableEl();
 	removeEl(tableEl, this.COLUMN_ATTR, null, true);
 
 	var columnsElement = this.createColumns();
 	tableEl.appendChild(columnsElement);
 
 	this.showEmptyRow();
+};
+
+/**
+ * Конфигурирвание колонок таблицы: объединение колонок
+ * с данныи со специальными колонками.
+ * @param dataColumns Колонки данных.
+ * @param actionColumns Специальные колонки.
+ */
+DataGrid.prototype.configureColumnsData = function (dataColumns, actionColumns) {
+	var getActionColumns = function (position) {
+		return actionColumns && actionColumns[position] || [];
+	};
+
+	this.columnsData = this.columnsData.concat(
+		getActionColumns('left'),
+		dataColumns,
+		getActionColumns('right')
+	);
 };
 
 /**
@@ -138,13 +157,37 @@ DataGrid.prototype.createRows = function () {
 		var rowData = this.rowsData[i];
 		for (var j = 0; j < this.columnsData.length; j++) {
 			var columnData = this.columnsData[j];
-			var value = rowData[columnData[this.COLUMN_NAME]];
-			var cellEl = this.createCell(value);
+			var cellEl;
+
+			if (columnData.actionColumn) {
+				cellEl = columnData.createCellElement();
+			}
+			else {
+				var value = rowData[columnData[this.COLUMN_NAME]];
+				cellEl = this.createCell(value);
+			}
+
 			rowEl.appendChild(cellEl);
 		}
 		rowsElements.push(rowEl);
 	}
 	return rowsElements;
+};
+
+/**
+ * Получение общего количества колонок.
+ * @return Количество колонок в таблице.
+ */
+DataGrid.prototype.getColumnsCount = function () {
+	var count = 0;
+	if (!isEmpty(this.columnsData)) {
+		count += this.columnsData.length;
+	}
+	if (!isEmpty(this.actionColumns)) {
+		count += !isEmpty(this.actionColumns.left) ? this.actionColumns.left.length : 0;
+		count += !isEmpty(this.actionColumns.right) ? this.actionColumns.right.length : 0;
+	}
+	return count;
 };
 
 /**

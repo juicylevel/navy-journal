@@ -123,6 +123,20 @@ nav, section, footer {
 	text-align: center;
 }
 
+.removeCell {
+	width: 17px;
+	height: 17px;
+	background-image: url('../img/remove.gif');
+	cursor: pointer;
+}
+
+.editCell {
+	width: 17px;
+	height: 17px;
+	background-image: url('../img/edit.gif');
+	cursor: pointer;
+}
+
 #notifications {
 	position: fixed;
 	left: 50%;

@@ -23,8 +23,12 @@ var scripts = [
 	'components/Dialog',
 	'components/Widget',
 	'components/Paginator',
-	'components/DataGrid',
-
+	'components/grid/DataGrid',
+	'components/grid/ActionColumnsConfig',
+	'components/grid/ActionColumn',
+	'components/grid/RemoveColumn',
+	'components/grid/EditColumn',
+	
 	'service/Service',
 
 	'modules/base/Module',
