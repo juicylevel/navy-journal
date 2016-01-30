@@ -2,13 +2,13 @@
  * Фрейм таблицы журнала боевых дежурств.
  */
 function JournalGridFrame () {
-    Widget.apply(this, arguments);
+    ViewFrame.apply(this, arguments);
 
     this.paginator = null;
     this.grid = null;
 };
 
-extend(JournalGridFrame, Widget);
+extend(JournalGridFrame, ViewFrame);
 
 /**
  * Отрисовка фрейма.
@@ -37,7 +37,7 @@ JournalGridFrame.prototype.init = function () {
  */
 JournalGridFrame.prototype.setDutyList = function (dutyList) {
     this.paginator.setData(dutyList.data, dutyList.count);
-    this.grid.setData(dutyList.data);
+    this.grid.setData(dutyList.data, dutyList.sort);
 
     this.paginator.setVisible(!isEmpty(dutyList.data));
 };
@@ -65,23 +65,34 @@ JournalGridFrame.prototype.createGrid = function () {
     this.grid = new DataGrid('Список боевых дежурств пуст', actionColumns);
     this.grid.render();
 
+    var gridEl = this.grid.getDomElement();
+
     var actionColumns = new ActionColumnsConfig(null, [
         new EditColumn(this.grid),
         new RemoveColumn(this.grid)
     ]);
 
     this.grid.setColumns(columns, actionColumns);
-    this.domElement.appendChild(this.grid.getDomElement());
+    this.domElement.appendChild(gridEl);
 
-    this.grid.getDomElement().addEventListener(EDITT_DUTY, function (event) {
+    gridEl.addEventListener(EDITT_DUTY, function (event) {
         event.stopPropagation();
-        alert('Редактирование боевого дежурства: ' + event.detail.dutyId);
+        alert('Редактирование боевого дежурства: ' + event.detail.dutyId); //TODO
     });
 
-    this.grid.getDomElement().addEventListener(REMOVE_DUTY, function (event) {
+    gridEl.addEventListener(REMOVE_DUTY, function (event) {
         event.stopPropagation();
-        alert('Удаление боевого дежурства: ' + event.detail.dutyId);
+        alert('Удаление боевого дежурства: ' + event.detail.dutyId); //TODO
     });
+
+    gridEl.addEventListener(SORT_GRID, (function (event) {
+        event.stopPropagation();
+        this.owner.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
+            offset: this.paginator.offset,
+            pageSize: this.paginator.pageSize,
+            sort: event.detail
+        }));
+    }).bind(this));
 };
 
 /**
@@ -90,6 +101,18 @@ JournalGridFrame.prototype.createGrid = function () {
 JournalGridFrame.prototype.createPaginator = function () {
 	this.paginator = new Paginator(Settings.getInstance().getDutyListPageSize());
     this.paginator.render();
+
+    var paginatorEl = this.paginator.getDomElement();
+
     this.paginator.setVisible(false);
-	this.domElement.appendChild(this.paginator.getDomElement());
+	this.domElement.appendChild(paginatorEl);
+
+    paginatorEl.addEventListener(CHANGE_PAGE, (function (event) {
+        event.stopPropagation();
+        this.owner.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
+            offset: event.detail.offset,
+            pageSize: event.detail.pageSize,
+            sort: this.grid.sort
+        }));
+    }).bind(this));
 };

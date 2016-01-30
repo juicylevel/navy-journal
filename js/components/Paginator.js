@@ -1,12 +1,13 @@
 /**
  * Виджет для постраничного просмотра списков.
  */
-function Paginator (pageSize) {
+function Paginator (maxPageSize) {
     Widget.apply(this, arguments);
 
     this.data = null;
     this.total = null;
-    this.pageSize = pageSize || 10;
+    this.maxPageSize = maxPageSize || 10;
+    this.pageSize = 0;
 	this.offset = 0;
 	this.currentPage = 1;
 };
@@ -62,6 +63,7 @@ Paginator.prototype.render = function () {
  * Обновление.
  */
 Paginator.prototype.refresh = function () {
+    this.offset = 0;
 	this.dispatchChangePageEvent();
 };
 
@@ -177,8 +179,7 @@ Paginator.prototype.onClickGoToPageButton = function () {
  */
 Paginator.prototype.onKeypressPageSizeInput = function (event) {
 	if (event.keyCode == 13) {
-		this.onClickRefreshGridButton();
-		this.updateDisplayValues();
+		this.refresh();
 	}
 };
 
@@ -217,7 +218,7 @@ Paginator.prototype.getPageSize = function () {
 	var value = pageSizeInputEl.value;
 
 	if (isEmpty(value) || isNaN(parseInt(value))) {
-		value = this.pageSize;
+		value = this.maxPageSize;
 	}
 
 	pageSize = parseInt(value);
@@ -229,6 +230,9 @@ Paginator.prototype.getPageSize = function () {
 	}
 
 	pageSizeInputEl.value = pageSize;
+
+    // TODO: replace getPageSize on updatePageSize
+    this.pageSize = pageSize;
 
 	return pageSize;
 };

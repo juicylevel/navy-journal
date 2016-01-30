@@ -182,18 +182,8 @@ JournalView.prototype.createMenuItemElement = function (menuItem) {
  * @return DOM-элемент фрейма.
  */
 JournalView.prototype.createJournalGridFrame = function () {
-    var journalGridFrame = new JournalGridFrame(this.domElement);
+    var journalGridFrame = new JournalGridFrame(this);
     journalGridFrame.render();
-
-    var journalGridFrameEl = journalGridFrame.getDomElement();
-    journalGridFrameEl.addEventListener(CHANGE_PAGE, (function (event) {
-        event.stopPropagation();
-        this.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
-            offset: event.detail.offset,
-            pageSize: event.detail.pageSize
-        }));
-    }).bind(this));
-
     return journalGridFrame;
 };
 

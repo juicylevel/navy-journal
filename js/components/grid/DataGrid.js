@@ -22,6 +22,12 @@ function DataGrid (emptyGridMessage, columnName, columnField) {
 
 	this.columnsData = [];
 	this.rowsData = [];
+
+	/**
+	 * Информация о сортировке записей.
+	 * Объект типа {column1: ASC, column2: DESC}.
+	 */
+	this.sort = null;
 };
 
 extend(DataGrid, Widget);
@@ -100,11 +106,16 @@ DataGrid.prototype.showEmptyRow = function () {
 /**
  * Установка записей таблицы.
  * @param data Список записей таблицы.
+ * @param sort Информация о сортировке записей.
  */
-DataGrid.prototype.setData = function (data) {
+DataGrid.prototype.setData = function (data, sort) {
 	var tableEl = this.getTableEl();
 	if (!isEmpty(data)) {
 		this.rowsData = data;
+		this.sort = sort;
+
+		this.updateColumnsSort();
+
 		removeEl(tableEl, this.ROW_ATTR, null, true);
 
 		var rowEls = this.createRows();
@@ -137,11 +148,105 @@ DataGrid.prototype.createColumns = function () {
  * @return DOM-элемент колонки таблицы.
  */
 DataGrid.prototype.createColumn = function (columnData) {
+	var columnKey = columnData[this.COLUMN_NAME];
 	var columnEl = document.createElement('td');
-	columnEl.setAttribute(this.COLUMN_ATTR, columnData[this.COLUMN_NAME])
-	var labelEl = document.createTextNode(columnData[this.COLUMN_FIELD]);
-	columnEl.appendChild(labelEl);
+	columnEl.setAttribute(this.COLUMN_ATTR, columnKey);
+
+	var sortHtml = '';
+	if (!columnData.actionColumn) { // TODO: duplicate check actionColumn
+		sortHtml = '' +
+			'<div class="columnSort">' +
+				'<div sort="ASC" class="sortAscOff"></div>' +
+				'<div sort="DESC" class="sortDescOff"></div>' +
+			'</div>';
+	}
+
+	var title = columnData[this.COLUMN_FIELD];
+	var columnHtml = '' +
+		'<div class="columnContainer">' +
+			'<div title class="columnTitle">' + title + '</div>' +
+			sortHtml +
+			'<div class="clearBoth"></div>' +
+		'</div>';
+
+	columnEl.innerHTML = columnHtml;
+
+	if (!columnData.actionColumn) { // TODO: duplicate check actionColumn
+		this.configureSortButtons(columnEl, columnKey);
+	}
+
 	return columnEl;
+};
+
+/**
+ * Настройка кнопок сортировки.
+ * @param columnEl DOM-элемент колонки.
+ * @param columnKey Колонка.
+ */
+DataGrid.prototype.configureSortButtons = function (columnEl, columnKey) {
+	var configureSortButton = function (direction) {
+		var sortButtonEl = getEl(columnEl, 'sort', direction);
+		sortButtonEl.columnKey = columnKey;
+		sortButtonEl.addEventListener('click', (this.onSortButton).bind(this));
+	};
+	configureSortButton.call(this, 'ASC');
+	configureSortButton.call(this, 'DESC');
+};
+
+/**
+ * Обработка события клика по кнопке сортировки.
+ * @param event
+ */
+DataGrid.prototype.onSortButton = function (event) {
+	var sortEl = event.target;
+	var sortElDirection = sortEl.getAttribute('sort');
+	var columnKey = sortEl.columnKey;
+	// если пользователь выбрал то же направление сортировки
+	// для одной и той же колонки, то сбрасываем сортировку
+	var sort = null;
+	if (isEmpty(this.sort) || this.sort[columnKey] != sortElDirection) {
+		sort = {}; sort[columnKey] = sortElDirection;
+	}
+	var sortEvent = new CustomEvent(
+		SORT_GRID,
+		{
+			detail: sort,
+			bubbles: true
+		}
+	);
+	this.domElement.dispatchEvent(sortEvent);
+};
+
+/**
+ * Обновление кнопок сортировки в колонках таблицы.
+ */
+DataGrid.prototype.updateColumnsSort = function () {
+	if (!isEmpty(this.sort)) {
+		var columnData, columnKey, columnEl, direction, ascButtonEl, descButtonEl;
+		for (var i = 0; i < this.columnsData.length; i++) {
+			columnData = this.columnsData[i];
+			if (!columnData.actionColumn) {
+				columnKey = columnData[this.COLUMN_NAME];
+				columnEl = getEl(this.domElement, this.COLUMN_ATTR, columnKey);
+				ascButtonEl = getEl(columnEl, 'sort', 'ASC');
+				descButtonEl = getEl(columnEl, 'sort', 'DESC');
+				direction = this.sort[columnKey];
+				switch (direction) {
+					case 'ASC':
+						ascButtonEl.className = 'sortAscOn';
+						descButtonEl.className = 'sortDescOff';
+						break;
+					case 'DESC':
+						ascButtonEl.className = 'sortAscOff';
+						descButtonEl.className = 'sortDescOn';
+						break;
+					default:
+						ascButtonEl.className = 'sortAscOff';
+						descButtonEl.className = 'sortDescOff';
+				}
+			}
+		}
+	}
 };
 
 /**
@@ -153,7 +258,11 @@ DataGrid.prototype.createRows = function () {
 	for (var i = 0; i < this.rowsData.length; i++) {
 		var rowEl = document.createElement('tr');
 		rowEl.setAttribute(this.ROW_ATTR, this.getRowAttributeValue(i));
-		rowEl.className = 'gridRow';
+		rowEl.baseCls = 'gridRow';
+		rowEl.defaultBgCls = ((i % 2) == 0) ? 'altColor1' : 'altColor2';
+		rowEl.overBgCls = 'overColor';
+		rowEl.className = rowEl.baseCls + ' ' + rowEl.defaultBgCls;
+
 		var rowData = this.rowsData[i];
 		for (var j = 0; j < this.columnsData.length; j++) {
 			var columnData = this.columnsData[j];
@@ -168,7 +277,16 @@ DataGrid.prototype.createRows = function () {
 			}
 
 			rowEl.appendChild(cellEl);
+
+			rowEl.addEventListener('mouseover', function(event) {
+				this.className = this.baseCls + ' ' + this.overBgCls;
+			});
+
+			rowEl.addEventListener('mouseout', function(event) {
+				this.className = this.baseCls + ' ' + this.defaultBgCls;
+			});
 		}
+
 		rowsElements.push(rowEl);
 	}
 	return rowsElements;
@@ -184,8 +302,12 @@ DataGrid.prototype.getColumnsCount = function () {
 		count += this.columnsData.length;
 	}
 	if (!isEmpty(this.actionColumns)) {
-		count += !isEmpty(this.actionColumns.left) ? this.actionColumns.left.length : 0;
-		count += !isEmpty(this.actionColumns.right) ? this.actionColumns.right.length : 0;
+		var getActionColumns = function (position) {
+			var columns = this.actionColumns[position];
+			return !isEmpty(columns) ? columns.length : 0;
+		};
+		count += getActionColumns('left').bind(this) +
+				 getActionColumns('right').bind(this);
 	}
 	return count;
 };
@@ -210,6 +332,16 @@ DataGrid.prototype.createCell = function (value) {
 	var valueEl = document.createTextNode(value);
 	cellEl.appendChild(valueEl);
 	return cellEl;
+};
+
+DataGrid.prototype.setRowVisualState = function (rowEl, state) {
+	switch (state) {
+		case expression:
+
+			break;
+		default:
+
+	}
 };
 
 /**

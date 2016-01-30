@@ -74,11 +74,19 @@ class RequestHandler {
 	 * @param $offset
 	 * @param $pageSize
 	 */
-	public function getDutyList ($offset, $pageSize) {
+	public function getDutyList ($offset, $pageSize, $sort) {
 		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
+
+		if (empty($sort)) {
+			$sort = array('duty_end_date' => 'DESC');
+		}
+
 		return array (
+			'offset' => $offset,
+			'pageSize' => $pageSize,
 			'count' => $this->db->getDutyCount(),
-			'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize)
+			'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize, $sort),
+			'sort' => $sort
 		);
 	}
 

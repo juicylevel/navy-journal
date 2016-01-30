@@ -101,15 +101,27 @@ class DataBase {
      * @param $dutyListColumns Список колонок таблицы боевых дежурств.
      * @param $offset Номер записи, с которой начинается выборка.
      * @param $pageSize Номер записи, которой заканчивается выборка.
+     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
      */
-    public function getDutyList ($dutyListColumns, $offset, $pageSize) {
+    public function getDutyList ($dutyListColumns, $offset, $pageSize, $sort) {
+        // список запрашиваемых колонок
         $columns = implode(', ', $dutyListColumns);
+
+        // сортировка по заданным колонкам и направлению сортировки
+        $sortSql = '';
+        if (!empty($sort)) {
+            foreach ($sort as $key => $value) {
+                $sortSql .= ', ' . $key . ' ' . $value;
+            }
+            $sortSql .= ' ';
+        }
+
         // сортировка: сначала идёт текущее оевое дежурство
         // (то, у которого duty_end_date = NULL), затем идут
-        // завершённые дежурства, отосортированные по duty_end_date
-        // по убыванию
+        // завершённые дежурства, отосортированные в соответствии с $sortSql
         $sql = 'SELECT ' . $columns . ' FROM duty_tbl ' .
-               'ORDER BY ISNULL(duty_end_date) DESC, duty_end_date DESC ' .
+               'ORDER BY ISNULL(duty_end_date) DESC' .
+               $sortSql .
                'LIMIT ' . $offset . ',' . $pageSize;
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

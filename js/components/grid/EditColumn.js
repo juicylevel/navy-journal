@@ -1,3 +1,6 @@
+/**
+ * Колонка для редактирования записей в таблице.
+ */
 function EditColumn () {
     ActionColumn.apply(this, arguments);
 };

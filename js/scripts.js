@@ -22,13 +22,14 @@ var scripts = [
 	'components/Notifier',
 	'components/Dialog',
 	'components/Widget',
+	'components/ViewFrame',
 	'components/Paginator',
 	'components/grid/DataGrid',
 	'components/grid/ActionColumnsConfig',
 	'components/grid/ActionColumn',
 	'components/grid/RemoveColumn',
 	'components/grid/EditColumn',
-	
+
 	'service/Service',
 
 	'modules/base/Module',

@@ -100,10 +100,27 @@ nav, section, footer {
 
 .dataGrid table, th, td  {
 	border: 1px solid black;
+	vertical-align: middle;
 }
 
 .dataGrid td {
 	padding: 5px;
+}
+
+.dataGrid tr.gridRow {
+	cursor: pointer;
+}
+
+.dataGrid tr.altColor1 {
+	background-color: #F5F5F5;
+}
+
+.dataGrid tr.altColor2 {
+	background-color: #FFFFFF;
+}
+
+.dataGrid tr.overColor {
+	background-color: #DDF5DD;
 }
 
 .paginator {
@@ -117,6 +134,41 @@ nav, section, footer {
 
 .paginator input[type="text"] {
 	width: 25px;
+}
+
+.columnContainer {
+
+}
+
+.columnTitle {
+	float: left;
+	font-weight: bold;
+}
+
+.columnSort {
+	float: right;
+}
+
+.sortAscOn, .sortAscOff, .sortDescOn, .sortDescOff {
+	cursor: pointer;
+	width: 13px;
+	height: 9px;
+}
+
+.sortAscOn {
+	background-image: url('../img/sort-asc-on.png');
+}
+
+.sortAscOff {
+	background-image: url('../img/sort-asc-off.png');
+}
+
+.sortDescOn {
+	background-image: url('../img/sort-desc-on.png');
+}
+
+.sortDescOff {
+	background-image: url('../img/sort-desc-off.png');
 }
 
 .emptyCell {

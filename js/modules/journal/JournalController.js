@@ -180,5 +180,5 @@ JournalController.prototype.onCallShowDataManagement = function () {
  * Загрузка списка боевых дежурств.
  */
 JournalController.prototype.onCallLoadDutyList = function (dutyListOptions) {
-	this.service.getDutyList(dutyListOptions.offset, dutyListOptions.pageSize);
+	this.service.getDutyList(dutyListOptions);
 };

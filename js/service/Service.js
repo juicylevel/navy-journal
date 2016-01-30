@@ -60,14 +60,20 @@ Service.prototype.completeDuty = function () {
 
 /**
  * Загрузка списка боевых дежурств.
- * @param offset
- * @param pageSize
+ * @param dutyListOptions
  */
-Service.prototype.getDutyList = function (offset, pageSize) {
+Service.prototype.getDutyList = function (dutyListOptions) {
+	var sortJsonString = null;
+	var sort = dutyListOptions.sort;
+	if (!isEmpty(sort)) {
+		sortJsonString = JSON.stringify(sort);
+	}
+
 	this.sendRequest('GET', LOAD_DUTY_LIST, {
 		request: 'getDutyList',
-		offset: offset,
-		pageSize: pageSize,
+		offset: dutyListOptions.offset,
+		pageSize: dutyListOptions.pageSize,
+		sort: sortJsonString,
 		message: 'Загрузка списка боевых дежурств'
 	});
 };

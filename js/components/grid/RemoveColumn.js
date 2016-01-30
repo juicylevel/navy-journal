@@ -1,3 +1,6 @@
+/**
+ * Колонка для удаления записей в таблице.
+ */
 function RemoveColumn () {
     ActionColumn.apply(this, arguments);
 };
