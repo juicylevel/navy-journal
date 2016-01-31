@@ -12,9 +12,9 @@
 		"dutyGridColumns": {
 			"duty_id": "id",
 			"duty_name": "Наименование",
-			"duty_start_date": "Начало дежурства",
-			"duty_end_date": "Завершение дежурства",
-			"duty_runup_time": "Время подготовки"
+			"duty_start_date": "Начало дежурства",			
+			"duty_runup_time": "Время подготовки",
+			"duty_end_date": "Завершение дежурства"
 		}
 	}
 }

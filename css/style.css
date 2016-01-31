@@ -123,6 +123,10 @@ nav, section, footer {
 	background-color: #DDF5DD;
 }
 
+.activeDutyGridRow {
+	background-color: #E4D4FF;
+}
+
 .paginator {
 	padding: 5px 0px;
 }

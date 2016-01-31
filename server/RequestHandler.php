@@ -81,13 +81,42 @@ class RequestHandler {
 			$sort = array('duty_end_date' => 'DESC');
 		}
 
+		$dutyList = $this->db->getDutyList($dutyListColumns, $offset, $pageSize, $sort);
+
+		$dutyList = $this->configureActiveDutyInList($dutyList);
+
 		return array (
 			'offset' => $offset,
 			'pageSize' => $pageSize,
 			'count' => $this->db->getDutyCount(),
-			'data' => $this->db->getDutyList($dutyListColumns, $offset, $pageSize, $sort),
+			'data' => $dutyList,
 			'sort' => $sort
 		);
+	}
+
+	/**
+	 * Конфигурация активного дежурства в списке боевых дежурств.
+	 * @param $dutyList Список боевых дежурств.
+	 * @return $dutyList Модифицированный список боевых дежурств.
+	 */
+	private function configureActiveDutyInList ($dutyList) {
+		$activeDuty = $this->getActiveDuty();
+		if (!empty($activeDuty) && !empty($dutyList)) {
+			foreach ($dutyList as $key => $duty) {
+				if ($activeDuty['dutyId'] == $duty['duty_id']) {
+					$duty['activeDuty'] = array(
+						'columns' => array('duty_end_date'),
+						'duration' => $activeDuty['duration']
+					);
+					if ($activeDuty['runUpTime'] == 0) {
+						$duty['activeDuty']['columns'][] = 'duty_runup_time';
+					}
+					$dutyList[$key] = $duty;
+					break;
+				}
+			}
+		}
+		return $dutyList;
 	}
 
 	/**

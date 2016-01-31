@@ -108,6 +108,13 @@ JournalModel.prototype.setActiveDuty = function (activeDuty) {
  */
 JournalModel.prototype.setDutyList = function (dutyList) {
     this.dutyList = dutyList;
+
+    // for (var i = 0; i < this.dutyList.length; i++) {
+    //     if (!isEmpty(this.dutyList[i].activeDuty) && !isEmpty(this.activeDutyInfo)) {
+    //         this.dutyList[i].activeDuty.duration = this.activeDutyInfo.duration;
+    //     }
+    // }
+
     this.sendNotification(new Notification(CHANGE_DUTY_LIST, this.dutyList));
 };
 

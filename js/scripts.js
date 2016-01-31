@@ -29,6 +29,7 @@ var scripts = [
 	'components/grid/ActionColumn',
 	'components/grid/RemoveColumn',
 	'components/grid/EditColumn',
+	'components/grid/CustomRow',
 
 	'service/Service',
 
@@ -40,6 +41,7 @@ var scripts = [
 	'modules/journal/JournalModel',
 	'modules/journal/JournalController',
 	'modules/journal/frames/JournalGridFrame',
+	'modules/journal/frames/ActiveDutyRow',
 
 	'modules/duty/DutyView',
 	'modules/duty/DutyModel',

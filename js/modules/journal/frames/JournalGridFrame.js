@@ -62,7 +62,7 @@ JournalGridFrame.prototype.createTools = function () {
  */
 JournalGridFrame.prototype.createGrid = function () {
     var columns = Settings.getInstance().getDutyListColumns();
-    this.grid = new DataGrid('Список боевых дежурств пуст', actionColumns);
+    this.grid = new DataGrid('Список боевых дежурств пуст');
     this.grid.render();
 
     var gridEl = this.grid.getDomElement();
@@ -72,7 +72,13 @@ JournalGridFrame.prototype.createGrid = function () {
         new RemoveColumn(this.grid)
     ]);
 
-    this.grid.setColumns(columns, actionColumns);
+    var customRows = [
+        new ActiveDutyRow(this.grid)
+    ];
+
+    this.grid.setCustom(actionColumns, customRows);
+
+    this.grid.setColumns(columns);
     this.domElement.appendChild(gridEl);
 
     gridEl.addEventListener(EDITT_DUTY, function (event) {

@@ -23,6 +23,9 @@ function DataGrid (emptyGridMessage, columnName, columnField) {
 	this.columnsData = [];
 	this.rowsData = [];
 
+	this.actionColumns = [];
+	this.customRows = [];
+
 	/**
 	 * Информация о сортировке записей.
 	 * Объект типа {column1: ASC, column2: DESC}.
@@ -47,12 +50,21 @@ DataGrid.prototype.render = function () {
 };
 
 /**
+ * Установка кастомных колонок и рядов.
+ * @param actionColumns Конфигурация расположения специальных колонок в таблице.
+ * @param customRows Кастомные ряды таблицы.
+ */
+DataGrid.prototype.setCustom = function (actionColumns, customRows) {
+	this.actionColumns = actionColumns;
+	this.customRows = customRows;
+};
+
+/**
  * Установка колонок.
  * @param columns Список колонок.
- * @param actionColumns Конфигурация расположения специальных колонок в таблице.
  */
 DataGrid.prototype.setColumns = function (columns, actionColumns) {
-	this.configureColumnsData(columns, actionColumns);
+	this.configureColumnsData(columns);
 
 	var tableEl = this.getTableEl();
 	removeEl(tableEl, this.COLUMN_ATTR, null, true);
@@ -67,17 +79,16 @@ DataGrid.prototype.setColumns = function (columns, actionColumns) {
  * Конфигурирвание колонок таблицы: объединение колонок
  * с данныи со специальными колонками.
  * @param dataColumns Колонки данных.
- * @param actionColumns Специальные колонки.
  */
-DataGrid.prototype.configureColumnsData = function (dataColumns, actionColumns) {
+DataGrid.prototype.configureColumnsData = function (dataColumns) {
 	var getActionColumns = function (position) {
-		return actionColumns && actionColumns[position] || [];
+		return !isEmpty(this.actionColumns) && this.actionColumns[position] || [];
 	};
 
 	this.columnsData = this.columnsData.concat(
-		getActionColumns('left'),
+		getActionColumns.call(this, 'left'),
 		dataColumns,
-		getActionColumns('right')
+		getActionColumns.call(this, 'right')
 	);
 };
 
@@ -254,42 +265,96 @@ DataGrid.prototype.updateColumnsSort = function () {
  * @return Список DOM-элементов рядов таблицы.
  */
 DataGrid.prototype.createRows = function () {
-	var rowsElements = [];
+	var rowsElements = [], rowData, rowEl;
 	for (var i = 0; i < this.rowsData.length; i++) {
-		var rowEl = document.createElement('tr');
-		rowEl.setAttribute(this.ROW_ATTR, this.getRowAttributeValue(i));
-		rowEl.baseCls = 'gridRow';
-		rowEl.defaultBgCls = ((i % 2) == 0) ? 'altColor1' : 'altColor2';
-		rowEl.overBgCls = 'overColor';
-		rowEl.className = rowEl.baseCls + ' ' + rowEl.defaultBgCls;
-
-		var rowData = this.rowsData[i];
-		for (var j = 0; j < this.columnsData.length; j++) {
-			var columnData = this.columnsData[j];
-			var cellEl;
-
-			if (columnData.actionColumn) {
-				cellEl = columnData.createCellElement();
-			}
-			else {
-				var value = rowData[columnData[this.COLUMN_NAME]];
-				cellEl = this.createCell(value);
-			}
-
-			rowEl.appendChild(cellEl);
-
-			rowEl.addEventListener('mouseover', function(event) {
-				this.className = this.baseCls + ' ' + this.overBgCls;
-			});
-
-			rowEl.addEventListener('mouseout', function(event) {
-				this.className = this.baseCls + ' ' + this.defaultBgCls;
-			});
-		}
-
+		rowData = this.rowsData[i];
+		rowEl = this.createRow(rowData, i);
 		rowsElements.push(rowEl);
 	}
 	return rowsElements;
+};
+
+/**
+ * Создание DOM-элемента ряда.
+ * @param rowData Данные ряда таблицы.
+ * @param index Индекс ряда таблицы.
+ * @return rowEl
+ */
+DataGrid.prototype.createRow = function (rowData, index) {
+	var rowEl = null;
+	var customRowObject = this.isCustomRow(rowData);
+	if (!isEmpty(customRowObject)) {
+		rowEl = customRowObject.createRowEl(rowData, index);
+	} else {
+		rowEl = this.createSimpleRow(rowData, index);
+	}
+	return rowEl;
+};
+
+/**
+ * Метод определяет, я вляется ли ряд кастомным.
+ * Если ряд кастомный, то возвращает объект кастомного ряда.
+ * @param rowData Данные ряда таблицы.
+ * @return customRowObject | null
+ */
+DataGrid.prototype.isCustomRow = function (rowData) {
+	if (!isEmpty(this.customRows)) {
+		for (var i = 0; i < this.customRows.length; i++) {
+			var customRow = this.customRows[i];
+			if (customRow.isCustomRow(rowData)) {
+				return customRow;
+			}
+		}
+	}
+	return null;
+};
+
+/**
+ * Создание обычного ряда таблицы.
+ * @param rowData Данные ряда таблицы.
+ * @param index Индекс ряда таблицы.
+ * @return rowEl
+ */
+DataGrid.prototype.createSimpleRow = function (rowData, index) {
+	var rowEl = document.createElement('tr');
+	rowEl.setAttribute(this.ROW_ATTR, this.getRowAttributeValue(index));
+	rowEl.baseCls = 'gridRow';
+	rowEl.defaultBgCls = ((index % 2) == 0) ? 'altColor1' : 'altColor2';
+	rowEl.overBgCls = 'overColor';
+	rowEl.className = rowEl.baseCls + ' ' + rowEl.defaultBgCls;
+
+	rowEl.addEventListener('mouseover', function(event) {
+		this.className = this.baseCls + ' ' + this.overBgCls;
+	});
+
+	rowEl.addEventListener('mouseout', function(event) {
+		this.className = this.baseCls + ' ' + this.defaultBgCls;
+	});
+
+	this.createRowCells(rowData, rowEl);
+
+	return rowEl;
+};
+
+/**
+ * Создание ячеек ряда таблицы.
+ * @param rowData Данные ряда таблицы.
+ * @param rowEl DOM-элемент ряда таблицы.
+ */
+DataGrid.prototype.createRowCells = function (rowData, rowEl) {
+	for (var j = 0; j < this.columnsData.length; j++) {
+		var columnData = this.columnsData[j];
+		var cellEl;
+		if (columnData.actionColumn) {
+			cellEl = columnData.createCellElement();
+		}
+		else {
+			var columnKey = columnData[this.COLUMN_NAME];
+			var value = rowData[columnKey];
+			cellEl = this.createCell(value, columnKey);
+		}
+		rowEl.appendChild(cellEl);
+	}
 };
 
 /**
@@ -326,11 +391,10 @@ DataGrid.prototype.getRowAttributeValue = function (rowIndex) {
  * @param value Значение ячейки.
  * @return DOM-элемент ячейки таблицы.
  */
-DataGrid.prototype.createCell = function (value) {
+DataGrid.prototype.createCell = function (value, columnKey) {
 	var cellEl = document.createElement('td');
-	cellEl.setAttribute(this.CELL_ATTR, '');
-	var valueEl = document.createTextNode(value);
-	cellEl.appendChild(valueEl);
+	cellEl.setAttribute(this.CELL_ATTR, columnKey);
+	cellEl.innerHTML = value;
 	return cellEl;
 };
 
