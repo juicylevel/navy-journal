@@ -39,10 +39,6 @@ ActiveDutyRow.prototype.runTimers = function (rowData, rowEl) {
         var me = this;
         var duration = rowData.activeDuty.duration;
         this.updateCountingCells(countingCells, duration);
-        setInterval(function () {
-            duration++;
-            me.updateCountingCells(countingCells, duration);
-        }, 1000);
     }
 };
 
@@ -73,6 +69,6 @@ ActiveDutyRow.prototype.getCountingCells = function (rowData, rowEl) {
 ActiveDutyRow.prototype.updateCountingCells = function (countingCells, duration) {
     var cellCount = countingCells.length;
     for (var i = 0; i < cellCount; i++) {
-        countingCells[i].innerHTML = getDurationString(duration);
+        countingCells[i].innerHTML = '<span style="font-style: italic;">определяется</span>';
     }
 };

@@ -35,6 +35,10 @@ function DataGrid (emptyGridMessage, columnName, columnField) {
 
 extend(DataGrid, Widget);
 
+//------------------------------------------------------------------------------
+// init
+//------------------------------------------------------------------------------
+
 /**
  * Отрисовка таблицы.
  */
@@ -50,6 +54,14 @@ DataGrid.prototype.render = function () {
 };
 
 /**
+ * Получение DOM-элемента таблицы.
+ * @return DOM-элемент таблиуы.
+ */
+DataGrid.prototype.getTableEl = function () {
+	return getEl(this.domElement, this.TABLE_ATTR);
+};
+
+/**
  * Установка кастомных колонок и рядов.
  * @param actionColumns Конфигурация расположения специальных колонок в таблице.
  * @param customRows Кастомные ряды таблицы.
@@ -59,11 +71,15 @@ DataGrid.prototype.setCustom = function (actionColumns, customRows) {
 	this.customRows = customRows;
 };
 
+//------------------------------------------------------------------------------
+// columns
+//------------------------------------------------------------------------------
+
 /**
  * Установка колонок.
  * @param columns Список колонок.
  */
-DataGrid.prototype.setColumns = function (columns, actionColumns) {
+DataGrid.prototype.setColumns = function (columns) {
 	this.configureColumnsData(columns);
 
 	var tableEl = this.getTableEl();
@@ -90,51 +106,6 @@ DataGrid.prototype.configureColumnsData = function (dataColumns) {
 		dataColumns,
 		getActionColumns.call(this, 'right')
 	);
-};
-
-/**
- * Отображение пустого ряда.
- */
-DataGrid.prototype.showEmptyRow = function () {
-	var tableEl = this.getTableEl();
-
-	var rowEl = document.createElement('tr');
-	rowEl.setAttribute(this.ROW_ATTR, this.EMPTY_ROW);
-	rowEl.className = 'gridRow';
-
-	var cellEl = document.createElement('td');
-	cellEl.setAttribute(this.CELL_ATTR, this.EMPTY_CELL);
-	cellEl.className = 'emptyCell';
-
-	var messageEl = document.createTextNode(this.EMPTY_ROW_TEXT);
-	cellEl.appendChild(messageEl);
-	cellEl.setAttribute('colspan', this.columnsData.length);
-
-	rowEl.appendChild(cellEl);
-	tableEl.appendChild(rowEl);
-};
-
-/**
- * Установка записей таблицы.
- * @param data Список записей таблицы.
- * @param sort Информация о сортировке записей.
- */
-DataGrid.prototype.setData = function (data, sort) {
-	var tableEl = this.getTableEl();
-	if (!isEmpty(data)) {
-		this.rowsData = data;
-		this.sort = sort;
-
-		this.updateColumnsSort();
-
-		removeEl(tableEl, this.ROW_ATTR, null, true);
-
-		var rowEls = this.createRows();
-		for (var i = 0; i < rowEls.length; i++) {
-			var rowEl = rowEls[i];
-			tableEl.appendChild(rowEl);
-		}
-	}
 };
 
 /**
@@ -261,6 +232,52 @@ DataGrid.prototype.updateColumnsSort = function () {
 };
 
 /**
+ * Получение общего количества колонок.
+ * @return Количество колонок в таблице.
+ */
+DataGrid.prototype.getColumnsCount = function () {
+	var count = 0;
+	if (!isEmpty(this.columnsData)) {
+		count += this.columnsData.length;
+	}
+	if (!isEmpty(this.actionColumns)) {
+		var colsCount = function (position) {
+			var columns = this.actionColumns[position];
+			return !isEmpty(columns) ? columns.length : 0;
+		};
+		count += colsCount('left').bind(this) + colsCount('right').bind(this);
+	}
+	return count;
+};
+
+//------------------------------------------------------------------------------
+// rows
+//------------------------------------------------------------------------------
+
+/**
+ * Установка записей таблицы.
+ * @param data Список записей таблицы.
+ * @param sort Информация о сортировке записей.
+ */
+DataGrid.prototype.setData = function (data, sort) {
+	var tableEl = this.getTableEl();
+	if (!isEmpty(data)) {
+		this.rowsData = data;
+		this.sort = sort;
+
+		this.updateColumnsSort();
+
+		removeEl(tableEl, this.ROW_ATTR, null, true);
+
+		var rowEls = this.createRows();
+		for (var i = 0; i < rowEls.length; i++) {
+			var rowEl = rowEls[i];
+			tableEl.appendChild(rowEl);
+		}
+	}
+};
+
+/**
  * Создание рядов таблицы.
  * @return Список DOM-элементов рядов таблицы.
  */
@@ -337,6 +354,41 @@ DataGrid.prototype.createSimpleRow = function (rowData, index) {
 };
 
 /**
+ * Получение значения атрибута ряда таблицы.
+ * @param rowIndex Индекс ряда таблицы.
+ * @return Значение атрибута.
+ */
+DataGrid.prototype.getRowAttributeValue = function (rowIndex) {
+	return this.ROW_ATTR + '-' + (rowIndex + 1);
+};
+
+/**
+ * Отображение пустого ряда.
+ */
+DataGrid.prototype.showEmptyRow = function () {
+	var tableEl = this.getTableEl();
+
+	var rowEl = document.createElement('tr');
+	rowEl.setAttribute(this.ROW_ATTR, this.EMPTY_ROW);
+	rowEl.className = 'gridRow';
+
+	var cellEl = document.createElement('td');
+	cellEl.setAttribute(this.CELL_ATTR, this.EMPTY_CELL);
+	cellEl.className = 'emptyCell';
+
+	var messageEl = document.createTextNode(this.EMPTY_ROW_TEXT);
+	cellEl.appendChild(messageEl);
+	cellEl.setAttribute('colspan', this.columnsData.length);
+
+	rowEl.appendChild(cellEl);
+	tableEl.appendChild(rowEl);
+};
+
+//------------------------------------------------------------------------------
+// cells
+//------------------------------------------------------------------------------
+
+/**
  * Создание ячеек ряда таблицы.
  * @param rowData Данные ряда таблицы.
  * @param rowEl DOM-элемент ряда таблицы.
@@ -358,35 +410,6 @@ DataGrid.prototype.createRowCells = function (rowData, rowEl) {
 };
 
 /**
- * Получение общего количества колонок.
- * @return Количество колонок в таблице.
- */
-DataGrid.prototype.getColumnsCount = function () {
-	var count = 0;
-	if (!isEmpty(this.columnsData)) {
-		count += this.columnsData.length;
-	}
-	if (!isEmpty(this.actionColumns)) {
-		var getActionColumns = function (position) {
-			var columns = this.actionColumns[position];
-			return !isEmpty(columns) ? columns.length : 0;
-		};
-		count += getActionColumns('left').bind(this) +
-				 getActionColumns('right').bind(this);
-	}
-	return count;
-};
-
-/**
- * Получение значения атрибута ряда таблицы.
- * @param rowIndex Индекс ряда таблицы.
- * @return Значение атрибута.
- */
-DataGrid.prototype.getRowAttributeValue = function (rowIndex) {
-	return this.ROW_ATTR + '-' + (rowIndex + 1);
-};
-
-/**
  * Создание DOM-элемента ячейки таблицы.
  * @param value Значение ячейки.
  * @return DOM-элемент ячейки таблицы.
@@ -396,22 +419,4 @@ DataGrid.prototype.createCell = function (value, columnKey) {
 	cellEl.setAttribute(this.CELL_ATTR, columnKey);
 	cellEl.innerHTML = value;
 	return cellEl;
-};
-
-DataGrid.prototype.setRowVisualState = function (rowEl, state) {
-	switch (state) {
-		case expression:
-
-			break;
-		default:
-
-	}
-};
-
-/**
- * Получение DOM-элемента таблицы.
- * @return DOM-элемент таблиуы.
- */
-DataGrid.prototype.getTableEl = function () {
-	return getEl(this.domElement, this.TABLE_ATTR);
 };
