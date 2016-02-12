@@ -50,13 +50,18 @@ var ModuleManager = (function () {
 
             switch (moduleName) {
                 case JOURNAL:
-                    module = new Module(JournalModel, JournalView, JournalController);
+                    module = new Module(moduleName, JournalModel, JournalView, JournalController);
+                    break;
+				case INDEX:
+                    module = new Module(moduleName, IndexModel, IndexView, IndexController);
                     break;
 				case DUTY:
-					module = new Module(DutyModel, DutyView, DutyController);
+					module = new Module(moduleName, DutyModel, DutyView, DutyController);
 					break;
-                case STATISTICS:
-                case DATA_MANAGEMENT:
+                case DICTIONARY:
+					module = new Module(moduleName, DictionaryModel, DictionaryView, DictionaryController);
+					break;
+				case STATISTICS:
                 default:
                     Notifier.getInstance().showError(
                         'Ошибка при создании модуля',

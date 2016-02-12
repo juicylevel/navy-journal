@@ -22,37 +22,19 @@ function JournalModel () {
         notificationType: CALL_COMPLETE_DUTY
     };
 
+    this.goToIndexMenuItem = {
+        label: 'На главную',
+        icon: 'img/',
+        notificationType: CALL_INDEX_MODULE
+    };
+
     this.lastDutyInfo = null;
     this.activeDutyInfo = null;
-    this.dutyList = null;
+
+    this.currentModule = null;
 };
 
 extend(JournalModel, Model);
-
-/**
- * Получение меню модуля.
- */
-JournalModel.prototype.getModuleMenu = function () {
-    var menu = [
-        {
-            label: 'Боевые дежурства',
-            icon: 'img/',
-            notificationType: CALL_DUTY_MODULE
-        },
-        {
-            label: 'Статистика',
-            icon: 'img/',
-            notificationType: CALL_STATISTICS_MODULE
-        },
-        {
-            label: 'Управление данными',
-            icon: 'img/',
-            notificationType: CALL_DATA_MANAGEMENT_MODULE
-        }
-    ];
-
-    return menu;
-};
 
 /**
  * Установка статуса журнала.
@@ -103,22 +85,6 @@ JournalModel.prototype.setActiveDuty = function (activeDuty) {
 };
 
 /**
- * Установка списка боевых дежурств.
- * @param dutyList Список боевых дежурств.
- */
-JournalModel.prototype.setDutyList = function (dutyList) {
-    this.dutyList = dutyList;
-
-    // for (var i = 0; i < this.dutyList.length; i++) {
-    //     if (!isEmpty(this.dutyList[i].activeDuty) && !isEmpty(this.activeDutyInfo)) {
-    //         this.dutyList[i].activeDuty.duration = this.activeDutyInfo.duration;
-    //     }
-    // }
-
-    this.sendNotification(new Notification(CHANGE_DUTY_LIST, this.dutyList));
-};
-
-/**
  * Обновление системного меню.
  */
 JournalModel.prototype.updateSystemMenu = function () {
@@ -140,12 +106,26 @@ JournalModel.prototype.updateSystemMenu = function () {
         systemMenu.unshift(this.completeDutyMenuItem);
     }
 
+    if (!isEmpty(this.currentModule) && this.currentModule.name != INDEX) {
+        systemMenu.push(this.goToIndexMenuItem);
+    }
+
     this.sendNotification(new Notification(CHANGE_SYSTEM_MENU, systemMenu));
 };
 
 /**
- * Получение меню для текущего контекста.
+ * Установка текущего модуля.
+ * @param module Экземпляр класса Module.
  */
-JournalModel.prototype.setCurrentModuleMenu = function (moduleMenu) {
-    this.sendNotification(new Notification(CHANGE_MODULE_MENU, moduleMenu));
+JournalModel.prototype.setModule = function (module) {
+    this.currentModule = module;
+
+    var moduleMenu = this.currentModule.getMenu();
+    var moduleDomElement = this.currentModule.getDomElement();
+
+    this.sendNotification(new Notification(CHANGE_MODULE, {
+        menu: moduleMenu, domElement: moduleDomElement
+    }));
+
+    this.updateSystemMenu();
 };

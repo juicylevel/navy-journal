@@ -1,23 +1,23 @@
 /**
  * Фрейм таблицы журнала боевых дежурств.
  */
-function JournalGridFrame () {
+function DutyListFrame () {
     ViewFrame.apply(this, arguments);
 
+    this.name = 'Список боевых дежурств';
     this.paginator = null;
     this.grid = null;
 };
 
-extend(JournalGridFrame, ViewFrame);
+extend(DutyListFrame, ViewFrame);
 
 /**
  * Отрисовка фрейма.
  */
-JournalGridFrame.prototype.render = function () {
+DutyListFrame.prototype.render = function () {
     this.domElement = document.createElement('div');
-    this.domElement.className = 'journalGridFrame';
+    this.domElement.className = 'dutyListFrame';
 
-	this.createTools();
     this.createGrid();
 	this.createPaginator();
 
@@ -27,7 +27,7 @@ JournalGridFrame.prototype.render = function () {
 /**
  * Инициализация фрейма.
  */
-JournalGridFrame.prototype.init = function () {
+DutyListFrame.prototype.init = function () {
     this.paginator.refresh();
 };
 
@@ -35,7 +35,7 @@ JournalGridFrame.prototype.init = function () {
  * Установка списка боевых дежурств.
  * @paran dutyList Список боевых дежурств.
  */
-JournalGridFrame.prototype.setDutyList = function (dutyList) {
+DutyListFrame.prototype.setDutyList = function (dutyList) {
     this.paginator.setData(dutyList.data, dutyList.count);
     this.grid.setData(dutyList.data, dutyList.sort);
 
@@ -45,22 +45,14 @@ JournalGridFrame.prototype.setDutyList = function (dutyList) {
 /**
  * Обновление списка боевых дежурств.
  */
-JournalGridFrame.prototype.refreshDutyList = function () {
+DutyListFrame.prototype.refreshDutyList = function () {
     this.paginator.refresh();
-};
-
-/**
- * Создание панели инструментов.
- */
-JournalGridFrame.prototype.createTools = function () {
-	var html = '<div style="font-weight: bold; margin-bottom: 5px;">Боевые дежурства:</div>';
-	this.domElement.insertAdjacentHTML('afterbegin', html);
 };
 
 /**
  * Создание таблицы боевых дежурств.
  */
-JournalGridFrame.prototype.createGrid = function () {
+DutyListFrame.prototype.createGrid = function () {
     var columns = Settings.getInstance().getDutyListColumns();
     this.grid = new DataGrid('Список боевых дежурств пуст');
     this.grid.render();
@@ -104,7 +96,7 @@ JournalGridFrame.prototype.createGrid = function () {
 /**
  * Создания компонента для постраничного просмотра элементов таблицы.
  */
-JournalGridFrame.prototype.createPaginator = function () {
+DutyListFrame.prototype.createPaginator = function () {
 	this.paginator = new Paginator(Settings.getInstance().getDutyListPageSize());
     this.paginator.render();
 

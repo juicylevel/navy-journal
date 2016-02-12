@@ -9,9 +9,10 @@ var CALL_START_DUTY = 'callStartDuty';
 var CALL_COMPLETE_RUN_UP = 'callCompleteRunUp';
 var CALL_COMPLETE_DUTY = 'callCompleteDuty';
 
+var CALL_INDEX_MODULE = 'callIndexModule';
 var CALL_DUTY_MODULE = 'callDutyModule';
 var CALL_STATISTICS_MODULE = 'callStatisticsModule';
-var CALL_DATA_MANAGEMENT_MODULE = 'callDataManagmentModule';
+var CALL_DICTIONARY_MODULE = 'callDictionaryModule';
 
 var CALL_LOAD_DUTY_LIST = 'callLoadDutyList';
 
@@ -31,8 +32,15 @@ var LOAD_DUTY_LIST = 'loadDutyList';
 var CHANGE_SYSTEM_MENU = 'changeSystemMenu';
 var CHANGE_MODULE_MENU = 'changeModuleMenu';
 
+var CHANGE_MODULE = 'changeModule';
+
 // оповещения от модели фрейма с таблицей журналов
 var CHANGE_JOURNAL_GRID_COLUMNS = 'changeJournalGridColumns';
 var CHANGE_JOURNAL_GRID_ROWS = 'changeJournalGridRows';
 
 var CHANGE_DUTY_LIST = 'changeDutyList';
+
+var CALL_PROVISION_DATA = 'callProvisionData';
+var CALL_TECHNICAL_DATA = 'callTechnicalData';
+var CALL_MAIN_DUTY_DATA = 'callMainDutyData';
+var CALL_WEATHER_DUTY_DATA = 'callWeatherDutyData';

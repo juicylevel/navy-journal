@@ -316,6 +316,11 @@ nav, section, footer {
 	cursor: pointer;
 }
 
-.journalGridFrame {
+.dutyListFrame {
 
+}
+
+.moduleHeader {
+	margin-bottom: 10px;
+	font-weight: bold;
 }

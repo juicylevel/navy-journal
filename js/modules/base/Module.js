@@ -1,7 +1,8 @@
 /**
  * Базовый класс модуля приложения.
  */
-function Module (modelClass, viewClass, controllerClass) {
+function Module (name, modelClass, viewClass, controllerClass) {
+    this.name = name;
     this.model = new modelClass();
     this.view = new viewClass();
     this.service = new Service();
@@ -21,3 +22,22 @@ Module.prototype.mapComponents = function () {
 
     Bus.getInstance().addReceiver(this.controller);
 };
+
+/**
+ * Получение DOM-элемента представления модуля.
+ * @return DOM-элемент модуля.
+ */
+Module.prototype.getDomElement = function () {
+    if (isEmpty(this.view.domElement)) {
+        this.view.render();
+    }
+    return this.view.domElement;
+};
+
+/**
+ * Получение списка пунктов меню модуля.
+ * @return Список пунктов меню.
+ */
+Module.prototype.getMenu = function () {
+    return NAVIGATION[this.name];
+}

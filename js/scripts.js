@@ -4,10 +4,9 @@ var scripts = [
 	'utils/arrayUtils',
 
 	'types/states',
-	'types/frames',
 	'types/events',
-	'types/consts',
 	'types/notifications',
+	'types/consts',
 
 	'settings/Settings',
 
@@ -36,16 +35,25 @@ var scripts = [
 	'modules/base/Module',
 	'modules/base/Bus',
 	'modules/base/ModuleManager',
+	'modules/base/ModuleView',
+
+	'modules/index/IndexView',
+	'modules/index/IndexModel',
+	'modules/index/IndexController',
+	'modules/index/frames/DutyListFrame',
+	'modules/index/frames/ActiveDutyRow',
 
 	'modules/journal/JournalView',
 	'modules/journal/JournalModel',
 	'modules/journal/JournalController',
-	'modules/journal/frames/JournalGridFrame',
-	'modules/journal/frames/ActiveDutyRow',
 
 	'modules/duty/DutyView',
 	'modules/duty/DutyModel',
 	'modules/duty/DutyController',
+
+	'modules/dictionary/DictionaryView',
+	'modules/dictionary/DictionaryModel',
+	'modules/dictionary/DictionaryController',
 
 	'app'
 ];

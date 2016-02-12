@@ -6,11 +6,8 @@
 function JournalView (domElement) {
     View.apply(this, arguments);
 
-    this.frames = {
-        JOURNAL_GRID_FRAME: 'journalGrid'
-    };
-
-    this.durationTimer;
+    this.durationTimer = null;
+    this.moduleContainerEl = null;
 };
 
 extend(JournalView, View);
@@ -24,8 +21,7 @@ JournalView.prototype.getHandlers = function () {
 		{type: CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
         {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
         {type: CHANGE_SYSTEM_MENU, handler: this.onChangeSystemMenu},
-        {type: CHANGE_MODULE_MENU, handler: this.onChangeModuleMenu},
-        {type: CHANGE_DUTY_LIST, handler: this.onChangeDutyList}
+        {type: CHANGE_MODULE, handler: this.onChangeModule}
 	];
 };
 
@@ -60,14 +56,14 @@ JournalView.prototype.render = function () {
                     '<div module-menu></div>' +
                 '</div>' +
             '</nav>' +
-            '<section id="frameContainer" frameContainer>' +
+            '<section id="frameContainer" moduleContainer>' +
 
             '</section>' +
             '<footer id="footer"></footer>' +
         '</div>';
 
     this.domElement.innerHTML = journalUIHtml;
-    this.frameContainerEl = getEl(this.domElement, 'frameContainer');
+    this.moduleContainerEl = getEl(this.domElement, 'moduleContainer');
 
     new JournalLayout();
 
@@ -131,10 +127,19 @@ JournalView.prototype.onChangeSystemMenu = function (systemMenu) {
 };
 
 /**
- * Обработка оповещения об изенении состава меню модуля приложения.
+ * Обработка оповещения об изменении текущего модуля.
+ * @param moduleData Информация о модуле.
+ */
+JournalView.prototype.onChangeModule = function (moduleData) {
+    this.changeModuleMenu(moduleData.menu);
+    this.showModule(moduleData.domElement);
+};
+
+/**
+ * Изменение состава меню модуля приложения.
  * @param moduleMenu Список пунктов меню модуля.
  */
-JournalView.prototype.onChangeModuleMenu = function (moduleMenu) {
+JournalView.prototype.changeModuleMenu = function (moduleMenu) {
     var moduleMenuEl = getEl(this.domElement, 'module-menu');
     this.createMenu(moduleMenu, moduleMenuEl);
 };
@@ -170,7 +175,7 @@ JournalView.prototype.createMenu = function (menuItems, menuEl) {
  * @return menuItemEl DOM-элемент пункта меню.
  */
 JournalView.prototype.createMenuItemElement = function (menuItem) {
-	var menuItemHtml = '<a href="#' + menuItem.command + '">' + menuItem.label + '</a>';
+	var menuItemHtml = '<a href="#' + menuItem.notificationType + '">' + menuItem.label + '</a>';
     var menuItemEl = document.createElement('div');
     menuItemEl.className = 'menuItem';
     menuItemEl.innerHTML = menuItemHtml;
@@ -178,42 +183,10 @@ JournalView.prototype.createMenuItemElement = function (menuItem) {
 };
 
 /**
- * Создание фрейма с таблицей боевых дежурств.
- * @return DOM-элемент фрейма.
+ * Пока представления модуля.
+ * @param moduleDomEl
  */
-JournalView.prototype.createJournalGridFrame = function () {
-    var journalGridFrame = new JournalGridFrame(this);
-    journalGridFrame.render();
-    return journalGridFrame;
-};
-
-/**
- * Показ фрейма.
- * @param frameName Наименование фрейма.
- */
-JournalView.prototype.showFrame = function (frameName) {
-    var frame = View.prototype.showFrame.apply(this, arguments);
-
-    if (frameName == JOURNAL_GRID_FRAME) {
-        frame.init();
-    }
-
-    return frame;
-};
-
-/**
- * Обновление списка боевых дежурств.
- */
-JournalView.prototype.refreshDutyList = function () {
-    var journalGridFrame = this.getFrame(JOURNAL_GRID_FRAME);
-    journalGridFrame.refreshDutyList();
-};
-
-/**
- * Обработка события обновления списка боевых дежурств.
- * @param dutyList Список боевых дежурств.
- */
-JournalView.prototype.onChangeDutyList = function (dutyList) {
-    var journalGridFrame = this.getFrame(JOURNAL_GRID_FRAME);
-    journalGridFrame.setDutyList(dutyList);
+JournalView.prototype.showModule = function (moduleDomEl) {
+    removeChilds(this.moduleContainerEl);
+    this.moduleContainerEl.appendChild(moduleDomEl);
 };

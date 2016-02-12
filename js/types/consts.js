@@ -1,209 +1,55 @@
-// Наименования модулей
+// Модули и фреймы
+// Главный модуль приложения
 var JOURNAL = 'journal';
+
+var INDEX = 'index';
+var DUTY_LIST_FRAME = 'dutyList';
+
 var DUTY = 'duty';
 var STATISTICS = 'statistics';
-var DATA_MANAGEMENT = 'dataManagement';
+var DICTIONARY = 'dictionary';
 
-var DEFAULT_GRID_PAGE_SIZE = 10;
-
-var JOURNAL_GRID_DATA = {
-	columns: [
+// Навигация
+var NAVIGATION = {
+	index: [
+        {
+            label: 'Боевые дежурства',
+            icon: 'img/',
+            notificationType: CALL_INDEX_MODULE
+        },
+        {
+            label: 'Статистика',
+            icon: 'img/',
+            notificationType: CALL_STATISTICS_MODULE
+        },
+        {
+            label: 'Управление данными',
+            icon: 'img/',
+            notificationType: CALL_DICTIONARY_MODULE
+        }
+    ],
+	dictionary: [
 		{
-			label: 'Наименование',
-			index: 'name',
-			dataType: 'string'
-		},
+            label: 'Провизия',
+            icon: 'img/',
+            notificationType: CALL_PROVISION_DATA
+        },
 		{
-			label: 'Дата',
-			index: 'startDate',
-			dataType: 'date'
-		},
-		{
-			label: 'Длительность',
-			index: 'dutyTime',
-			dataType: 'time'
-		},
-		{
-			label: 'Причина завершения',
-			index: 'reasonEnd',
-			dataType: 'number'
-		}
+            label: 'Технические ресурсы',
+            icon: 'img/',
+            notificationType: CALL_TECHNICAL_DATA
+        }
 	],
-	rows: [
+	duty: [
 		{
-			name: 'Наименование 1',
-			startDate: '20.09.2015',
-			dutyTime: '14:17',
-			reasonEnd: 'Заряд аккумулятора'
-		},
+            label: 'Основные параметры',
+            icon: 'img/',
+            notificationType: CALL_MAIN_DUTY_DATA
+        },
 		{
-			name: 'Наименование 2',
-			startDate: '21.09.2015',
-			dutyTime: '12:12',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 3',
-			startDate: '22.09.2015',
-			dutyTime: '10:00',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 4',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 5',
-			startDate: '23.09.2015',
-			dutyTime: '19:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 6',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 7',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 8',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 9',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 10',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 11',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 12',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 13',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 14',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 15',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 16',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 17',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 18',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 19',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 20',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 21',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 22',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 23',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 24',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 25',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 26',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 27',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 28',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		},
-		{
-			name: 'Наименование 29',
-			startDate: '23.09.2015',
-			dutyTime: '09:30',
-			reasonEnd: 'Заряд аккумулятора'
-		}
-	],
-	total: 29
+            label: 'Погода',
+            icon: 'img/',
+            notificationType: CALL_WEATHER_DUTY_DATA
+        }
+	]
 };
