@@ -43,5 +43,5 @@ Module.prototype.getDomElement = function () {
  * @return Список пунктов меню.
  */
 Module.prototype.getMenu = function () {
-    return NAVIGATION[this.name];
+    return Consts.NAVIGATION[this.name];
 }

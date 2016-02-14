@@ -73,19 +73,19 @@ DutyListFrame.prototype.createGrid = function () {
     this.grid.setColumns(columns);
     this.domElement.appendChild(gridEl);
 
-    gridEl.addEventListener(EDITT_DUTY, function (event) {
+    gridEl.addEventListener(EventTypes.EDITT_DUTY, function (event) {
         event.stopPropagation();
         alert('Редактирование боевого дежурства: ' + event.detail.dutyId); //TODO
     });
 
-    gridEl.addEventListener(REMOVE_DUTY, function (event) {
+    gridEl.addEventListener(EventTypes.REMOVE_DUTY, function (event) {
         event.stopPropagation();
         alert('Удаление боевого дежурства: ' + event.detail.dutyId); //TODO
     });
 
-    gridEl.addEventListener(SORT_GRID, (function (event) {
+    gridEl.addEventListener(EventTypes.SORT_GRID, (function (event) {
         event.stopPropagation();
-        this.owner.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
+        this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_DUTY_LIST, {
             offset: this.paginator.offset,
             pageSize: this.paginator.pageSize,
             sort: event.detail
@@ -105,9 +105,9 @@ DutyListFrame.prototype.createPaginator = function () {
     this.paginator.setVisible(false);
 	this.domElement.appendChild(paginatorEl);
 
-    paginatorEl.addEventListener(CHANGE_PAGE, (function (event) {
+    paginatorEl.addEventListener(EventTypes.CHANGE_PAGE, (function (event) {
         event.stopPropagation();
-        this.owner.sendNotification(new Notification(CALL_LOAD_DUTY_LIST, {
+        this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_DUTY_LIST, {
             offset: event.detail.offset,
             pageSize: event.detail.pageSize,
             sort: this.grid.sort

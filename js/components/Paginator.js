@@ -242,7 +242,7 @@ Paginator.prototype.getPageSize = function () {
  */
 Paginator.prototype.dispatchChangePageEvent = function () {
 	var event = new CustomEvent(
-        CHANGE_PAGE,
+        EventTypes.CHANGE_PAGE,
         {
             detail: {
                 offset: this.offset,

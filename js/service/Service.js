@@ -11,7 +11,7 @@ extend(Service, Dispatcher);
  * Загрузка конфигурации приложения.
  */
 Service.prototype.loadConfig = function (url) {
-	this.sendRequest('GET', LOAD_CONFIG_COMPLETE, {
+	this.sendRequest('GET', Notifications.LOAD_CONFIG_COMPLETE, {
 		request: 'loadFile',
 		url: url,
 		message: 'Загрузка файла конфигурации'
@@ -22,7 +22,7 @@ Service.prototype.loadConfig = function (url) {
  * Получение статуса журнала.
  */
 Service.prototype.getJournalStatus = function () {
-	this.sendRequest('GET', LOAD_JOURNAL_STATUS, {
+	this.sendRequest('GET', Notifications.LOAD_JOURNAL_STATUS, {
 		request: 'getJournalStatus',
 		message: 'Определение статуса журнала'
 	});
@@ -32,7 +32,7 @@ Service.prototype.getJournalStatus = function () {
  * Создание боевого дежурства.
  */
 Service.prototype.createDuty = function () {
-	this.sendRequest('POST', CREATE_DUTY_COMPLETE, {
+	this.sendRequest('POST', Notifications.CREATE_DUTY_COMPLETE, {
 		request: 'createDuty',
 		message: 'Создание боевого дежурства'
 	});
@@ -42,7 +42,7 @@ Service.prototype.createDuty = function () {
  * Завершение подготовки к дежурству.
  */
 Service.prototype.completeRunUp = function () {
-	this.sendRequest('POST', RUN_UP_COMPLETE, {
+	this.sendRequest('POST', Notifications.RUN_UP_COMPLETE, {
 		request: 'completeRunUp',
 		message: 'Завершение подготовки к дежурству'
 	});
@@ -52,7 +52,7 @@ Service.prototype.completeRunUp = function () {
  * Завершение боевого дежурства.
  */
 Service.prototype.completeDuty = function () {
-	this.sendRequest('POST', DUTY_COMPLETE, {
+	this.sendRequest('POST', Notifications.DUTY_COMPLETE, {
 		request: 'completeDuty',
 		message: 'Завершение боевого дежурства'
 	});
@@ -69,7 +69,7 @@ Service.prototype.getDutyList = function (dutyListOptions) {
 		sortJsonString = JSON.stringify(sort);
 	}
 
-	this.sendRequest('GET', LOAD_DUTY_LIST, {
+	this.sendRequest('GET', Notifications.LOAD_DUTY_LIST, {
 		request: 'getDutyList',
 		offset: dutyListOptions.offset,
 		pageSize: dutyListOptions.pageSize,

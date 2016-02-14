@@ -1,1 +1,0 @@
-var INITIAL_STATE = 'initialState';

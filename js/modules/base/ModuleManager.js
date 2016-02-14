@@ -49,16 +49,16 @@ var ModuleManager = (function () {
             var module = null;
 
             switch (moduleName) {
-                case JOURNAL:
+                case Consts.JOURNAL:
                     module = new Module(moduleName, JournalModel, JournalView, JournalController);
                     break;
-				case INDEX:
+				case Consts.INDEX:
                     module = new Module(moduleName, IndexModel, IndexView, IndexController);
                     break;
-				case DUTY:
+				case Consts.DUTY:
 					module = new Module(moduleName, DutyModel, DutyView, DutyController);
 					break;
-                case DICTIONARY:
+                case Consts.DICTIONARY:
 					module = new Module(moduleName, DictionaryModel, DictionaryView, DictionaryController);
 					break;
 				case STATISTICS:

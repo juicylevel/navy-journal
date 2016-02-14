@@ -15,5 +15,5 @@ extend(IndexModel, Model);
  */
 IndexModel.prototype.setDutyList = function (dutyList) {
     this.dutyList = dutyList;
-    this.sendNotification(new Notification(CHANGE_DUTY_LIST, this.dutyList));
+    this.sendNotification(new Notification(Notifications.CHANGE_DUTY_LIST, this.dutyList));
 };

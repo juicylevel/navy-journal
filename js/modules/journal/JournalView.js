@@ -18,10 +18,10 @@ extend(JournalView, View);
  */
 JournalView.prototype.getHandlers = function () {
 	return [
-		{type: CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
-        {type: CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
-        {type: CHANGE_SYSTEM_MENU, handler: this.onChangeSystemMenu},
-        {type: CHANGE_MODULE, handler: this.onChangeModule}
+		{type: Notifications.CHANGE_LAST_DUTY_INFO, handler: this.onChangeLastDutyInfo},
+        {type: Notifications.CHANGE_ACTIVE_DUTY_INFO, handler: this.onChangeActiveDutyInfo},
+        {type: Notifications.CHANGE_SYSTEM_MENU, handler: this.onChangeSystemMenu},
+        {type: Notifications.CHANGE_MODULE, handler: this.onChangeModule}
 	];
 };
 
@@ -67,7 +67,7 @@ JournalView.prototype.render = function () {
 
     new JournalLayout();
 
-    this.sendNotification(new Notification(VIEW_READY));
+    this.sendNotification(new Notification(Notifications.VIEW_READY));
 };
 
 /**

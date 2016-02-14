@@ -12,9 +12,9 @@ extend(IndexController, Controller);
  */
 IndexController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
-		{type: LOAD_DUTY_LIST, handler: this.onLoadDutyList},
-		{type: CHANGE_ACTIVE_DUTY, handler: this.onChangeActiveDuty},
-		{type: CALL_LOAD_DUTY_LIST, handler: this.onCallLoadDutyList}
+		{type: Notifications.LOAD_DUTY_LIST, handler: this.onLoadDutyList},
+		{type: Notifications.CHANGE_ACTIVE_DUTY, handler: this.onChangeActiveDuty},
+		{type: Notifications.CALL_LOAD_DUTY_LIST, handler: this.onCallLoadDutyList}
 	]);
 };
 

@@ -190,7 +190,7 @@ DataGrid.prototype.onSortButton = function (event) {
 		sort = {}; sort[columnKey] = sortElDirection;
 	}
 	var sortEvent = new CustomEvent(
-		SORT_GRID,
+		EventTypes.SORT_GRID,
 		{
 			detail: sort,
 			bubbles: true

@@ -3,11 +3,6 @@ var scripts = [
 	'utils/baseUtils',
 	'utils/arrayUtils',
 
-	'types/states',
-	'types/events',
-	'types/notifications',
-	'types/consts',
-
 	'settings/Settings',
 
 	'core/Dispatcher',
@@ -16,6 +11,10 @@ var scripts = [
 	'core/Model',
 	'core/View',
 	'core/Controller',
+
+	'types/Notifications',
+	'types/EventTypes',
+	'types/Consts',
 
 	'components/JournalLayout',
 	'components/Notifier',

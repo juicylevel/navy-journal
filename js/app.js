@@ -15,6 +15,6 @@ function initApplication () {
 	Notifier.getInstance().init();
 	Dialog.getInstance().init();
 
-	var journalModule = ModuleManager.getInstance().getModule(JOURNAL);
+	var journalModule = ModuleManager.getInstance().getModule(Consts.JOURNAL);
 	journalModule.view.render();
 };

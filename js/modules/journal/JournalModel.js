@@ -7,25 +7,25 @@ function JournalModel () {
     this.startDutyMenuItem = {
         label: 'Начать дежурство',
         icon: 'img/',
-        notificationType: CALL_START_DUTY
+        notificationType: Notifications.CALL_START_DUTY
     };
 
     this.completeRunUpMenuItem = {
         label: 'Завершить подготовку',
         icon: 'img/',
-        notificationType: CALL_COMPLETE_RUN_UP
+        notificationType: Notifications.CALL_COMPLETE_RUN_UP
     };
 
     this.completeDutyMenuItem = {
         label: 'Завершить дежурство',
         icon: 'img/',
-        notificationType: CALL_COMPLETE_DUTY
+        notificationType: Notifications.CALL_COMPLETE_DUTY
     };
 
     this.goToIndexMenuItem = {
         label: 'На главную',
         icon: 'img/',
-        notificationType: CALL_INDEX_MODULE
+        notificationType: Notifications.CALL_INDEX_MODULE
     };
 
     this.lastDutyInfo = null;
@@ -52,7 +52,7 @@ JournalModel.prototype.setJournalStatus = function (journalStatus) {
  */
 JournalModel.prototype.setLastDuty = function (lastDuty) {
     this.lastDutyInfo = lastDuty;
-    this.sendNotification(new Notification(CHANGE_LAST_DUTY_INFO, this.lastDutyInfo));
+    this.sendNotification(new Notification(Notifications.CHANGE_LAST_DUTY_INFO, this.lastDutyInfo));
 }
 
 /**
@@ -83,7 +83,7 @@ JournalModel.prototype.setActiveDuty = function (activeDuty) {
 
     this.updateSystemMenu();
 
-    this.sendNotification(new Notification(CHANGE_ACTIVE_DUTY_INFO, this.activeDutyInfo));
+    this.sendNotification(new Notification(Notifications.CHANGE_ACTIVE_DUTY_INFO, this.activeDutyInfo));
 };
 
 /**
@@ -108,11 +108,11 @@ JournalModel.prototype.updateSystemMenu = function () {
         systemMenu.unshift(this.completeDutyMenuItem);
     }
 
-    if (!isEmpty(this.currentModule) && this.currentModule.name != INDEX) {
+    if (!isEmpty(this.currentModule) && this.currentModule.name != Consts.INDEX) {
         systemMenu.push(this.goToIndexMenuItem);
     }
 
-    this.sendNotification(new Notification(CHANGE_SYSTEM_MENU, systemMenu));
+    this.sendNotification(new Notification(Notifications.CHANGE_SYSTEM_MENU, systemMenu));
 };
 
 /**
@@ -125,7 +125,7 @@ JournalModel.prototype.setModule = function (module) {
     var moduleMenu = this.currentModule.getMenu();
     var moduleDomElement = this.currentModule.getDomElement();
 
-    this.sendNotification(new Notification(CHANGE_MODULE, {
+    this.sendNotification(new Notification(Notifications.CHANGE_MODULE, {
         menu: moduleMenu, domElement: moduleDomElement
     }));
 

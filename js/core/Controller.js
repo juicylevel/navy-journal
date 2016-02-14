@@ -19,7 +19,7 @@ extend(Controller, Receiver);
  */
 Controller.prototype.getHandlers = function () {
 	return [
-		{type: VIEW_READY, handler: this.init}
+		{type: Notifications.VIEW_READY, handler: this.init}
 	];
 };
 

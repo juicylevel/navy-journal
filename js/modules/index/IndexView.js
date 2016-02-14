@@ -14,7 +14,7 @@ extend(IndexView, ModuleView);
  */
 IndexView.prototype.render = function () {
     ModuleView.prototype.render.apply(this, arguments);
-    this.showFrame(DUTY_LIST_FRAME);
+    this.showFrame(Consts.DUTY_LIST_FRAME);
 };
 
 /**
@@ -23,7 +23,7 @@ IndexView.prototype.render = function () {
  */
 IndexView.prototype.getHandlers = function () {
 	return [
-        {type: CHANGE_DUTY_LIST, handler: this.onChangeDutyList}
+        {type: Notifications.CHANGE_DUTY_LIST, handler: this.onChangeDutyList}
 	];
 };
 
@@ -40,7 +40,7 @@ IndexView.prototype.createDutyListFrame = function () {
  * Обновление списка боевых дежурств.
  */
 IndexView.prototype.refreshDutyList = function () {
-    var dutyListFrame = this.getFrame(DUTY_LIST_FRAME);
+    var dutyListFrame = this.getFrame(Consts.DUTY_LIST_FRAME);
     dutyListFrame.refreshDutyList();
 };
 
@@ -49,6 +49,6 @@ IndexView.prototype.refreshDutyList = function () {
  * @param dutyList Список боевых дежурств.
  */
 IndexView.prototype.onChangeDutyList = function (dutyList) {
-    var dutyListFrame = this.getFrame(DUTY_LIST_FRAME);
+    var dutyListFrame = this.getFrame(Consts.DUTY_LIST_FRAME);
     dutyListFrame.setDutyList(dutyList);
 };

@@ -41,6 +41,20 @@ var Settings = (function () {
 				columns.push({column: column, name: dutyGridColumns[column]});
 			}
 			return columns;
+		},
+
+		/**
+		 * Получение текста диалогового окна завершения подготовки к дежурству.
+		 */
+		getCompleteRunUpDialog: function () {
+			return this.config.dialogs.completeRunUp;
+		}
+
+		/**
+		 * Получение текста диалогового окна завершения боевого дежурства.
+		 */
+		getCompleteDutyDialog: function () {
+			return this.config.dialogs.completeDuty;
 		}
 	};
 
