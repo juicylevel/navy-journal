@@ -48,7 +48,7 @@ var Settings = (function () {
 		 */
 		getCompleteRunUpDialog: function () {
 			return this.config.dialogs.completeRunUp;
-		}
+		},
 
 		/**
 		 * Получение текста диалогового окна завершения боевого дежурства.
