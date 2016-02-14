@@ -20,6 +20,8 @@ var CALL_LOAD_DUTY_LIST = 'callLoadDutyList';
 var CHANGE_LAST_DUTY_INFO = 'changeLastDutyInfo';
 var CHANGE_ACTIVE_DUTY_INFO = 'changeActiveDutyInfo';
 
+var CHANGE_ACTIVE_DUTY = 'changeActiveDuty';
+
 // оповещения от сервиса
 var LOAD_CONFIG_COMPLETE = 'loadConfigComplete';
 var LOAD_JOURNAL_GRID_DATA = 'loadJournalGridData';

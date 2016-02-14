@@ -1,3 +1,6 @@
+/**
+ * Модель модуля с таблицей боевых дежурств.
+ */
 function IndexModel () {
     Model.apply(this, arguments);
 

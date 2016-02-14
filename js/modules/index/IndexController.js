@@ -1,3 +1,6 @@
+/**
+ * Контроллер страницы приложения c таблицей боевых дежурств.
+ */
 function IndexController (model, view, service) {
 	Controller.apply(this, arguments);
 };
@@ -9,10 +12,8 @@ extend(IndexController, Controller);
  */
 IndexController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
-		// service handlers
 		{type: LOAD_DUTY_LIST, handler: this.onLoadDutyList},
-
-		// view handlers
+		{type: CHANGE_ACTIVE_DUTY, handler: this.onChangeActiveDuty},
 		{type: CALL_LOAD_DUTY_LIST, handler: this.onCallLoadDutyList}
 	]);
 };
@@ -23,6 +24,14 @@ IndexController.prototype.getHandlers = function () {
  */
 IndexController.prototype.onLoadDutyList = function (dutyList) {
 	this.model.setDutyList(dutyList);
+};
+
+/**
+ * Обработка события изменения активного дежурства
+ * (создание, завершение подготовки, завершение дежурства).
+ */
+IndexController.prototype.onChangeActiveDuty = function () {
+	this.view.refreshDutyList();
 };
 
 /**

@@ -1,5 +1,5 @@
 /**
- * Модуль с со списком боевых дежурств.
+ * Представление модуля со списком боевых дежурств.
  */
 function IndexView () {
     ModuleView.apply(this, arguments);
@@ -36,7 +36,6 @@ IndexView.prototype.createDutyListFrame = function () {
     return dutyListFrame;
 };
 
-// TODO:
 /**
  * Обновление списка боевых дежурств.
  */

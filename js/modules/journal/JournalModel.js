@@ -81,6 +81,8 @@ JournalModel.prototype.setActiveDuty = function (activeDuty) {
         this.activeDutyInfo = null;
     }
 
+    this.updateSystemMenu();
+
     this.sendNotification(new Notification(CHANGE_ACTIVE_DUTY_INFO, this.activeDutyInfo));
 };
 

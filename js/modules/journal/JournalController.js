@@ -59,7 +59,6 @@ JournalController.prototype.onLoadConfig = function (config) {
  */
 JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
 	this.model.setJournalStatus(journalStatus);
-	this.model.updateSystemMenu();
 
 	this.onCallIndexModule();
 };
@@ -70,8 +69,7 @@ JournalController.prototype.onLoadJournalStatus = function (journalStatus) {
  */
 JournalController.prototype.onCreateDutyComplete = function (createdDuty) {
 	this.model.setActiveDuty(createdDuty);
-	this.model.updateSystemMenu();
-	//TODO: this.view.refreshDutyList();
+	Bus.getInstance().sendNotification(new Notification(CHANGE_ACTIVE_DUTY));
 };
 
 /**
@@ -80,8 +78,7 @@ JournalController.prototype.onCreateDutyComplete = function (createdDuty) {
  */
 JournalController.prototype.onRunUpComplete = function (activeDuty) {
 	this.model.setActiveDuty(activeDuty);
-	this.model.updateSystemMenu();
-	//TODO: this.view.refreshDutyList();
+	Bus.getInstance().sendNotification(new Notification(CHANGE_ACTIVE_DUTY));
 };
 
 // TODO: почему-то 2 раза шлётся запрос на обновления таблицы боевых дежурств после завершения текущего боевого дежурства
@@ -91,7 +88,7 @@ JournalController.prototype.onRunUpComplete = function (activeDuty) {
  */
 JournalController.prototype.onDutyComplete = function (journalStatus) {
 	this.onLoadJournalStatus(journalStatus);
-	//TODO: this.view.refreshDutyList();
+	Bus.getInstance().sendNotification(new Notification(CHANGE_ACTIVE_DUTY));
 };
 
 //------------------------------------------------------------------------------

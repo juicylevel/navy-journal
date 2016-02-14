@@ -1,5 +1,9 @@
 /**
  * Базовый класс модуля приложения.
+ * @param name Наименование модуля.
+ * @param modelClass Класс модели.
+ * @param viewClass Класс представления.
+ * @param controllerClass Класс контроллера.
  */
 function Module (name, modelClass, viewClass, controllerClass) {
     this.name = name;
