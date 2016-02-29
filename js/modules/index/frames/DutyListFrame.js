@@ -59,10 +59,12 @@ DutyListFrame.prototype.createGrid = function () {
 
     var gridEl = this.grid.getDomElement();
 
-    var actionColumns = new ActionColumnsConfig(null, [
-        new EditColumn(this.grid),
-        new RemoveColumn(this.grid)
-    ]);
+    var actionColumns = new ActionColumnsConfig(this.grid,
+        null, [
+            new EditColumn(EventTypes.EDIT_ITEM),
+            new RemoveColumn(EventTypes.REMOVE_ITEM)
+        ]
+    );
 
     var customRows = [
         new ActiveDutyRow(this.grid)
@@ -73,12 +75,12 @@ DutyListFrame.prototype.createGrid = function () {
     this.grid.setColumns(columns);
     this.domElement.appendChild(gridEl);
 
-    gridEl.addEventListener(EventTypes.EDITT_DUTY, function (event) {
+    gridEl.addEventListener(EventTypes.EDIT_ITEM, function (event) {
         event.stopPropagation();
         alert('Редактирование боевого дежурства: ' + event.detail.dutyId); //TODO
     });
 
-    gridEl.addEventListener(EventTypes.REMOVE_DUTY, function (event) {
+    gridEl.addEventListener(EventTypes.REMOVE_ITEM, function (event) {
         event.stopPropagation();
         alert('Удаление боевого дежурства: ' + event.detail.dutyId); //TODO
     });

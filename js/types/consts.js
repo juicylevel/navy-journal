@@ -9,6 +9,7 @@ var Consts = (function () {
 		DUTY: 'duty',
 		STATISTICS: 'statistics',
 		DICTIONARY: 'dictionary',
+		PROVISIONS: 'provisions',
 		NAVIGATION: {
 			index: [
 		        {

@@ -1,15 +1,23 @@
 /**
  * Колонка в таблице для выполнения операций над записями.
- * @param grid Целевая таблица.
+ * @param actionEventType Тип события.
  * @param column Наименование (ключ) колонки.
  * @param field Надпись колонки.
  */
-function ActionColumn (grid, column, name) {
+function ActionColumn (actionEventType, column, name) {
     this.actionColumn = true;
-    this.grid = grid;
+    this.actionEventType = actionEventType;
     this.column = column || 'remove';
     this.name = name || '';
 };
+
+/**
+ * Установка родительской таблицы.
+ * @param grid Таблица.
+ */
+ActionColumn.prototype.setGrid = function (grid) {
+    this.grid = grid;
+},
 
 /**
  * Создание заголовка колонки.

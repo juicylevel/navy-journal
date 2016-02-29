@@ -137,7 +137,7 @@ DataGrid.prototype.createColumn = function (columnData) {
 	var sortHtml = '';
 	if (!columnData.actionColumn) { // TODO: duplicate check actionColumn
 		sortHtml = '' +
-			'<div class="columnSort">' +
+			'<div class="columnSort" columnSort style="display: none;">' +
 				'<div sort="ASC" class="sortAscOff"></div>' +
 				'<div sort="DESC" class="sortDescOff"></div>' +
 			'</div>';
@@ -261,7 +261,9 @@ DataGrid.prototype.getColumnsCount = function () {
  */
 DataGrid.prototype.setData = function (data, sort) {
 	var tableEl = this.getTableEl();
-	if (!isEmpty(data)) {
+
+	var hasData = !isEmpty(data);
+	if (hasData) {
 		this.rowsData = data;
 		this.sort = sort;
 
@@ -275,7 +277,22 @@ DataGrid.prototype.setData = function (data, sort) {
 			tableEl.appendChild(rowEl);
 		}
 	}
+
+	this.showSortButtons(hasData);
 };
+
+/**
+ * Показ/скрытие элементов сортировки.
+ * @param flag
+ */
+DataGrid.prototype.showSortButtons = function (flag) {
+	var tableEl = this.getTableEl();
+	var columnSortEls = getEl(tableEl, 'columnSort', null, true);
+	for (var i = 0; i < columnSortEls.length; i++) {
+		var columnSortEl = columnSortEls[i];
+		columnSortEl.style.display = flag ? 'block' : 'none';
+	}
+},
 
 /**
  * Создание рядов таблицы.

@@ -53,6 +53,7 @@ var scripts = [
 	'modules/dictionary/DictionaryView',
 	'modules/dictionary/DictionaryModel',
 	'modules/dictionary/DictionaryController',
+	'modules/dictionary/frames/ProvisionsFrame',
 
 	'app'
 ];

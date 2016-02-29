@@ -6,7 +6,7 @@ var EventTypes = (function () {
         CHANGE_PAGE: 'changePage',
         CHANGE_PAGE_SIZE: 'changePageSize',
         SORT_GRID: 'sortGrid',
-        REMOVE_DUTY: 'removeDuty',
-        EDITT_DUTY: 'editDuty'
+        REMOVE_ITEM: 'removeItem',
+        EDIT_ITEM: 'editItem'
     };
 })();

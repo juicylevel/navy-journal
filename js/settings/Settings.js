@@ -36,11 +36,16 @@ var Settings = (function () {
 		 */
 		getDutyListColumns: function () {
 			var dutyGridColumns = this.config.meta.dutyGridColumns;
-			var columns = [];
-			for (var column in dutyGridColumns) {
-				columns.push({column: column, name: dutyGridColumns[column]});
-			}
-			return columns;
+			return this.getColumns(dutyGridColumns);
+		},
+
+		/**
+		 * Получение колонок таблицы типов провизии.
+		 * @return {column: label} Список колонок типов провизии.
+		 */
+		getProvisionsColumns: function () {
+			var provisionsColumns = this.config.meta.provisionsColumns;
+			return this.getColumns(provisionsColumns);
 		},
 
 		/**
@@ -55,6 +60,19 @@ var Settings = (function () {
 		 */
 		getCompleteDutyDialog: function () {
 			return this.config.dialogs.completeDuty;
+		},
+
+		/**
+		 * Получение колонок из метаданных.
+		 * @param columnsMeta Метаинформация о колонках.
+		 * @return {column: columnKey, name: columnName}
+		 */
+		getColumns: function (columnsMeta) {
+			var columns = [];
+			for (var column in columnsMeta) {
+				columns.push({column: column, name: columnsMeta[column]});
+			}
+			return columns;
 		}
 	};
 
