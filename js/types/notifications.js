@@ -48,6 +48,15 @@
          CHANGE_JOURNAL_GRID_COLUMNS: 'changeJournalGridColumns',
          CHANGE_JOURNAL_GRID_ROWS: 'changeJournalGridRows',
 
-         CHANGE_DUTY_LIST: 'changeDutyList'
+         CHANGE_DUTY_LIST: 'changeDutyList',
+
+         // оповещение о завершении загрузки типов провизии
+         LOAD_PROVISIONS_TYPES: 'loadProvisionsTypes',
+
+         // оповещение об изменении списка типов провизии
+         CHANGE_PROVISIONS_TYPES: 'changeProvisionsTypes',
+
+         // запрос на загрузку типов провизии
+         CALL_LOAD_PROVISIONS_TYPES: 'callLoadProvisionsTypes'
      };
 })();

@@ -108,13 +108,7 @@ class DataBase {
         $columns = implode(', ', $dutyListColumns);
 
         // сортировка по заданным колонкам и направлению сортировки
-        $sortSql = '';
-        if (!empty($sort)) {
-            foreach ($sort as $key => $value) {
-                $sortSql .= ', ' . $key . ' ' . $value;
-            }
-            $sortSql .= ' ';
-        }
+        $sortSql = $this->getSortSql($sort, true);
 
         // сортировка: сначала идёт текущее оевое дежурство
         // (то, у которого duty_end_date = NULL), затем идут
@@ -125,6 +119,33 @@ class DataBase {
                'LIMIT ' . $offset . ',' . $pageSize;
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+	 * Получение типов провизии.
+     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+	 */
+	public function getProvisionsTypes ($sort) {
+        $sortSql = $this->getSortSql($sort, false);
+		$sql = 'SELECT * FROM provisions_type_tbl ' .
+               (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+    /**
+     * Получение строки сортировки по заданным колонкам и направлению.
+     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+     */
+    private function getSortSql ($sort, $isNext) {
+        $sortSql = '';
+        if (!empty($sort)) {
+            foreach ($sort as $key => $value) {
+                $sortSql .= ($isNext ? ', ' : ' ') . $key . ' ' . $value;
+            }
+            $sortSql .= ' ';
+        }
+        return $sortSql;
     }
 }
 

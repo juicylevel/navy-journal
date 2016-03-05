@@ -78,6 +78,9 @@ switch ($request) {
 	case 'getDutyList':
 		$result = $requestHandler->getDutyList($offset, $pageSize, json_decode($sort, true));
 		break;
+	case 'getProvisionsTypes':
+		$result = $requestHandler->getProvisionsTypes(json_decode($sort, true));
+		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }

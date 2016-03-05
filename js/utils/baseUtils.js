@@ -34,6 +34,17 @@ function createUrl (parameters) {
 };
 
 /**
+ * Преобразование объекта в json-строку.
+ */
+function objectToJsonString (object) {
+	var jsonString = null;
+	if (!isEmpty(object)) {
+		jsonString = JSON.stringify(object);
+	}
+	return jsonString;
+};
+
+/**
  * Получение DOM-элементов по значению атрибута.
  * @param context Элемент, в который вложен целевой с наименованием атрибута attributeName.
  * @param attributeName Наименование атрибута искомого элемента.

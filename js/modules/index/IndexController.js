@@ -36,7 +36,8 @@ IndexController.prototype.onChangeActiveDuty = function () {
 
 /**
  * Загрузка списка боевых дежурств.
+ * @param options Опции запроса.
  */
-IndexController.prototype.onCallLoadDutyList = function (dutyListOptions) {
-	this.service.getDutyList(dutyListOptions);
+IndexController.prototype.onCallLoadDutyList = function (options) {
+	this.service.getDutyList(options);
 };

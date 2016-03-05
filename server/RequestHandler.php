@@ -73,6 +73,7 @@ class RequestHandler {
 	 * Получение списка боевых дежурств.
 	 * @param $offset
 	 * @param $pageSize
+	 * @param $sort
 	 */
 	public function getDutyList ($offset, $pageSize, $sort) {
 		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
@@ -90,6 +91,19 @@ class RequestHandler {
 			'pageSize' => $pageSize,
 			'count' => $this->db->getDutyCount(),
 			'data' => $dutyList,
+			'sort' => $sort
+		);
+	}
+
+	/**
+	 * Получение типов провизии.
+	 * @param $sort Параметры сортировки.
+	 */
+	public function getProvisionsTypes ($sort) {
+		$provisionsTypes = $this->db->getProvisionsTypes($sort);
+
+		return array (
+			'data' => $provisionsTypes,
 			'sort' => $sort
 		);
 	}

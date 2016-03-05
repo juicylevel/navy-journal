@@ -78,12 +78,16 @@ DataGrid.prototype.setCustom = function (actionColumns, customRows) {
 /**
  * Установка колонок.
  * @param columns Список колонок.
+ * @param columnsWidth Список значений ширины колонок
+ * (в порядке следования колонок в таблице).
  */
-DataGrid.prototype.setColumns = function (columns) {
+DataGrid.prototype.setColumns = function (columns, columnsWidth) {
 	this.configureColumnsData(columns);
 
 	var tableEl = this.getTableEl();
 	removeEl(tableEl, this.COLUMN_ATTR, null, true);
+
+	this.applyColumnsWidth(columnsWidth);
 
 	var columnsElement = this.createColumns();
 	tableEl.appendChild(columnsElement);
@@ -106,6 +110,25 @@ DataGrid.prototype.configureColumnsData = function (dataColumns) {
 		dataColumns,
 		getActionColumns.call(this, 'right')
 	);
+};
+
+/**
+ * Установка ширины колонок в таблице.
+ * @param columnsWidth Список значений ширины колонок
+ * (в порядке следования колонок в таблице).
+ */
+DataGrid.prototype.applyColumnsWidth = function (columnsWidth) {
+	if (!isEmpty(columnsWidth)) {
+		var tableEl = this.getTableEl();
+		for (var i = 0; i < columnsWidth.length; i++) {
+			var colEl = document.createElement('col');
+			var colWidth = columnsWidth[i];
+			if (!isEmpty(colWidth)) {
+				colEl.setAttribute('width', colWidth);
+			}
+			tableEl.appendChild(colEl);
+		}
+	}
 };
 
 /**
@@ -203,29 +226,27 @@ DataGrid.prototype.onSortButton = function (event) {
  * Обновление кнопок сортировки в колонках таблицы.
  */
 DataGrid.prototype.updateColumnsSort = function () {
-	if (!isEmpty(this.sort)) {
-		var columnData, columnKey, columnEl, direction, ascButtonEl, descButtonEl;
-		for (var i = 0; i < this.columnsData.length; i++) {
-			columnData = this.columnsData[i];
-			if (!columnData.actionColumn) {
-				columnKey = columnData[this.COLUMN_NAME];
-				columnEl = getEl(this.domElement, this.COLUMN_ATTR, columnKey);
-				ascButtonEl = getEl(columnEl, 'sort', 'ASC');
-				descButtonEl = getEl(columnEl, 'sort', 'DESC');
-				direction = this.sort[columnKey];
-				switch (direction) {
-					case 'ASC':
-						ascButtonEl.className = 'sortAscOn';
-						descButtonEl.className = 'sortDescOff';
-						break;
-					case 'DESC':
-						ascButtonEl.className = 'sortAscOff';
-						descButtonEl.className = 'sortDescOn';
-						break;
-					default:
-						ascButtonEl.className = 'sortAscOff';
-						descButtonEl.className = 'sortDescOff';
-				}
+	var columnData, columnKey, columnEl, direction, ascButtonEl, descButtonEl;
+	for (var i = 0; i < this.columnsData.length; i++) {
+		columnData = this.columnsData[i];
+		if (!columnData.actionColumn) {
+			columnKey = columnData[this.COLUMN_NAME];
+			columnEl = getEl(this.domElement, this.COLUMN_ATTR, columnKey);
+			ascButtonEl = getEl(columnEl, 'sort', 'ASC');
+			descButtonEl = getEl(columnEl, 'sort', 'DESC');
+			direction = !isEmpty(this.sort) ? this.sort[columnKey] : null;
+			switch (direction) {
+				case 'ASC':
+					ascButtonEl.className = 'sortAscOn';
+					descButtonEl.className = 'sortDescOff';
+					break;
+				case 'DESC':
+					ascButtonEl.className = 'sortAscOff';
+					descButtonEl.className = 'sortDescOn';
+					break;
+				default:
+					ascButtonEl.className = 'sortAscOff';
+					descButtonEl.className = 'sortDescOff';
 			}
 		}
 	}

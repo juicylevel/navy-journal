@@ -26,7 +26,15 @@ ProvisionsFrame.prototype.render = function () {
  * Инициализация фрейма.
  */
 ProvisionsFrame.prototype.init = function () {
+    this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_PROVISIONS_TYPES));
+};
 
+/**
+ * Установка типов провизии.
+ * @param provisionsTypes Типы провизии.
+ */
+ProvisionsFrame.prototype.setProvisionsTypes = function (provisionsTypes) {
+    this.provisionsGrid.setData(provisionsTypes.data, provisionsTypes.sort);
 };
 
 /**
@@ -35,7 +43,7 @@ ProvisionsFrame.prototype.init = function () {
 ProvisionsFrame.prototype.createToolBar = function () {
     var toolBarHtml = '' +
         '<div style="margin-bottom: 6px;">' +
-            '<button addButton style="cursor: pointer;">Добавить</button>' +
+            '<button addButton style="cursor: pointer; padding: 2px 4px;">Добавить новый тип провизии</button>' +
         '</div>';
 
     var toolBarEl = document.createElement('div');
@@ -74,7 +82,7 @@ ProvisionsFrame.prototype.createProvisionsGrid = function () {
 
     this.provisionsGrid.setCustom(actionColumns);
 
-    this.provisionsGrid.setColumns(columns);
+    this.provisionsGrid.setColumns(columns, ['', 27, 27]);
     this.domElement.appendChild(provisionsGridEl);
 
     provisionsGridEl.addEventListener(EventTypes.EDIT_ITEM, function (event) {
@@ -89,9 +97,7 @@ ProvisionsFrame.prototype.createProvisionsGrid = function () {
 
     provisionsGridEl.addEventListener(EventTypes.SORT_GRID, (function (event) {
         event.stopPropagation();
-        this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_PROVISIONS_TYPES_LIST, {
-            offset: this.paginator.offset,
-            pageSize: this.paginator.pageSize,
+        this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_PROVISIONS_TYPES, {
             sort: event.detail
         }));
     }).bind(this));

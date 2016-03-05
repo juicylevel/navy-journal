@@ -62,19 +62,24 @@ Service.prototype.completeDuty = function () {
  * Загрузка списка боевых дежурств.
  * @param dutyListOptions
  */
-Service.prototype.getDutyList = function (dutyListOptions) {
-	var sortJsonString = null;
-	var sort = dutyListOptions.sort;
-	if (!isEmpty(sort)) {
-		sortJsonString = JSON.stringify(sort);
-	}
-
+Service.prototype.getDutyList = function (options) {
 	this.sendRequest('GET', Notifications.LOAD_DUTY_LIST, {
 		request: 'getDutyList',
-		offset: dutyListOptions.offset,
-		pageSize: dutyListOptions.pageSize,
-		sort: sortJsonString,
+		offset: options.offset,
+		pageSize: options.pageSize,
+		sort: objectToJsonString(options.sort),
 		message: 'Загрузка списка боевых дежурств'
+	});
+};
+
+/**
+ * Получение списка типов провизии.
+ */
+Service.prototype.getProvisionsTypes = function (options) {
+    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_TYPES, {
+		request: 'getProvisionsTypes',
+		sort:  objectToJsonString(options.sort),
+		message: 'Загрузка списка типов провизии'
 	});
 };
 

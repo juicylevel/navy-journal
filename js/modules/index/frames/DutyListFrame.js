@@ -72,7 +72,7 @@ DutyListFrame.prototype.createGrid = function () {
 
     this.grid.setCustom(actionColumns, customRows);
 
-    this.grid.setColumns(columns);
+    this.grid.setColumns(columns, [20, '', '', '', '', 27, 27]);
     this.domElement.appendChild(gridEl);
 
     gridEl.addEventListener(EventTypes.EDIT_ITEM, function (event) {
