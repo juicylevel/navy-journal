@@ -40,12 +40,12 @@ var Settings = (function () {
 		},
 
 		/**
-		 * Получение колонок таблицы типов провизии.
-		 * @return {column: label} Список колонок типов провизии.
+		 * Получение колонок таблицы элементов провизии.
+		 * @return {column: label} Список колонок элементов провизии.
 		 */
-		getProvisionsColumns: function () {
-			var provisionsColumns = this.config.meta.provisionsColumns;
-			return this.getColumns(provisionsColumns);
+		getProvisionsItemColumns: function () {
+			var provisionsItemColumns = this.config.meta.provisionsItemColumns;
+			return this.getColumns(provisionsItemColumns);
 		},
 
 		/**

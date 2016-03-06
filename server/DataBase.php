@@ -34,8 +34,8 @@ class DataBase {
      * Получение информации о последнем завершённом дежурстве.
      */
     public function getLastCompleteDuty () {
-        $sql = 'SELECT duty_id, duty_start_date, duty_end_date FROM duty_tbl ' .
-               'WHERE duty_end_date = (SELECT MAX(duty_end_date) FROM duty_tbl)';
+        $sql = 'SELECT id, start_date, end_date FROM duty ' .
+               'WHERE end_date = (SELECT MAX(end_date) FROM duty)';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
@@ -44,7 +44,7 @@ class DataBase {
      * Получение информации об активном (текущем) дежурстве.
      */
     public function getActiveDuty () {
-        $sql = 'SELECT * FROM duty_tbl WHERE duty_end_date IS NULL';
+        $sql = 'SELECT * FROM duty WHERE end_date IS NULL';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
@@ -56,7 +56,7 @@ class DataBase {
      * @return int Ижентификатор созданного боевого дежурства.
      */
     public function createDuty ($startDate, $name) {
-        $sql = 'INSERT INTO duty_tbl (duty_start_date, duty_name) VALUES (:startDate, :name)';
+        $sql = 'INSERT INTO duty (start_date, name) VALUES (:startDate, :name)';
         $stmt = $this->pdo->prepare($sql);
         $data = array(':startDate' => $startDate, ':name' => $name);
         $result = $stmt->execute($data);
@@ -69,7 +69,7 @@ class DataBase {
      * @param $runUpTime Время подготовки к боевому дежурству.
      */
     public function saveRunUpTime ($dutyId, $runUpTime) {
-        $sql = 'UPDATE duty_tbl SET duty_runup_time = ? WHERE duty_id = ?';
+        $sql = 'UPDATE duty SET runup_time = ? WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
         $data = array($runUpTime, $dutyId);
         return $stmt->execute($data);
@@ -81,7 +81,7 @@ class DataBase {
      * @param $endDate Время завершения боевого дежурства.
      */
     public function saveDutyEndDate ($dutyId, $endDate) {
-        $sql = 'UPDATE duty_tbl SET duty_end_date = ? WHERE duty_id = ?';
+        $sql = 'UPDATE duty SET end_date = ? WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
         $data = array($endDate, $dutyId);
         return $stmt->execute($data);
@@ -91,7 +91,7 @@ class DataBase {
      * Получение общего количества боевых дежурств.
      */
     public function getDutyCount () {
-        $sql = 'SELECT * FROM duty_tbl';
+        $sql = 'SELECT * FROM duty';
         $stmt = $this->pdo->query($sql);
         return $stmt->rowCount();
     }
@@ -113,8 +113,8 @@ class DataBase {
         // сортировка: сначала идёт текущее оевое дежурство
         // (то, у которого duty_end_date = NULL), затем идут
         // завершённые дежурства, отосортированные в соответствии с $sortSql
-        $sql = 'SELECT ' . $columns . ' FROM duty_tbl ' .
-               'ORDER BY ISNULL(duty_end_date) DESC' .
+        $sql = 'SELECT ' . $columns . ' FROM duty ' .
+               'ORDER BY ISNULL(end_date) DESC' .
                $sortSql .
                'LIMIT ' . $offset . ',' . $pageSize;
         $stmt = $this->pdo->query($sql);
@@ -122,16 +122,32 @@ class DataBase {
     }
 
     /**
-	 * Получение типов провизии.
+	 * Получение элементов провизии.
      * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
 	 */
-	public function getProvisionsTypes ($sort) {
+	public function getProvisionsItems ($sort) {
         $sortSql = $this->getSortSql($sort, false);
-		$sql = 'SELECT * FROM provisions_type_tbl ' .
+        // INNER JOIN
+        $sql = 'SELECT provisions_item.id, provisions_item.name, provisions_type.name as type_name ' .
+               'FROM provisions_item, provisions_type ' .
+               'WHERE provisions_item.type_id = provisions_type.id ' .
                (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
+
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+    /**
+	 * Добавление нового элемента провизии.
+	 * @param $name Наименование нового элемента провизии.
+	 */
+	public function addProvisionsItem ($name) {
+        $sql = 'INSERT INTO provisions_item (name) VALUES (:name)';
+        $stmt = $this->pdo->prepare($sql);
+        $data = array(':name' => $name);
+        $result = $stmt->execute($data);
+        return $this->pdo->lastInsertId();
+    }
 
     /**
      * Получение строки сортировки по заданным колонкам и направлению.

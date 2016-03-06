@@ -73,13 +73,26 @@ Service.prototype.getDutyList = function (options) {
 };
 
 /**
- * Получение списка типов провизии.
+ * Получение списка элементов провизии.
  */
-Service.prototype.getProvisionsTypes = function (options) {
-    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_TYPES, {
-		request: 'getProvisionsTypes',
+Service.prototype.getProvisionsItems = function (options) {
+    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_ITEMS, {
+		request: 'getProvisionsItems',
 		sort:  objectToJsonString(options.sort),
-		message: 'Загрузка списка типов провизии'
+		message: 'Загрузка списка элементов провизии'
+	});
+};
+
+/**
+ * Добавление нового элемента провизии.
+ * @param provisionsTypeName Наименование элемента провизии.
+ */
+Service.prototype.addProvisionsItem = function (name, sort) {
+	this.sendRequest('POST', Notifications.COMPLATE_ADD_PROVISIONS_ITEM, {
+		request: 'addProvisionsItem',
+		name: name,
+		sort: sort,
+		message: 'Добавление нового элемента провизии'
 	});
 };
 

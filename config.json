@@ -10,14 +10,23 @@
 	},
 	"meta": {
 		"dutyGridColumns": {
-			"duty_id": "id",
-			"duty_name": "Наименование",
-			"duty_start_date": "Начало дежурства",
-			"duty_runup_time": "Время подготовки",
-			"duty_end_date": "Завершение дежурства"
+			"id": "id",
+			"name": "Наименование",
+			"start_date": "Начало дежурства",
+			"runup_time": "Время подготовки",
+			"end_date": "Завершение дежурства"
 		},
-		"provisionsColumns": {
-			"provisions_type_name": "Наименование"
-		}
+		"provisionsItemColumns": {
+			"name": "Наименование",
+			"type_name": "Тип"
+		},
+		"provisionsTypes": [
+			{"id": 0, "name": "Безалкогольный напиток"},
+			{"id": 0, "name": "Вода питьевая"},
+			{"id": 0, "name": "Крепкий алкогольный напиток"},
+			{"id": 0, "name": "Пиво"},
+			{"id": 0, "name": "Пища"},
+			{"id": 0, "name": "Столовые принадлежности"}
+		]
 	}
 }

@@ -46,9 +46,9 @@ class RequestHandler {
 	 */
 	public function completeRunUp () {
 		$activeDuty = $this->db->getActiveDuty();
-		$startDate = new DateTime($activeDuty->duty_start_date);
+		$startDate = new DateTime($activeDuty->start_date);
 		$runUpTime = time() - $startDate->format('U');
-		$this->db->saveRunUpTime($activeDuty->duty_id, secondsToTimeString($runUpTime));
+		$this->db->saveRunUpTime($activeDuty->id, secondsToTimeString($runUpTime));
 		return $this->getActiveDuty();
 	}
 
@@ -60,12 +60,12 @@ class RequestHandler {
 		$endDate = new DateTime();
 		$endDateString = $endDate->format('Y-m-d H:i:s');
 
-		$runUpTime = timeStringToSeconds($activeDuty->duty_runup_time);
+		$runUpTime = timeStringToSeconds($activeDuty->runup_time);
 		if ($runUpTime == 0) {
 			$this->completeRunUp();
 		}
 
-		$this->db->saveDutyEndDate($activeDuty->duty_id, $endDateString);
+		$this->db->saveDutyEndDate($activeDuty->id, $endDateString);
 		return $this->getJournalStatus();
 	}
 
@@ -79,7 +79,7 @@ class RequestHandler {
 		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
 
 		if (empty($sort)) {
-			$sort = array('duty_end_date' => 'DESC');
+			$sort = array('end_date' => 'DESC');
 		}
 
 		$dutyList = $this->db->getDutyList($dutyListColumns, $offset, $pageSize, $sort);
@@ -96,16 +96,29 @@ class RequestHandler {
 	}
 
 	/**
-	 * Получение типов провизии.
+	 * Получение элементов провизии.
 	 * @param $sort Параметры сортировки.
 	 */
-	public function getProvisionsTypes ($sort) {
-		$provisionsTypes = $this->db->getProvisionsTypes($sort);
+	public function getProvisionsItems ($sort) {
+		$provisionsItems = $this->db->getProvisionsItems($sort);
 
 		return array (
-			'data' => $provisionsTypes,
+			'data' => $provisionsItems,
 			'sort' => $sort
 		);
+	}
+
+	/**
+	 * Добавление нового элемента провизии.
+	 * @param $name Наименование нового элемента провизии.
+	 * @param $sort Параметры сортировки списка элементов провизии,
+	 * который после добавления будет обновлён и возвращён в ответе.
+	 */
+	public function addProvisionsItem ($name, $sort) {
+		if (!empty($name)) {
+			$this->db->addProvisionsItem($name);
+		}
+		return $this->getProvisionsItems($sort);
 	}
 
 	/**
@@ -117,13 +130,13 @@ class RequestHandler {
 		$activeDuty = $this->getActiveDuty();
 		if (!empty($activeDuty) && !empty($dutyList)) {
 			foreach ($dutyList as $key => $duty) {
-				if ($activeDuty['dutyId'] == $duty['duty_id']) {
+				if ($activeDuty['dutyId'] == $duty['id']) {
 					$duty['activeDuty'] = array(
-						'columns' => array('duty_end_date'),
+						'columns' => array('end_date'),
 						'duration' => $activeDuty['duration']
 					);
 					if ($activeDuty['runUpTime'] == 0) {
-						$duty['activeDuty']['columns'][] = 'duty_runup_time';
+						$duty['activeDuty']['columns'][] = 'runup_time';
 					}
 					$dutyList[$key] = $duty;
 					break;
@@ -141,8 +154,8 @@ class RequestHandler {
 		$lastCompleteDuty = $this->db->getLastCompleteDuty();
 
 		if (!empty($lastCompleteDuty)) {
-			$startDate = new DateTime($lastCompleteDuty->duty_start_date);
-			$endDate = new DateTime($lastCompleteDuty->duty_end_date);
+			$startDate = new DateTime($lastCompleteDuty->start_date);
+			$endDate = new DateTime($lastCompleteDuty->end_date);
 			$duration = date_diff($startDate, $endDate);
 			$result = array(
 				'date' => $startDate->format('U'),
@@ -161,11 +174,11 @@ class RequestHandler {
 		$activeDuty = $this->db->getActiveDuty();
 
 		if (!empty($activeDuty)) {
-			$startDate = new DateTime($activeDuty->duty_start_date);
+			$startDate = new DateTime($activeDuty->start_date);
 			$duration = date_diff($startDate, new DateTime());
-			$runUpTime = $activeDuty->duty_runup_time;
+			$runUpTime = $activeDuty->runup_time;
 			$result = array(
-				'dutyId' => $activeDuty->duty_id,
+				'dutyId' => $activeDuty->id,
 				'date' => $startDate->format('U'),
 				'duration' => dateIntervalToSeconds($duration),
 				'runUpTime' => timeStringToSeconds($runUpTime)

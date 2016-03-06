@@ -28,6 +28,8 @@ var scripts = [
 	'components/grid/RemoveColumn',
 	'components/grid/EditColumn',
 	'components/grid/CustomRow',
+	'components/form/Form',
+	'components/form/FormItem',
 
 	'service/Service',
 

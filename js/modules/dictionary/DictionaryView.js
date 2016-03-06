@@ -15,7 +15,7 @@ extend(DictionaryView, ModuleView);
  */
 DictionaryView.prototype.getHandlers = function () {
 	return [
-        {type: Notifications.CHANGE_PROVISIONS_TYPES, handler: this.onChangeProvisionsTypes}
+        {type: Notifications.CHANGE_PROVISIONS_ITEMS, handler: this.onChangeProvisionsItems}
 	];
 };
 
@@ -37,10 +37,10 @@ DictionaryView.prototype.createProvisionsFrame = function () {
 };
 
 /**
- * Обработка оповещения об изменении списка типов провизии.
- * @param provisionsTypes Типы провизии.
+ * Обработка оповещения об изменении списка элементов провизии.
+ * @param provisionsItems Типы провизии.
  */
-DictionaryView.prototype.onChangeProvisionsTypes = function (provisionsTypes) {
+DictionaryView.prototype.onChangeProvisionsItems = function (provisionsItems) {
     var provisionsFrame = this.getFrame(Consts.PROVISIONS);
-    provisionsFrame.setProvisionsTypes(provisionsTypes);
+    provisionsFrame.setProvisionsItems(provisionsItems);
 };

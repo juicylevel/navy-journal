@@ -1,5 +1,6 @@
 'use strict';
-
+// перйти в командной строке в папку проекта
+// вызвать команду "gulp build-journal"
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');

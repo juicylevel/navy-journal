@@ -436,7 +436,7 @@ DataGrid.prototype.createRowCells = function (rowData, rowEl) {
 		var columnData = this.columnsData[j];
 		var cellEl;
 		if (columnData.actionColumn) {
-			cellEl = columnData.createCellElement();
+			cellEl = columnData.createCellElement(rowData);
 		}
 		else {
 			var columnKey = columnData[this.COLUMN_NAME];
