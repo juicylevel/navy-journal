@@ -18,10 +18,12 @@ var scripts = [
 
 	'components/JournalLayout',
 	'components/Notifier',
+	'components/PopUp',
 	'components/Dialog',
 	'components/Widget',
 	'components/ViewFrame',
 	'components/Paginator',
+	'components/Window',
 	'components/grid/DataGrid',
 	'components/grid/ActionColumnsConfig',
 	'components/grid/ActionColumn',
@@ -30,6 +32,9 @@ var scripts = [
 	'components/grid/CustomRow',
 	'components/form/Form',
 	'components/form/FormItem',
+	'components/form/Container',
+	'components/form/TextField',
+	'components/form/ComboBox',
 
 	'service/Service',
 

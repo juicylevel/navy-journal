@@ -187,6 +187,15 @@ class RequestHandler {
 
 		return $result;
 	}
+
+	/**
+	 * Получение параметров погоды из сервиса.
+	 */
+	private function getWeatherFromService () {
+		// CITYID = 498817
+		// APIID = a61d94e24a6ea5c6adca71cd69256c39 (juicylevel, epictrain)
+		// LINK = http://api.openweathermap.org/data/2.5/weather?id=498817&APPID=a61d94e24a6ea5c6adca71cd69256c39&lang=ru&mode=xml&units=metric
+	}
 }
 
 ?>

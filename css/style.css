@@ -287,33 +287,43 @@ nav, section, footer {
 	*/
 }
 
-.dialogBody {
+.windowBody {
 	border: 1px solid gray;
 	background-color: #FFFFFF;
 	padding: 3px;
 	position: absolute;
 }
 
-.dialogBody .title {
+.windowBody .title {
 	background-color: #EEEEEE;
 	margin: 1px;
 	font-weight: bold;
 	padding: 2px;
 }
 
-.dialogBody .message {
-	margin: 4px 2px;
-}
-
-.dialogBody .buttons {
+.windowBody .buttons {
 	text-align: center;
 	margin-bottom: 2px;
 }
 
-.dialogBody .buttons button {
+.windowBody .buttons button {
 	margin-right: 3px;
 	padding: 0px 4px;
 	cursor: pointer;
+}
+
+.windowContainer {
+	padding: 7px;
+}
+
+.formItem {
+	margin-bottom: 5px;
+}
+
+.fieldLabel {
+	display: inline-block;
+	text-align: right;
+	margin-right: 3px;
 }
 
 .dutyListFrame {
