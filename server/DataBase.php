@@ -150,6 +150,16 @@ class DataBase {
     }
 
     /**
+	 * Получение информации об элементе провизии.
+	 * @param $id Идентификатор элемента провизии.
+	 */
+	public function getProvisionsItem ($id) {
+        $sql = 'SELECT * FROM provisions_item WHERE id = ' . $id;
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+	}
+
+    /**
      * Получение строки сортировки по заданным колонкам и направлению.
      * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
      */

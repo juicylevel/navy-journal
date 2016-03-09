@@ -8,18 +8,24 @@ function ComboBox () {
 extend(ComboBox, FormItem);
 
 /**
- * Отрисовка комбобокса.
+ * Создание поля ввода значения.
  */
-ComboBox.prototype.render = function () {
-    FormItem.prototype.render.apply(this, arguments);
-
-    var formItemHtml = '' +
-        '<select style="width: ' + this.width + 'px;">' +
+ComboBox.prototype.createField = function () {
+    var fieldHtml = '' +
+        '<select style="width: ' + this.itemConfig.width + 'px;">' +
+            '<option value="">&nbsp;' + 
             '<option>Питьевая вода</option>' +
             '<option>Безалкогольный напиток</option>' +
             '<option>Пиво</option>' +
             '<option>Крепкий алкогольный напиток</option>' +
         '</select>';
 
-    this.domElement.insertAdjacentHTML('beforeend', formItemHtml);
+    this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
+};
+
+/**
+ * Установка вариантов выбора.
+ */
+ComboBox.prototype.setOptions = function () {
+
 };

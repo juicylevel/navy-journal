@@ -9,29 +9,11 @@ function Form () {
 
 extend(Form, Widget);
 
-Form.prototype.getFormConfig = function () {
-    return [
-        {
-            ui: Container,
-            layout: 'vertical',
-            items: [
-                {
-                    field: 'name',
-                    fieldLabel: 'Наименование',
-                    ui: TextField,
-                    labelWidth: 90,
-                    width: 146
-                },
-                {
-                    field: 'type',
-                    fieldLabel: 'Тип',
-                    ui: ComboBox,
-                    labelWidth: 90,
-                    width: 150
-                }
-            ]
-        }
-    ]
+/**
+ * Получение конфигурации элементов формы.
+ */
+Form.prototype.getFormItemsConfig = function () {
+    return [];
 };
 
 /**
@@ -48,18 +30,11 @@ Form.prototype.render = function () {
  * Создание полей ввода.
  */
 Form.prototype.createFields = function () {
-    var createItems = function (items, parentEl) {
-        for (var i = 0; i < items.length; i++) {
-            var itemConfig = items[i];
-            var itemUI = new itemConfig.ui(itemConfig.fieldLabel, itemConfig.labelWidth, itemConfig.width);
-            var itemEl = itemUI.getDomElement();
-
-            parentEl.appendChild(itemUI.getDomElement());
-            if (!isEmpty(itemConfig.items)) {
-                createItems.call(this, itemConfig.items, itemUI.getDomElement());
-            }
-        }
-    };
-
-    createItems.call(this, this.getFormConfig(), this.domElement);
+    var items = this.getFormItemsConfig();
+    for (var i = 0; i < items.length; i++) {
+        var itemConfig = items[i];
+        var itemUI = new itemConfig.ui(itemConfig);
+        var itemEl = itemUI.getDomElement();
+        this.domElement.appendChild(itemEl);
+    }
 };

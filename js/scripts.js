@@ -32,7 +32,6 @@ var scripts = [
 	'components/grid/CustomRow',
 	'components/form/Form',
 	'components/form/FormItem',
-	'components/form/Container',
 	'components/form/TextField',
 	'components/form/ComboBox',
 
@@ -61,6 +60,7 @@ var scripts = [
 	'modules/dictionary/DictionaryModel',
 	'modules/dictionary/DictionaryController',
 	'modules/dictionary/frames/ProvisionsFrame',
+	'modules/dictionary/frames/ProvisionsItemForm',
 
 	'app'
 ];

@@ -122,6 +122,15 @@ class RequestHandler {
 	}
 
 	/**
+	 * Получение информации об элементе провизии.
+	 * @param $id Идентификатор элемента провизии.
+	 */
+	public function getProvisionsItem ($id) {
+		$provisionsItem = $this->db->getProvisionsItem($id);
+		return $provisionsItem;
+	}
+
+	/**
 	 * Конфигурация активного дежурства в списке боевых дежурств.
 	 * @param $dutyList Список боевых дежурств.
 	 * @return $dutyList Модифицированный список боевых дежурств.

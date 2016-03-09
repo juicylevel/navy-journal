@@ -18,7 +18,7 @@ function initApplication () {
 	var journalModule = ModuleManager.getInstance().getModule(Consts.JOURNAL);
 	journalModule.view.render();
 
-	var form = new Form();
+	var form = new ProvisionsItemForm();
 
 	var wnd = new Window('Форма', form.getDomElement(), {
 		context: this,

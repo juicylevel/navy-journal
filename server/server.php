@@ -84,6 +84,9 @@ switch ($request) {
 	case 'addProvisionsItem':
 		$result = $requestHandler->addProvisionsItem($name, $sort);
 		break;
+	case 'getProvisionsItem':
+		$result = $requestHandler->getProvisionsItem($id);
+		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }

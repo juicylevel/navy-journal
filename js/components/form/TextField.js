@@ -8,12 +8,9 @@ function TextField () {
 extend(TextField, FormItem);
 
 /**
- * Отрисовка поля ввода текста.
+ * Создание поля ввода значения.
  */
-TextField.prototype.render = function () {
-    FormItem.prototype.render.apply(this, arguments);
-
-    var formItemHtml = '<input type="text" style="width: ' + this.width + 'px;">';
-
-    this.domElement.insertAdjacentHTML('beforeend', formItemHtml);
+TextField.prototype.createField = function () {
+    var fieldHtml = '<input type="text" style="width: ' + this.itemConfig.width + 'px;">';
+    this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
 };
