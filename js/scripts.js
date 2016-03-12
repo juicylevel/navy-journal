@@ -31,6 +31,7 @@ var scripts = [
 	'components/grid/EditColumn',
 	'components/grid/CustomRow',
 	'components/form/Form',
+	'components/form/FormWindow',
 	'components/form/FormItem',
 	'components/form/TextField',
 	'components/form/ComboBox',

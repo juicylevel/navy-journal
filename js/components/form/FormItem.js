@@ -59,7 +59,8 @@ FormItem.prototype.createRequiredMarker = function () {
  * @param value Значение элемента формы.
  */
 FormItem.prototype.setValue = function (value) {
-
+    this.originalValue = value;
+    this.dispatchChangeEvent();
 };
 
 /**
@@ -75,7 +76,7 @@ FormItem.prototype.getValue = function () {
  * @return boolean
  */
 FormItem.prototype.isDirty = function () {
-
+    return this.getValue() != this.originalValue;
 };
 
 /**
@@ -83,5 +84,24 @@ FormItem.prototype.isDirty = function () {
  * @return boolean
  */
 FormItem.prototype.isValid = function () {
-
+    if (this.itemConfig.required && isEmpty(this.getValue())) {
+        return false;
+    }
+    return true;
 };
+
+/**
+ * Отправка события об изменении значения.
+ */
+FormItem.prototype.dispatchChangeEvent = function () {
+    var changeEvent = new CustomEvent(
+		EventTypes.CHANGE_VALUE,
+		{
+			detail: {
+                value: this.getValue()
+            },
+			bubbles: true
+		}
+	);
+	this.domElement.dispatchEvent(changeEvent);
+}

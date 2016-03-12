@@ -1,12 +1,13 @@
 /**
  * Окно с шапкой, контентом и кнопками.
  */
-function Window (title, contentEl, buttons) {
+function Window (title, contentEl, buttons, buttonsHandler) {
     Widget.apply(this, arguments);
 
     this.title = title;
     this.contentEl = contentEl;
     this.buttons = buttons;
+    this.buttonsHandler = buttonsHandler;
 
     this.render();
 };
@@ -32,23 +33,19 @@ Window.prototype.render = function () {
 
     var self = this,
         buttonsEl = getEl(this.domElement, 'buttons'),
+        buttonConfig,
         buttonEl;
 
-    for (var buttonName in this.buttons) {
-        if (buttonName == 'context') continue;
+    for (var i in this.buttons) {
+        buttonConfig = this.buttons[i];
 
         buttonEl = document.createElement('button');
-        buttonEl.innerHTML = buttonName;
-        buttonEl.buttonName = buttonName;
+        buttonEl.innerHTML = buttonConfig.btn;
+        buttonEl.config = buttonConfig;
+
         buttonEl.addEventListener('click', function () {
-            var closeWindow = true;
-            var handler = self.buttons[this.buttonName];
-            if (!isEmpty(handler)) {
-                closeWindow = handler.call(self.buttons.context);
-            }
-            // закрываем окно, если handler ничего не вернул или вернул true
-            // если вернул false, то окно не закрываем
-            if (isEmpty(closeWindow) || closeWindow) {
+            self.buttonsHandler(this.config.btn);
+            if (isEmpty(this.config.close) || this.config.close) {
             	self.domElement.dispatchEvent(new CustomEvent(EventTypes.CLOSE));
             }
         });

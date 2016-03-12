@@ -22,17 +22,16 @@ var Dialog = (function () {
 	Dialog.prototype = {
         /**
          * Показ окна подтверждения.
+		 * @param title Заголовок сообщения.
          * @param message Текст сообщения.
          * @param buttons Объект настроек блока с кнопками и их обработчиками.
-         * @param title Заголовок сообщения.
+		 * @param handler
          */
-        show: function (message, buttons, title) {
-            title = isEmpty(title) ? 'Сообщение' : title;
-
+        show: function (title, message, buttons, handler) {
             var messageEl = document.createElement('p');
 			messageEl.innerHTML = message;
 
-			var window = new Window(title, messageEl, buttons);
+			var window = new Window(title, messageEl, buttons, handler);
 
             PopUp.getInstance().show(window.getDomElement());
         }

@@ -8,6 +8,7 @@ var EventTypes = (function () {
         SORT_GRID: 'sortGrid',
         REMOVE_ITEM: 'removeItem',
         EDIT_ITEM: 'editItem',
-        CLOSE: 'close'
+        CLOSE: 'close',
+        CHANGE_VALUE: 'changeValue'
     };
 })();

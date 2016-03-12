@@ -18,29 +18,20 @@ function initApplication () {
 	var journalModule = ModuleManager.getInstance().getModule(Consts.JOURNAL);
 	journalModule.view.render();
 
+
 	var form = new ProvisionsItemForm();
 
-	var wnd = new Window('Форма', form.getDomElement(), {
-		context: this,
-		'Да': function () {
-			console.log('Сохранение');
-			setTimeout(function () {
-				console.log('Сохранение завершено');
-				PopUp.getInstance().removePopUp(wnd.getDomElement());
-			}, 5000);
-			return false;
-		},
-		'Нет': function () {
-			Dialog.getInstance().show(Settings.getInstance().getCompleteDutyDialog(), {
-				context: this,
-				'Да': function () {
-					//this.service.completeDuty();
-				},
-				'Нет': null
-			});
-			return true;
+	var wnd = new FormWindow('Форма', form.getDomElement(), [
+		{btn: 'Сохранить', close: false, role: 'save'},
+		{btn: 'Отмена'}
+	], (function (btn) {
+		switch (btn) {
+			case 'Сохранить':
+				break;
+			case 'Отмена':
+				break;
 		}
-	});
+	}).bind(this));
 
 	PopUp.getInstance().show(wnd.getDomElement());
 };

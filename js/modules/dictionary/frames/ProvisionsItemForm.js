@@ -5,7 +5,7 @@ function ProvisionsItemForm () {
     Form.apply(this, arguments);
 };
 
-extend(ProvisionsItemsForm, Form);
+extend(ProvisionsItemForm, Form);
 
 /**
  * Получение конфигурации элементов формы.

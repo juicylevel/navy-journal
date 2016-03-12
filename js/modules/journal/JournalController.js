@@ -105,26 +105,30 @@ JournalController.prototype.onCallStartDuty = function () {
  * Обработка события завершения подготовки к дежурству.
  */
 JournalController.prototype.onCallCompleteRunUp = function () {
-	Dialog.getInstance().show(Settings.getInstance().getCompleteRunUpDialog(), {
-		context: this,
-		'Да': function () {
-			this.service.completeRunUp();
-		},
-		'Нет': null
-	});
+	Dialog.getInstance().show('Завершение подготовки к дежурству',
+		Settings.getInstance().getCompleteRunUpDialog(),
+		[{btn: 'Да'}, {btn: 'Нет'}],
+		(function (btn) {
+			if (btn == 'Да') {
+				this.service.completeRunUp();
+			}
+		}).bind(this)
+	);
 };
 
 /**
  * Обработка события завершения дежурства.
  */
 JournalController.prototype.onCallCompleteDuty = function () {
-	Dialog.getInstance().show(Settings.getInstance().getCompleteDutyDialog(), {
-		context: this,
-		'Да': function () {
-			this.service.completeDuty();
-		},
-		'Нет': null
-	});
+	Dialog.getInstance().show('Завершение дежурства',
+		Settings.getInstance().getCompleteDutyDialog(),
+		[{btn: 'Да'}, {btn: 'Нет'}],
+		(function (btn) {
+			if (btn == 'Да') {
+				this.service.completeDuty();
+			}
+		}).bind(this)
+	);
 };
 
 //------------------------------------------------------------------------------
