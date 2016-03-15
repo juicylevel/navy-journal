@@ -30,15 +30,10 @@ ProvisionsItemForm.prototype.getFormItemsConfig = function () {
     ]
 };
 
+/**
+ * Установка списка типов провизии.
+ * @param provisionsTypes Список типов провизии.
+ */
 ProvisionsItemForm.prototype.setProvisionsTypes = function (provisionsTypes) {
     this.getItem('type').setOptions(provisionsTypes);
-};
-
-ProvisionsItemForm.prototype.getItem = function (fieldName) {
-    for (var i in this.formItems) {
-        var formItem = this.formItems[i];
-        if (formItem.itemConfig.field == fieldName) {
-            return formItem;
-        }
-    }
 };

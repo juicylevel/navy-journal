@@ -75,6 +75,19 @@ Form.prototype.isValid = function () {
 };
 
 /**
+ * Получение элемента формы по имени поля.
+ * @param fieldName Наименование поля.
+ */
+Form.prototype.getItem = function (fieldName) {
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        if (formItem.itemConfig.field == fieldName) {
+            return formItem;
+        }
+    }
+};
+
+/**
  * Отправка события валидации.
  * @param valid
  */

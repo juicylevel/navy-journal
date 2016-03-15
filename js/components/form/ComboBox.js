@@ -32,7 +32,7 @@ ComboBox.prototype.setOptions = function (options) {
     var deselectOptionHtml = '<option value="">&nbsp;';
     fieldEl.insertAdjacentHTML('beforeend', deselectOptionHtml);
 
-    for (var i = 0; i < options.length; i++) {
+    for (var i in options) {
         option = options[i];
         optionHtml = '<option value="' + option[this.valueField] + '">' + option[this.displayField] + '</option>';
         fieldEl.insertAdjacentHTML('beforeend', optionHtml);
