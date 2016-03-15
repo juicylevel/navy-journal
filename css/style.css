@@ -316,8 +316,13 @@ nav, section, footer {
 	padding: 7px;
 }
 
-.formItem {
+.formItemVLayout {
+	display: block;
 	margin-bottom: 5px;
+}
+
+.formItemHLayout {
+	display: inline-block;
 }
 
 .fieldLabel {

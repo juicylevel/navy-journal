@@ -96,15 +96,17 @@ class RequestHandler {
 	}
 
 	/**
-	 * Получение элементов провизии.
+	 * Получение информации об элементах и типах провизии.
 	 * @param $sort Параметры сортировки.
 	 */
-	public function getProvisionsItems ($sort) {
+	public function getProvisionsData ($sort) {
 		$provisionsItems = $this->db->getProvisionsItems($sort);
+		$types = $this->db->getProvisionsTypes();
 
 		return array (
 			'data' => $provisionsItems,
-			'sort' => $sort
+			'sort' => $sort,
+			'types' => $types
 		);
 	}
 

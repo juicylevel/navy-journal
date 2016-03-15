@@ -15,16 +15,15 @@ ProvisionsItemForm.prototype.getFormItemsConfig = function () {
         {
             field: 'name',
             fieldLabel: 'Наименование',
+            placeholder: 'Введите наименование элемента провизии',
             ui: TextField,
-            labelWidth: 90,
-            width: 146,
+            width: 300,
             required: true
         },
         {
             field: 'type',
             fieldLabel: 'Тип',
             ui: ComboBox,
-            labelWidth: 90,
             width: 150,
             required: true
         }

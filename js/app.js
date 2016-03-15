@@ -12,13 +12,15 @@ function windowLoadEventHandler (event) {
  * Инициализация приложения.
  */
 function initApplication () {
+	window.IDG = idGenerator();
+
 	Notifier.getInstance().init();
 	PopUp.getInstance().init();
 
 	var journalModule = ModuleManager.getInstance().getModule(Consts.JOURNAL);
 	journalModule.view.render();
 
-
+	return;
 	var form = new ProvisionsItemForm();
 
 	var wnd = new FormWindow('Форма', form.getDomElement(), [

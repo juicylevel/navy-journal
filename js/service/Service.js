@@ -60,7 +60,7 @@ Service.prototype.completeDuty = function () {
 
 /**
  * Загрузка списка боевых дежурств.
- * @param dutyListOptions
+ * @param options
  */
 Service.prototype.getDutyList = function (options) {
 	this.sendRequest('GET', Notifications.LOAD_DUTY_LIST, {
@@ -73,13 +73,14 @@ Service.prototype.getDutyList = function (options) {
 };
 
 /**
- * Получение списка элементов провизии.
+ * Получение информации об элементах и типах провизии.
+ * @param options
  */
-Service.prototype.getProvisionsItems = function (options) {
-    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_ITEMS, {
-		request: 'getProvisionsItems',
+Service.prototype.getProvisionsData = function (options) {
+    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_DATA, {
+		request: 'getProvisionsData',
 		sort:  objectToJsonString(options.sort),
-		message: 'Загрузка списка элементов провизии'
+		message: 'Загрузка информации об элементах и типах провизии'
 	});
 };
 

@@ -128,7 +128,9 @@ class DataBase {
 	public function getProvisionsItems ($sort) {
         $sortSql = $this->getSortSql($sort, false);
         // INNER JOIN
-        $sql = 'SELECT provisions_item.id, provisions_item.name, provisions_type.name as type_name ' .
+        $sql = 'SELECT provisions_item.id, provisions_item.name,
+                provisions_type.id as type_id,
+                provisions_type.name as type_name ' .
                'FROM provisions_item, provisions_type ' .
                'WHERE provisions_item.type_id = provisions_type.id ' .
                (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
@@ -158,6 +160,15 @@ class DataBase {
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
 	}
+
+    /**
+     * Получение списка типов провизии.
+     */
+    public function getProvisionsTypes () {
+        $sql = 'SELECT * FROM provisions_type';
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     /**
      * Получение строки сортировки по заданным колонкам и направлению.

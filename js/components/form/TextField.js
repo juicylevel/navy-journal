@@ -11,7 +11,11 @@ extend(TextField, FormItem);
  * Создание поля ввода значения.
  */
 TextField.prototype.createField = function () {
-    var fieldHtml = '<input type="text" field style="width: ' + this.itemConfig.width + 'px;">';
+    var placeholder = this.itemConfig.placeholder;
+    if (isEmpty(placeholder)) {
+        placeholder = '';
+    }
+    var fieldHtml = '<input field type="text" placeholder="' + placeholder + '" style="width: ' + this.itemConfig.width + 'px;">';
     this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
 };
 

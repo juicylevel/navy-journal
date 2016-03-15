@@ -35,7 +35,7 @@ var PopUp = (function (window, document) {
                 this.addTint();
             }
 
-			popUpEl.setAttribute('popUpElement', null);
+			popUpEl.setAttribute('popUpElement', '');
 
 			popUpEl.addEventListener(EventTypes.CLOSE, (function (event) {
 				this.removePopUp(popUpEl);

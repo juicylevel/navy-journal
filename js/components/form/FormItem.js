@@ -30,8 +30,10 @@ FormItem.prototype.render = function () {
  * Создание элемента наименования поля.
  */
 FormItem.prototype.createFieldLabel = function () {
+    var labelWidth = this.itemConfig.labelWidth;
+    var widthStyle = !isEmpty(labelWidth) ? labelWidth + 'px;' : 'auto;';
     var fieldLabelHtml = '' +
-        '<label class="fieldLabel" style="width: ' + this.itemConfig.labelWidth + 'px;">' +
+        '<label class="fieldLabel" style="width: ' + widthStyle + '">' +
             this.itemConfig.fieldLabel + ':' +
         '</label>';
     this.domElement.insertAdjacentHTML('beforeend', fieldLabelHtml);

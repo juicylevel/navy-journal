@@ -78,8 +78,8 @@ switch ($request) {
 	case 'getDutyList':
 		$result = $requestHandler->getDutyList($offset, $pageSize, json_decode($sort, true));
 		break;
-	case 'getProvisionsItems':
-		$result = $requestHandler->getProvisionsItems(json_decode($sort, true));
+	case 'getProvisionsData':
+		$result = $requestHandler->getProvisionsData(json_decode($sort, true));
 		break;
 	case 'addProvisionsItem':
 		$result = $requestHandler->addProvisionsItem($name, $sort);

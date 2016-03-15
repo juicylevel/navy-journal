@@ -12,30 +12,34 @@ extend(DictionaryController, Controller);
  */
 DictionaryController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
-		{type: Notifications.CALL_LOAD_PROVISIONS_ITEMS, handler: this.onCallLoadProvisionsItems},
-		{type: Notifications.LOAD_PROVISIONS_ITEMS, handler: this.onLoadProvisionsItems},
+		{type: Notifications.CALL_LOAD_PROVISIONS_DATA, handler: this.onCallLoadProvisionsData},
+		{type: Notifications.LOAD_PROVISIONS_DATA, handler: this.onLoadProvisionsData},
 		{type: Notifications.ADD_PROVISIONS_ITEM, handler: this.onAddProvisionsItem},
 		{type: Notifications.COMPLATE_ADD_PROVISIONS_ITEM, handler: this.onCompleteAddProvisionsItem}
 	]);
 };
 
 /**
- * Обработка запроса на загрузку элементов провизии.
+ * Обработка запроса на загрузку информации об элементах и типах провизии.
  * @param options Опции запроса на получение списка элементов провизии (сортировка и пр.).
  */
-DictionaryController.prototype.onCallLoadProvisionsItems = function (options) {
+DictionaryController.prototype.onCallLoadProvisionsData = function (options) {
 	if (isEmpty(options)) {
 		options = {sort: {name: 'ASC'}};
 	}
-	this.service.getProvisionsItems(options);
+	this.service.getProvisionsData(options);
 };
 
 /**
  * Обработка события завершения загрузки списка элементов провизии.
- * @param provisionsItems Список элементов провизии.
+ * @param provisions Информация для раздела провизии
+ * (список элементов провизии, сортировка, список типов провизии).
  */
-DictionaryController.prototype.onLoadProvisionsItems = function (provisionsItems) {
+DictionaryController.prototype.onLoadProvisionsData = function (provisions) {
+	var provisionsItems = {data: provisions.data, sort: provisions.sort};
+	var provisionsTypes = provisions.types;
 	this.model.setProvisionsItems(provisionsItems);
+	this.model.setProvisionsTypes(provisionsTypes);
 };
 
 /**
