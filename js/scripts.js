@@ -24,6 +24,7 @@ var scripts = [
 	'components/ViewFrame',
 	'components/Paginator',
 	'components/Window',
+	'components/Button',
 	'components/grid/DataGrid',
 	'components/grid/ActionColumnsConfig',
 	'components/grid/ActionColumn',

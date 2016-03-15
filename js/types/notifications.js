@@ -50,14 +50,14 @@
 
          CHANGE_DUTY_LIST: 'changeDutyList',
 
-         // оповещение о завершении загрузки элементов провизии
-         LOAD_PROVISIONS_ITEMS: 'loadProvisionsItems',
+         // оповещение о завершении загрузки информации об элементах и типах провизии
+         LOAD_PROVISIONS_DATA: 'loadProvisionsData',
 
          // оповещение об изменении списка элементов провизии
          CHANGE_PROVISIONS_ITEMS: 'changeProvisionsItems',
 
-         // запрос на загрузку элементов провизии
-         CALL_LOAD_PROVISIONS_ITEMS: 'callLoadProvisionsItems',
+         // запрос на загрузку информации об элементах и типах провизии
+         CALL_LOAD_PROVISIONS_DATA: 'callLoadProvisionsData',
 
          // добавление нового элемента провизии
          ADD_PROVISIONS_ITEM: 'addProvisionsItem',
@@ -66,6 +66,9 @@
          COMPLATE_ADD_PROVISIONS_ITEM: 'completeAddProvisionsItem',
 
          // скрытие элемента провизии из списка
-         HIDE_PROVISIONS_ITEM: 'hideProvisionsItem'
+         HIDE_PROVISIONS_ITEM: 'hideProvisionsItem',
+
+          // оповещение об изменении списка типов провизии
+         CHANGE_PROVISIONS_TYPES: 'changeProvisionsTypes'
      };
 })();

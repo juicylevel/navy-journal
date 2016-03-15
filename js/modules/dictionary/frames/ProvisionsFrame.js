@@ -16,7 +16,7 @@ extend(ProvisionsFrame, ViewFrame);
 ProvisionsFrame.prototype.render = function () {
     this.domElement = document.createElement('div');
 
-    this.createToolBar();
+    this.createEditor();
     this.createProvisionsGrid();
 
 	return this.domElement;
@@ -26,33 +26,46 @@ ProvisionsFrame.prototype.render = function () {
  * Инициализация фрейма.
  */
 ProvisionsFrame.prototype.init = function () {
-    this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_PROVISIONS_ITEMS));
+    this.owner.sendNotification(new Notification(Notifications.CALL_LOAD_PROVISIONS_DATA));
 };
 
 /**
  * Установка элементов провизии.
- * @param provisionsItems Типы провизии.
+ * @param provisionsItems Элементы провизии.
  */
 ProvisionsFrame.prototype.setProvisionsItems = function (provisionsItems) {
     this.provisionsGrid.setData(provisionsItems.data, provisionsItems.sort);
 };
 
 /**
- * Инициализация фрейма.
+ * Установка типов провизии.
+ * @param provisionsTypes Типы провизии.
  */
-ProvisionsFrame.prototype.createToolBar = function () {
-    var toolBarHtml = '' +
-        '<div style="margin-bottom: 6px;">' +
-            '<input type="text" provisionsItemField placeholder="Введите наименование нового элемента провизии" style="width: 400px; padding: 2px 4px; margin-right: 3px;">' +
-            '<button addButton disabled="disabled" style="cursor: pointer; padding: 2px 4px;">Добавить</button>' +
-        '</div>';
+ProvisionsFrame.prototype.setProvisionsTypes = function (provisionsTypes) {
+    // TODO: set to edit form
+    console.log('provisionsTypes', provisionsTypes);
+};
 
-    var toolBarEl = document.createElement('div');
-    toolBarEl.innerHTML = toolBarHtml;
+/**
+ * Создание и настройка формы добавления/редактирования элементов провизии.
+ */
+ProvisionsFrame.prototype.createEditor = function () {
+    var editorEl = document.createElement('div');
+    editorEl.style.marginBottom = '10px';
 
-    this.configureToolBar(toolBarEl);
+    var form = new ProvisionsItemForm('horizontal', 'inline-block');
+    var formEl = form.getDomElement();
+    var addButton = new Button('Добавить', formEl, 'inline-block');
+    var addButtonEl = addButton.getDomElement();
 
-    this.domElement.appendChild(toolBarEl);
+    addButtonEl.addEventListener('click', (function (event) {
+        // TODO: this.notifyAddProvisionsItem();
+    }).bind(this));
+
+    editorEl.appendChild(form.getDomElement());
+    editorEl.appendChild(addButtonEl);
+
+    this.domElement.appendChild(editorEl);
 };
 
 /**

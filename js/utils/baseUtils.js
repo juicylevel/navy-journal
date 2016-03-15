@@ -9,6 +9,16 @@ function extend (Child, Parent) {
 };
 
 /**
+ * Генератор идентификаторов.
+ */
+function* idGenerator () {
+    var index = 1;
+    while (true) {
+		yield index++;
+	}
+};
+
+/**
  * Проверка на пустое значение.
  */
 function isEmpty (value, allowEmptyString) {
