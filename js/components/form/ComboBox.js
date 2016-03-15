@@ -3,6 +3,9 @@
  */
 function ComboBox () {
     FormItem.apply(this, arguments);
+
+    this.valueField = this.itemConfig.valueField || 'id';
+    this.displayField = this.itemConfig.displayField || 'name';
 };
 
 extend(ComboBox, FormItem);
@@ -16,15 +19,6 @@ ComboBox.prototype.createField = function () {
         '</select>';
 
     this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
-
-    // TODO: test
-    this.setOptions([
-        {value: 1, name: 'Вариант выбора 1'},
-        {value: 2, name: 'Вариант выбора 2'},
-        {value: 3, name: 'Вариант выбора 3'},
-        {value: 4, name: 'Вариант выбора 4'},
-        {value: 5, name: 'Вариант выбора 5'}
-    ]);
 };
 
 /**
@@ -40,7 +34,7 @@ ComboBox.prototype.setOptions = function (options) {
 
     for (var i = 0; i < options.length; i++) {
         option = options[i];
-        optionHtml = '<option value="' + option.value + '">' + option.name + '</option>';
+        optionHtml = '<option value="' + option[this.valueField] + '">' + option[this.displayField] + '</option>';
         fieldEl.insertAdjacentHTML('beforeend', optionHtml);
     }
 };

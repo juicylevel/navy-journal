@@ -165,7 +165,7 @@ class DataBase {
      * Получение списка типов провизии.
      */
     public function getProvisionsTypes () {
-        $sql = 'SELECT * FROM provisions_type';
+        $sql = 'SELECT * FROM provisions_type ORDER BY name ASC';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

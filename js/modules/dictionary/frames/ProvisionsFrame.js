@@ -6,6 +6,8 @@ function ProvisionsFrame () {
 
     this.name = 'Провизия';
     this.provisionsGrid = null;
+
+    this.provisionsItemForm = null;
 };
 
 extend(ProvisionsFrame, ViewFrame);
@@ -42,8 +44,7 @@ ProvisionsFrame.prototype.setProvisionsItems = function (provisionsItems) {
  * @param provisionsTypes Типы провизии.
  */
 ProvisionsFrame.prototype.setProvisionsTypes = function (provisionsTypes) {
-    // TODO: set to edit form
-    console.log('provisionsTypes', provisionsTypes);
+    this.provisionsItemForm.setProvisionsTypes(provisionsTypes);
 };
 
 /**
@@ -53,8 +54,8 @@ ProvisionsFrame.prototype.createEditor = function () {
     var editorEl = document.createElement('div');
     editorEl.style.marginBottom = '10px';
 
-    var form = new ProvisionsItemForm('horizontal', 'inline-block');
-    var formEl = form.getDomElement();
+    this.provisionsItemForm = new ProvisionsItemForm('horizontal', 'inline-block');
+    var formEl = this.provisionsItemForm.getDomElement();
     var addButton = new Button('Добавить', formEl, 'inline-block');
     var addButtonEl = addButton.getDomElement();
 
@@ -62,7 +63,7 @@ ProvisionsFrame.prototype.createEditor = function () {
         // TODO: this.notifyAddProvisionsItem();
     }).bind(this));
 
-    editorEl.appendChild(form.getDomElement());
+    editorEl.appendChild(this.provisionsItemForm.getDomElement());
     editorEl.appendChild(addButtonEl);
 
     this.domElement.appendChild(editorEl);
