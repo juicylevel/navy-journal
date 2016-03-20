@@ -99,21 +99,8 @@ ProvisionsFrame.prototype.createProvisionsGrid = function () {
 
     var provisionsGridEl = this.provisionsGrid.getDomElement();
 
-    var actionColumns = new ActionColumnsConfig(this.provisionsGrid,
-        null, [new EditColumn(EventTypes.EDIT_ITEM)]
-    );
-
-    this.provisionsGrid.setCustom(actionColumns);
-
-    this.provisionsGrid.setColumns(columns, ['', 200, 27]);
+    this.provisionsGrid.setColumns(columns, ['', 250]);
     this.domElement.appendChild(provisionsGridEl);
-
-    provisionsGridEl.addEventListener(EventTypes.EDIT_ITEM, (function (event) {
-        event.stopPropagation();
-        this.owner.sendNotification(new Notification(Notifications.EDIT_PROVISIONS_ITEM, {
-            provisionsType: event.detail.rowData
-        }));
-    }).bind(this));
 
     provisionsGridEl.addEventListener(EventTypes.SELECT_GRID_ROW, (function (event) {
         if (event.detail.selected) {
@@ -123,6 +110,7 @@ ProvisionsFrame.prototype.createProvisionsGrid = function () {
                 name: selectedItem.name,
                 type_id: selectedItem.type_id
             });
+            this.provisionsItemForm.getDomElement().scrollIntoView();
         } else {
             this.provisionsItemForm.clear();
         }

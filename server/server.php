@@ -81,6 +81,9 @@ switch ($request) {
 	case 'getProvisionsData':
 		$result = $requestHandler->getProvisionsData(json_decode($sort, true));
 		break;
+	case 'getProvisionsItems':
+		$result = $requestHandler->getProvisionsItems(json_decode($sort, true));
+		break;
 	case 'saveProvisionsItem':
 		$result = $requestHandler->saveProvisionsItem($item, $sort);
 		break;

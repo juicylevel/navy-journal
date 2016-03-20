@@ -13,7 +13,9 @@ extend(DictionaryController, Controller);
 DictionaryController.prototype.getHandlers = function () {
 	return Controller.prototype.getHandlers.apply(this, arguments).concat([
 		{type: Notifications.CALL_LOAD_PROVISIONS_DATA, handler: this.onCallLoadProvisionsData},
+		{type: Notifications.CALL_LOAD_PROVISIONS_ITEMS, handler: this.onCallLoadProvisionsItems},
 		{type: Notifications.LOAD_PROVISIONS_DATA, handler: this.onLoadProvisionsData},
+		{type: Notifications.LOAD_PROVISIONS_ITEMS, handler: this.onLoadProvisionsItems},
 		{type: Notifications.SAVE_PROVISIONS_ITEM, handler: this.onSaveProvisionsItem},
 		{type: Notifications.COMPLATE_SAVE_PROVISIONS_ITEM, handler: this.onCompleteSaveProvisionsItem}
 	]);
@@ -30,6 +32,13 @@ DictionaryController.prototype.onCallLoadProvisionsData = function (options) {
 	this.service.getProvisionsData(options);
 };
 
+DictionaryController.prototype.onCallLoadProvisionsItems = function (options) {
+	if (isEmpty(options)) {
+		options = {sort: {name: 'ASC'}};
+	}
+	this.service.getProvisionsItems(options);
+};
+
 /**
  * Обработка события завершения загрузки списка элементов провизии.
  * @param provisions Информация для раздела провизии
@@ -40,6 +49,10 @@ DictionaryController.prototype.onLoadProvisionsData = function (provisions) {
 	var provisionsTypes = provisions.types;
 	this.model.setProvisionsItems(provisionsItems);
 	this.model.setProvisionsTypes(provisionsTypes);
+};
+
+DictionaryController.prototype.onLoadProvisionsItems = function (provisionsItems) {
+	this.model.setProvisionsItems(provisionsItems);
 };
 
 /**

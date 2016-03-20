@@ -26,7 +26,7 @@
          CALL_DICTIONARY_MODULE: 'callDictionaryModule',
 
          CALL_PROVISION_DATA: 'callProvisionData',
-         CALL_TECHNICAL_DATA: 'callTechnicalData',
+         CALL_ACCUMULATORS_DATA: 'callAccumalatorsData',
          CALL_MAIN_DUTY_DATA: 'callMainDutyData',
          CALL_WEATHER_DUTY_DATA: 'callWeatherDutyData',
 
@@ -53,11 +53,15 @@
          // оповещение о завершении загрузки информации об элементах и типах провизии
          LOAD_PROVISIONS_DATA: 'loadProvisionsData',
 
+         LOAD_PROVISIONS_ITEMS: 'loadProvisionsItems',
+
          // оповещение об изменении списка элементов провизии
          CHANGE_PROVISIONS_ITEMS: 'changeProvisionsItems',
 
          // запрос на загрузку информации об элементах и типах провизии
          CALL_LOAD_PROVISIONS_DATA: 'callLoadProvisionsData',
+
+         CALL_LOAD_PROVISIONS_ITEMS: 'callLoadProvisionsItems',
 
          // сохранение элемента провизии
          SAVE_PROVISIONS_ITEM: 'saveProvisionsItem',

@@ -10,6 +10,7 @@ var Consts = (function () {
 		STATISTICS: 'statistics',
 		DICTIONARY: 'dictionary',
 		PROVISIONS: 'provisions',
+		ACCUMULATORS: 'accumulators',
 		NAVIGATION: {
 			index: [
 		        {
@@ -35,7 +36,7 @@ var Consts = (function () {
 		            notificationType: Notifications.CALL_PROVISION_DATA
 		        },
 				{
-		            label: 'Технические ресурсы',
+		            label: 'Аккумуляторы',
 		            icon: 'img/',
 		            notificationType: Notifications.CALL_TECHNICAL_DATA
 		        }

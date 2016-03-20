@@ -85,6 +85,18 @@ Service.prototype.getProvisionsData = function (options) {
 };
 
 /**
+ * Получение списка элементов провизии.
+ * @param options
+ */
+Service.prototype.getProvisionsItems = function (options) {
+    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_ITEMS, {
+		request: 'getProvisionsItems',
+		sort:  objectToJsonString(options.sort),
+		message: 'Загрузка списка элементов провизии'
+	});
+};
+
+/**
  * Сохранение элемента провизии.
  * @param item Элемент провизии.
  * @param sort Текущая конфигурация сортировки таблицы элементов провизии.
