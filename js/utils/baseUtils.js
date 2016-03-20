@@ -113,6 +113,22 @@ function removeEl (context, attributeName, attributeValue, all) {
 };
 
 /**
+ * Добавление прослушивателя события.
+ * @param target Целевой объект, кидающий событие.
+ * @param type Тип события.
+ * @param handler Обработчик события.
+ * @param context Контекст выполнения обработчика события.
+ */
+function listen (target, type, handler, context) {
+	target.addEventListener(type, function (event) {
+		if (isEmpty(context)) {
+			context = handler;
+		}
+		handler.call(context, event);
+	});
+};
+
+/**
  * Клонирование объекта.
  * @param source Целевой объект.
  * @return Object Клон целевого объекта source.

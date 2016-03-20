@@ -60,8 +60,10 @@ FormItem.prototype.createRequiredMarker = function () {
  * Установка значения.
  * @param value Значение элемента формы.
  */
-FormItem.prototype.setValue = function (value) {
-    this.originalValue = value;
+FormItem.prototype.setValue = function (value, resetOriginal) {
+    if (resetOriginal) {
+        this.originalValue = value;
+    }
     this.dispatchChangeEvent();
 };
 
@@ -71,6 +73,15 @@ FormItem.prototype.setValue = function (value) {
  */
 FormItem.prototype.getValue = function () {
 
+};
+
+/**
+ * Очистка элемента формы.
+ */
+FormItem.prototype.clear = function () {
+    var fieldEl = getEl(this.domElement, 'field');
+    fieldEl.value = '';    
+    this.dispatchChangeEvent();
 };
 
 /**
@@ -102,7 +113,7 @@ FormItem.prototype.dispatchChangeEvent = function () {
 			detail: {
                 value: this.getValue()
             },
-			bubbles: true
+			bubbles: false
 		}
 	);
 	this.domElement.dispatchEvent(changeEvent);

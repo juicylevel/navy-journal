@@ -85,15 +85,16 @@ Service.prototype.getProvisionsData = function (options) {
 };
 
 /**
- * Добавление нового элемента провизии.
- * @param provisionsTypeName Наименование элемента провизии.
+ * Сохранение элемента провизии.
+ * @param item Элемент провизии.
+ * @param sort Текущая конфигурация сортировки таблицы элементов провизии.
  */
-Service.prototype.addProvisionsItem = function (name, sort) {
-	this.sendRequest('POST', Notifications.COMPLATE_ADD_PROVISIONS_ITEM, {
-		request: 'addProvisionsItem',
-		name: name,
+Service.prototype.saveProvisionsItem = function (item, sort) {
+	this.sendRequest('POST', Notifications.COMPLATE_SAVE_PROVISIONS_ITEM, {
+		request: 'saveProvisionsItem',
+		item: item,
 		sort: sort,
-		message: 'Добавление нового элемента провизии'
+		message: 'Сохранение элемента провизии'
 	});
 };
 

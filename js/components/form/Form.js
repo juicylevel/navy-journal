@@ -9,6 +9,7 @@ function Form (layout, display) {
     this.layout = layout || 'vertical';
     this.display = display || 'block';
     this.formItems = null;
+    this.formData = {};
 
     this.render();
 };
@@ -28,7 +29,6 @@ Form.prototype.getFormItemsConfig = function () {
 Form.prototype.render = function () {
     this.domElement = document.createElement('div');
     this.domElement.style.display = this.display;
-    //this.domElement.setAttribute('id', 'form-' + IDG.next().value);
 
     this.createFields();
 };
@@ -51,15 +51,13 @@ Form.prototype.createFields = function () {
         itemEl.addEventListener(EventTypes.CHANGE_VALUE, this.onChangeValueFormItem.bind(this));
         this.formItems.push(itemUI);
     }
-
-    this.dispatchValidationEvent(this.isValid());
 };
 
 /**
  * Обработка события изменения значения элемента формы.
  */
 Form.prototype.onChangeValueFormItem = function (event) {
-
+    this.dispatchChangeEvent();
 };
 
 /**
@@ -69,9 +67,10 @@ Form.prototype.isValid = function () {
     for (var i = 0; i < this.formItems.length; i++) {
         var formItem = this.formItems[i];
         if (!formItem.isValid()) {
-            break;
+            return false;
         }
     }
+    return true;
 };
 
 /**
@@ -88,17 +87,89 @@ Form.prototype.getItem = function (fieldName) {
 };
 
 /**
- * Отправка события валидации.
- * @param valid
+ * Получение значений полей формы.
  */
-Form.prototype.dispatchValidationEvent = function (valid) {
+Form.prototype.getValues = function () {
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        var fieldName = formItem.itemConfig.field;
+
+        if (formItem.isDirty()) {
+            this.formData[fieldName] = formItem.getValue();
+        }
+    }
+    return this.formData;
+};
+
+/**
+ * Установка значений полей формы.
+ * @param data Объект со значениями полй формы.
+ */
+Form.prototype.setValues = function (data) {
+    this.formData = data;
+
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        var fieldName = formItem.itemConfig.field;
+
+        if (this.formData.hasOwnProperty(fieldName)) {
+            formItem.setValue(this.formData[fieldName], true);
+        }
+    }
+};
+
+/**
+ * Очистка формы.
+ */
+Form.prototype.clear = function () {
+    this.formData = {};
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        formItem.clear();
+    }
+};
+
+/**
+ * Проверка, пустая ли форма.
+ * @return boolean
+ */
+Form.prototype.isEmpty = function () {
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        if (!isEmpty(formItem.getValue())) {
+            return false;
+        }
+    }
+    return true;
+};
+
+/**
+ * Проверка, были ли изменения значений полей формы.
+ * @return boolean
+ */
+Form.prototype.isDirty = function () {
+    for (var i in this.formItems) {
+        var formItem = this.formItems[i];
+        if (formItem.isDirty()) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * Отправка события валидации.
+ */
+Form.prototype.dispatchChangeEvent = function () {
     var validationEvent = new CustomEvent(
-        EventTypes.VALIDATION,
+        EventTypes.CHANGE_FROM,
         {
             detail: {
-                valid: valid
+                valid: this.isValid(),
+                dirty: this.isDirty(),
+                empty: this.isEmpty()
             },
-            bubbles: true
+            bubbles: false
         }
     );
     this.domElement.dispatchEvent(validationEvent);

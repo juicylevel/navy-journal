@@ -19,6 +19,11 @@ ComboBox.prototype.createField = function () {
         '</select>';
 
     this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
+
+    var fieldEl = getEl(this.domElement, 'field');
+    fieldEl.addEventListener('change', (function () {
+        this.dispatchChangeEvent();
+    }).bind(this));
 };
 
 /**

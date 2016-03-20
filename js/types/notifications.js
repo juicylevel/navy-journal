@@ -59,11 +59,11 @@
          // запрос на загрузку информации об элементах и типах провизии
          CALL_LOAD_PROVISIONS_DATA: 'callLoadProvisionsData',
 
-         // добавление нового элемента провизии
-         ADD_PROVISIONS_ITEM: 'addProvisionsItem',
+         // сохранение элемента провизии
+         SAVE_PROVISIONS_ITEM: 'saveProvisionsItem',
 
-         // оповещение о завершении добавления нового элемента провизии на сервере
-         COMPLATE_ADD_PROVISIONS_ITEM: 'completeAddProvisionsItem',
+         // оповещение о завершении сохранения элемента провизии на сервере
+         COMPLATE_SAVE_PROVISIONS_ITEM: 'completeSaveProvisionsItem',
 
          // скрытие элемента провизии из списка
          HIDE_PROVISIONS_ITEM: 'hideProvisionsItem',

@@ -81,11 +81,8 @@ switch ($request) {
 	case 'getProvisionsData':
 		$result = $requestHandler->getProvisionsData(json_decode($sort, true));
 		break;
-	case 'addProvisionsItem':
-		$result = $requestHandler->addProvisionsItem($name, $sort);
-		break;
-	case 'getProvisionsItem':
-		$result = $requestHandler->getProvisionsItem($id);
+	case 'saveProvisionsItem':
+		$result = $requestHandler->saveProvisionsItem($item, $sort);
 		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);

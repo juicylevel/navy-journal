@@ -17,6 +17,11 @@ TextField.prototype.createField = function () {
     }
     var fieldHtml = '<input field type="text" placeholder="' + placeholder + '" style="width: ' + this.itemConfig.width + 'px;">';
     this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
+
+    var fieldEl = getEl(this.domElement, 'field');
+    fieldEl.addEventListener('input', (function () {
+        this.dispatchChangeEvent();
+    }).bind(this));
 };
 
 /**
@@ -27,7 +32,7 @@ TextField.prototype.setValue = function (value) {
     var fieldEl = getEl(this.domElement, 'field');
     fieldEl.value = value;
 
-    FormItem.prototype.setValue.apply(this, arguments)
+    FormItem.prototype.setValue.apply(this, arguments);
 };
 
 /**

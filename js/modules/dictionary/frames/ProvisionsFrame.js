@@ -56,63 +56,37 @@ ProvisionsFrame.prototype.createEditor = function () {
 
     this.provisionsItemForm = new ProvisionsItemForm('horizontal', 'inline-block');
     var formEl = this.provisionsItemForm.getDomElement();
-    var addButton = new Button('Добавить', formEl, 'inline-block');
+    var addButton = new Button('Сохранить', formEl, 'save', 'inline-block');
     var addButtonEl = addButton.getDomElement();
+    var clearButton = new Button('Очистить', formEl, 'clear', 'inline-block');
+    var clearButtonEl = clearButton.getDomElement();
 
     addButtonEl.addEventListener('click', (function (event) {
-        // TODO: this.notifyAddProvisionsItem();
+        var itemData = this.provisionsItemForm.getValues();
+        this.saveProvisionsItem(itemData);
+    }).bind(this));
+
+    clearButtonEl.addEventListener('click', (function (event) {
+        this.provisionsItemForm.clear();
+        this.provisionsGrid.deselectRows();
     }).bind(this));
 
     editorEl.appendChild(this.provisionsItemForm.getDomElement());
     editorEl.appendChild(addButtonEl);
+    editorEl.appendChild(clearButtonEl);
 
     this.domElement.appendChild(editorEl);
 };
 
 /**
- * Конфигурирование элементов управления панели инструментов.
- * @param toolBarEl DOM-элемент панели инструментов.
- */
-ProvisionsFrame.prototype.configureToolBar = function (toolBarEl) {
-    var provisionsItemFieldEl = getEl(toolBarEl, 'provisionsItemField');
-    var addButtonEl = getEl(toolBarEl, 'addButton');
-
-    addButtonEl.addEventListener('click', (function (event) {
-        this.notifyAddProvisionsItem(provisionsItemFieldEl.value);
-    }).bind(this));
-
-    provisionsItemFieldEl.addEventListener('input', function () {
-        addButtonEl.disabled = isEmpty(this.value);
-    });
-
-    provisionsItemFieldEl.addEventListener('keypress', (function (event) {
-        var name = provisionsItemFieldEl.value;
-        if (event.keyCode == 13 && !isEmpty(name)) {
-            this.notifyAddProvisionsItem(name);
-        }
-    }).bind(this));
-};
-
-/**
- * Очистка поля ввода нового элемента провизии.
- */
-ProvisionsFrame.prototype.resetToolBarControls = function () {
-    var provisionsItemFieldEl = getEl(this.domElement, 'provisionsItemField');
-    var addButtonEl = getEl(this.domElement, 'addButton');
-    provisionsItemFieldEl.value = '';
-    addButtonEl.disabled = true;
-};
-
-/**
  * Обработка события добавления нового элемента провизии.
- * @param name Наименование нового элемента провизии.
+ * @param provisionsItem Наименование нового элемента провизии.
  */
-ProvisionsFrame.prototype.notifyAddProvisionsItem = function (name) {
-    this.owner.sendNotification(new Notification(Notifications.ADD_PROVISIONS_ITEM, {
-        name: name,
+ProvisionsFrame.prototype.saveProvisionsItem = function (provisionsItem) {
+    this.owner.sendNotification(new Notification(Notifications.SAVE_PROVISIONS_ITEM, {
+        item: provisionsItem,
         sort: this.provisionsGrid.sort
     }));
-    this.resetToolBarControls();
 };
 
 /**
@@ -126,30 +100,33 @@ ProvisionsFrame.prototype.createProvisionsGrid = function () {
     var provisionsGridEl = this.provisionsGrid.getDomElement();
 
     var actionColumns = new ActionColumnsConfig(this.provisionsGrid,
-        null, [
-            new EditColumn(EventTypes.EDIT_ITEM),
-            new RemoveColumn(EventTypes.REMOVE_ITEM)
-        ]
+        null, [new EditColumn(EventTypes.EDIT_ITEM)]
     );
 
     this.provisionsGrid.setCustom(actionColumns);
 
-    this.provisionsGrid.setColumns(columns, ['', 150, 27, 27]);
+    this.provisionsGrid.setColumns(columns, ['', 200, 27]);
     this.domElement.appendChild(provisionsGridEl);
 
-    provisionsGridEl.addEventListener(EventTypes.EDIT_ITEM, function (event) {
+    provisionsGridEl.addEventListener(EventTypes.EDIT_ITEM, (function (event) {
         event.stopPropagation();
         this.owner.sendNotification(new Notification(Notifications.EDIT_PROVISIONS_ITEM, {
             provisionsType: event.detail.rowData
         }));
-    });
+    }).bind(this));
 
-    provisionsGridEl.addEventListener(EventTypes.REMOVE_ITEM, function (event) {
-        event.stopPropagation();
-        this.owner.sendNotification(new Notification(Notifications.HIDE_PROVISIONS_ITEM, {
-            provisionsType: event.detail.rowData
-        }));
-    });
+    provisionsGridEl.addEventListener(EventTypes.SELECT_GRID_ROW, (function (event) {
+        if (event.detail.selected) {
+            var selectedItem = event.detail.data;
+            this.provisionsItemForm.setValues({
+                id: selectedItem.id,
+                name: selectedItem.name,
+                type_id: selectedItem.type_id
+            });
+        } else {
+            this.provisionsItemForm.clear();
+        }
+    }).bind(this));
 
     provisionsGridEl.addEventListener(EventTypes.SORT_GRID, (function (event) {
         event.stopPropagation();

@@ -123,6 +123,10 @@ nav, section, footer {
 	background-color: #DDF5DD;
 }
 
+.dataGrid tr.selectedColor {
+	background-color: #DDDDF5;
+}
+
 .activeDutyGridRow {
 	background-color: #E4D4FF;
 }
@@ -323,6 +327,7 @@ nav, section, footer {
 
 .formItemHLayout {
 	display: inline-block;
+	margin-right: 5px;
 }
 
 .fieldLabel {

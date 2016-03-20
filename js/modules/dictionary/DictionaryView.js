@@ -53,4 +53,12 @@ DictionaryView.prototype.onChangeProvisionsItems = function (provisionsItems) {
 DictionaryView.prototype.onChangeProvisionsTypes = function (provisionsTypes) {
     var provisionsFrame = this.getFrame(Consts.PROVISIONS);
     provisionsFrame.setProvisionsTypes(provisionsTypes);
-}
+};
+
+/**
+ * Очистка формы редактирования элемента провизии.
+ */
+DictionaryView.prototype.clearProvisionsItemForm = function () {
+    var provisionsFrame = this.getFrame(Consts.PROVISIONS);
+    provisionsFrame.provisionsItemForm.clear();
+};

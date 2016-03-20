@@ -17,11 +17,11 @@ ProvisionsItemForm.prototype.getFormItemsConfig = function () {
             fieldLabel: 'Наименование',
             placeholder: 'Введите наименование элемента провизии',
             ui: TextField,
-            width: 300,
+            width: 250,
             required: true
         },
         {
-            field: 'type',
+            field: 'type_id',
             fieldLabel: 'Тип',
             ui: ComboBox,
             width: 200,
@@ -35,5 +35,5 @@ ProvisionsItemForm.prototype.getFormItemsConfig = function () {
  * @param provisionsTypes Список типов провизии.
  */
 ProvisionsItemForm.prototype.setProvisionsTypes = function (provisionsTypes) {
-    this.getItem('type').setOptions(provisionsTypes);
+    this.getItem('type_id').setOptions(provisionsTypes);
 };

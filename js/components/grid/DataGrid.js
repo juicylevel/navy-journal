@@ -295,6 +295,7 @@ DataGrid.prototype.setData = function (data, sort) {
 		var rowEls = this.createRows();
 		for (var i = 0; i < rowEls.length; i++) {
 			var rowEl = rowEls[i];
+			rowEl.addEventListener('click', this.onRowClick.bind(this));
 			tableEl.appendChild(rowEl);
 		}
 	}
@@ -343,6 +344,9 @@ DataGrid.prototype.createRow = function (rowData, index) {
 	} else {
 		rowEl = this.createSimpleRow(rowData, index);
 	}
+
+	rowEl.data = rowData;
+
 	return rowEl;
 };
 
@@ -376,14 +380,19 @@ DataGrid.prototype.createSimpleRow = function (rowData, index) {
 	rowEl.baseCls = 'gridRow';
 	rowEl.defaultBgCls = ((index % 2) == 0) ? 'altColor1' : 'altColor2';
 	rowEl.overBgCls = 'overColor';
+	rowEl.selectedBgCls = 'selectedColor';
 	rowEl.className = rowEl.baseCls + ' ' + rowEl.defaultBgCls;
 
 	rowEl.addEventListener('mouseover', function(event) {
-		this.className = this.baseCls + ' ' + this.overBgCls;
+		if (!this.selected) {
+			this.className = this.baseCls + ' ' + this.overBgCls;
+		}
 	});
 
 	rowEl.addEventListener('mouseout', function(event) {
-		this.className = this.baseCls + ' ' + this.defaultBgCls;
+		if (!this.selected) {
+			this.className = this.baseCls + ' ' + this.defaultBgCls;
+		}
 	});
 
 	this.createRowCells(rowData, rowEl);
@@ -420,6 +429,45 @@ DataGrid.prototype.showEmptyRow = function () {
 
 	rowEl.appendChild(cellEl);
 	tableEl.appendChild(rowEl);
+};
+
+/**
+ * Обработка события клика по ряду таблицы.
+ */
+DataGrid.prototype.onRowClick = function (event) {
+	var rowEl = event.currentTarget;
+
+	this.deselectRows(rowEl);
+
+	rowEl.selected = !rowEl.selected;
+	rowEl.className = rowEl.baseCls + ' ' + (rowEl.selected ? rowEl.selectedBgCls : rowEl.defaultBgCls);
+
+	var selectRowEvent = new CustomEvent(
+		EventTypes.SELECT_GRID_ROW,
+		{
+			detail: {
+				data: rowEl.data,
+				selected: rowEl.selected
+			},
+			bubbles: false
+		}
+	);
+	this.domElement.dispatchEvent(selectRowEvent);
+};
+
+/**
+ * Деселект ряда в таблице.
+ * @param exceptRowEl Если указан элемен ряда, то он будет проигнорирован.
+ */
+DataGrid.prototype.deselectRows = function (exceptRowEl) {
+	var tableEl = this.getTableEl();
+	var rowEls = getEl(tableEl, this.ROW_ATTR, null, true);
+	for (var i in rowEls) {
+		if (rowEls[i] != exceptRowEl && rowEls[i].selected) {
+			rowEls[i].selected = false;
+			rowEls[i].className = rowEls[i].baseCls + ' ' + rowEls[i].defaultBgCls;
+		}
+	}
 };
 
 //------------------------------------------------------------------------------

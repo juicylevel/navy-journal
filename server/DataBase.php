@@ -141,14 +141,27 @@ class DataBase {
 
     /**
 	 * Добавление нового элемента провизии.
-	 * @param $name Наименование нового элемента провизии.
+	 * @param $item Новый элемент провизии.
 	 */
-	public function addProvisionsItem ($name) {
-        $sql = 'INSERT INTO provisions_item (name) VALUES (:name)';
+	public function addProvisionsItem ($item) {
+        $sql = 'INSERT INTO provisions_item (' . $this->getInsertedFieldsList($item, false) . ') ' .
+               'VALUES (' . $this->getInsertedFieldsList($item, true) . ')';
         $stmt = $this->pdo->prepare($sql);
-        $data = array(':name' => $name);
+        $data = $this->getInsertedValuesList($item);
         $result = $stmt->execute($data);
         return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Обновление значений полей элемента провизии.
+     * @param $item Элемент провизии.
+     */
+    public function updateProvisionsItem ($item) {
+        $id = $item['id'];
+        $sql = 'UPDATE provisions_item SET ' . $this->getUpdatedFieldsList($item) . ' WHERE id = ?';
+        $stmt = $this->pdo->prepare($sql);
+        $data = $this->getUpdatedValues($item);
+        return $stmt->execute($data);
     }
 
     /**
@@ -183,6 +196,71 @@ class DataBase {
             $sortSql .= ' ';
         }
         return $sortSql;
+    }
+
+    /**
+     * Получение строки полей, перечисленных через запятую для вставки в таблицу.
+     * Если $withColon = true, то перед наименованиями полей будет добавлен
+     * символ ":" для оператора VALUES.
+     * @param $item Объект (ассоциативный массив) для вставки в таблицу.
+     * @param $withColon boolean
+     * @return "field1, field2, field3", если $withColon = true, то ":field1, :field2, :field3"
+     */
+    private function getInsertedFieldsList ($item, $withColon) {
+        $fields = array_keys($item);
+        if ($withColon) {
+            foreach ($fields as $key => $value) {
+                $fields[$key] = ':' . $value;
+            }
+        }
+        return join(', ', $fields);
+    }
+
+    /**
+     * Получение массива значений для вставки в таблицу.
+     * @param $item Объект (ассоциативный массив) для вставки в таблицу.
+     * @return array(":field1" => "fieldValue1")
+     */
+    private function getInsertedValuesList ($item) {
+        $result = array();
+        foreach ($item as $key => $value) {
+            $result[':' . $key] = $value;
+        }
+        return $result;
+    }
+
+    /**
+     * Получение строки полей, перечисленных через запятую для обновления
+     * записи в таблице.
+     * @param $item Объект (ассоциативный массив) для вставки в таблицу.
+     * @return "field1 = ?, field2 = ?"
+     */
+    private function getUpdatedFieldsList ($item) {
+        $fields = array_keys($item);
+        $updateFields = array();
+        foreach ($fields as $key => $value) {
+            if ($key != 'id') {
+                $updateFields[$key] = $value . ' = ?';
+            }
+        }
+        return join(', ', $updateFields);
+    }
+
+    /**
+     * Получение массива значений для обновления записи в таблице.
+     * @param $item Объект (ассоциативный массив) для вставки в таблицу.
+     * @return array("fieldValue1", "fieldValue2", "fieldValue3", "id")
+     */
+    private function getUpdatedValues ($item) {
+        $result = array();
+        foreach ($item as $key => $value) {
+            if ($key != 'id') {
+                $result[] = $value;
+            }
+        }
+        // нужно, чтобы id был последним в списке.
+        $result[] = $item['id'];
+        return $result;
     }
 }
 

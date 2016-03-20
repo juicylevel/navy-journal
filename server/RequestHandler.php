@@ -111,25 +111,31 @@ class RequestHandler {
 	}
 
 	/**
-	 * Добавление нового элемента провизии.
-	 * @param $name Наименование нового элемента провизии.
-	 * @param $sort Параметры сортировки списка элементов провизии,
-	 * который после добавления будет обновлён и возвращён в ответе.
+	 * Получение списка элементов провизии.
+	 * @param $sort Параметры сортировки.
 	 */
-	public function addProvisionsItem ($name, $sort) {
-		if (!empty($name)) {
-			$this->db->addProvisionsItem($name);
-		}
-		return $this->getProvisionsItems($sort);
+	public function getProvisionsItems ($sort) {
+		$provisionsItems = $this->db->getProvisionsItems($sort);
+
+		return array (
+			'data' => $provisionsItems,
+			'sort' => $sort
+		);
 	}
 
 	/**
-	 * Получение информации об элементе провизии.
-	 * @param $id Идентификатор элемента провизии.
+	 * Сохранение элемента провизии.
+	 * @param $item Элемент провизии.
+	 * @param $sort Параметры сортировки списка элементов провизии,
+	 * который после сохранения будет обновлён и возвращён в ответе.
 	 */
-	public function getProvisionsItem ($id) {
-		$provisionsItem = $this->db->getProvisionsItem($id);
-		return $provisionsItem;
+	public function saveProvisionsItem ($item, $sort) {
+		if (empty($item['id'])) {
+			$this->db->addProvisionsItem($item);
+		} else {
+			$this->db->updateProvisionsItem($item);
+		}
+		return $this->getProvisionsItems($sort);
 	}
 
 	/**
