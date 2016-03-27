@@ -46,7 +46,7 @@ Window.prototype.render = function () {
         buttonEl.addEventListener('click', function () {
             self.buttonsHandler(this.config.btn);
             if (isEmpty(this.config.close) || this.config.close) {
-            	self.el.dispatchEvent(new CustomEvent(EventTypes.CLOSE));
+            	self.el.dispatchEvent(new CustomEvent('close'));
             }
         });
 

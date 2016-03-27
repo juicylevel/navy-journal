@@ -37,7 +37,7 @@ var PopUp = (function (window, document) {
 
 			popUpEl.setAttribute('popUpElement', '');
 
-			popUpEl.addEventListener(EventTypes.CLOSE, (function (event) {
+			popUpEl.addEventListener('close', (function (event) {
 				this.removePopUp(popUpEl);
 			}).bind(this));
 
