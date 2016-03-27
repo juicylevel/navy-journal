@@ -23,6 +23,7 @@ FormItem.prototype.render = function () {
 
     this.createFieldLabel();
     this.createField();
+    this.addListeners();
     this.createRequiredMarker();
 };
 
@@ -43,6 +44,13 @@ FormItem.prototype.createFieldLabel = function () {
  * Создание поля ввода значения.
  */
 FormItem.prototype.createField = function () {
+
+};
+
+/**
+ * Добавление прослушивателей событий.
+ */
+FormItem.prototype.addListeners = function () {
 
 };
 
@@ -97,9 +105,15 @@ FormItem.prototype.isDirty = function () {
  * @return boolean
  */
 FormItem.prototype.isValid = function () {
+    var fieldEl = getEl(this.el, 'field');
+
     if (this.itemConfig.required && isEmpty(this.getValue())) {
         return false;
+    } else if (!isEmpty(this.itemConfig.regexp) && !this.itemConfig.regexp.test(this.getValue())) {
+        // TODO: не работает
+        return false;
     }
+
     return true;
 };
 

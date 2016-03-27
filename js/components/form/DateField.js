@@ -1,25 +1,8 @@
 function DateField () {
-    FormItem.apply(this, arguments);
+    TextField.apply(this, arguments);
 };
 
-extend(DateField, FormItem);
-
-/**
- * Создание поля ввода значения.
- */
-DateField.prototype.createField = function () {
-    var placeholder = this.itemConfig.placeholder;
-    if (isEmpty(placeholder)) {
-        placeholder = '';
-    }
-    var fieldHtml = '<input field type="text" placeholder="' + placeholder + '" style="width: ' + this.itemConfig.width + 'px;">';
-    this.el.insertAdjacentHTML('beforeend', fieldHtml);
-
-    var fieldEl = getEl(this.el, 'field');
-    fieldEl.addEventListener('input', (function () {
-        this.dispatchChangeEvent();
-    }).bind(this));
-};
+extend(DateField, TextField);
 
 /**
  * Установка значения.

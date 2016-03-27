@@ -17,7 +17,12 @@ TextField.prototype.createField = function () {
     }
     var fieldHtml = '<input field type="text" placeholder="' + placeholder + '" style="width: ' + this.itemConfig.width + 'px;">';
     this.el.insertAdjacentHTML('beforeend', fieldHtml);
+};
 
+/**
+ * Добавление прослушивателей событий.
+ */
+TextField.prototype.addListeners = function () {
     var fieldEl = getEl(this.el, 'field');
     fieldEl.addEventListener('input', (function () {
         this.dispatchChangeEvent();

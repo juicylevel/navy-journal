@@ -24,6 +24,7 @@ var scripts = [
 	'components/form/TextField',
 	'components/form/ComboBox',
 	'components/form/DateField',
+	'components/form/NumberField',
 
 	'service/Service',
 
@@ -41,6 +42,9 @@ var scripts = [
 	'app/duties/DutiesController',
 	'app/duties/ActiveDutyRow',
 
+	'app/search/Search',
+	'app/search/SearchController',
+
 	'app/provisions/Provisions',
 	'app/provisions/ProvisionsController',
 	'app/provisions/ProvisionsForm',
@@ -48,6 +52,9 @@ var scripts = [
 	'app/accumulators/Accumulators',
 	'app/accumulators/AccumulatorsController',
 	'app/accumulators/AccumulatorForm',
+
+	'app/statistics/Statistics',
+	'app/statistics/StatisticsController',
 
 	'app'
 ];

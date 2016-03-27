@@ -22,7 +22,7 @@ AccumulatorForm.prototype.getFormItemsConfig = function () {
             field: 'voltage',
             fieldLabel: 'Напряжение',
             placeholder: 'вольты',
-            ui: TextField,
+            ui: NumberField,
             width: 300,
             labelWidth: 154,
             required: true
@@ -31,7 +31,7 @@ AccumulatorForm.prototype.getFormItemsConfig = function () {
             field: 'capacity',
             fieldLabel: 'Ёмкость',
             placeholder: 'мАч',
-            ui: TextField,
+            ui: NumberField,
             width: 300,
             labelWidth: 154,
             required: true
@@ -40,6 +40,7 @@ AccumulatorForm.prototype.getFormItemsConfig = function () {
             field: 'start_exploitation',
             fieldLabel: 'Начало эксплуатации',
             placeholder: 'дд.мм.гггг',
+            regexp: new RegExp('(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d'),
             ui: DateField,
             width: 300,
             labelWidth: 154,
@@ -49,6 +50,7 @@ AccumulatorForm.prototype.getFormItemsConfig = function () {
             field: 'end_exploitation',
             fieldLabel: 'Завершение эксплуатации',
             placeholder: 'дд.мм.гггг',
+            regexp: new RegExp('(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.(19|20)\d\d'),
             ui: DateField,
             width: 300,
             labelWidth: 154,
