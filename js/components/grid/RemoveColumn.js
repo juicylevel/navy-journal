@@ -16,7 +16,8 @@ RemoveColumn.prototype.createCellElement = function (rowData) {
 	cellEl.setAttribute(this.grid.CELL_ATTR, 'remove-cell');
 	cellEl.innerHTML = '<div class="removeCell"></div>';
 
-    cellEl.addEventListener('click', (function () {
+    cellEl.addEventListener('click', (function (event) {
+        event.stopPropagation();
         this.dispatchActionEvent('removerow', {rowData: rowData});
     }).bind(this));
 

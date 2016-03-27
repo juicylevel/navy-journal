@@ -16,7 +16,8 @@ EditColumn.prototype.createCellElement = function (rowData) {
 	cellEl.setAttribute(this.grid.CELL_ATTR, 'edit-cell');
 	cellEl.innerHTML = '<div class="editCell"></div>';
 
-    cellEl.addEventListener('click', (function () {
+    cellEl.addEventListener('click', (function (event) {
+        event.stopPropagation();
         this.dispatchActionEvent('editrow', {rowData: rowData});
     }).bind(this));
 
