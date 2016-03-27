@@ -18,21 +18,21 @@ extend(Window, Widget);
  * Отрисовка окна.
  */
 Window.prototype.render = function () {
-    this.domElement = document.createElement('div');
-    this.domElement.className = 'windowBody';
+    this.el = document.createElement('div');
+    this.el.className = 'windowBody';
 
     var windowHtml = '' +
         '<div class="title">' + this.title + '</div>' +
         '<div class="windowContainer" container></div>' +
         '<div buttons class="buttons"></div>';
 
-    this.domElement.innerHTML = windowHtml;
+    this.el.innerHTML = windowHtml;
 
-    var containerEl = getEl(this.domElement, 'container');
+    var containerEl = getEl(this.el, 'container');
     containerEl.appendChild(this.contentEl);
 
     var self = this,
-        buttonsEl = getEl(this.domElement, 'buttons'),
+        buttonsEl = getEl(this.el, 'buttons'),
         buttonConfig,
         buttonEl;
 
@@ -46,7 +46,7 @@ Window.prototype.render = function () {
         buttonEl.addEventListener('click', function () {
             self.buttonsHandler(this.config.btn);
             if (isEmpty(this.config.close) || this.config.close) {
-            	self.domElement.dispatchEvent(new CustomEvent(EventTypes.CLOSE));
+            	self.el.dispatchEvent(new CustomEvent(EventTypes.CLOSE));
             }
         });
 

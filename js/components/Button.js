@@ -22,16 +22,16 @@ extend(Button, Widget);
  * Отрисовка кнопки.
  */
 Button.prototype.render = function () {
-    this.domElement = document.createElement('button');
-    this.domElement.className = this.ownerLayout == 'vertical' ?
+    this.el = document.createElement('button');
+    this.el.className = this.ownerLayout == 'vertical' ?
         'formItemVLayout' : 'formItemHLayout';
-    this.domElement.innerHTML = this.text;
+    this.el.innerHTML = this.text;
 
     // если к кнопке привязана форма, то до того момента,
     // как форма сообщит о своём статусе (валидность, изменённость данных)
     // блокируем кнопку по умолчанию (чтобы не мигала)
     if (!isEmpty(this.bindFormEl)) {
-        this.domElement.disabled = true;
+        this.el.disabled = true;
     }
 };
 
@@ -42,10 +42,10 @@ Button.prototype.configure = function () {
     if (!isEmpty(this.bindFormEl)) {
         this.bindFormEl.addEventListener(EventTypes.CHANGE_FROM, (function (event) {
             if (this.role == 'save') {
-                this.domElement.disabled = !event.detail.valid || !event.detail.dirty;
+                this.el.disabled = !event.detail.valid || !event.detail.dirty;
             }
             if (this.role == 'clear') {
-                this.domElement.disabled = event.detail.empty;
+                this.el.disabled = event.detail.empty;
             }
         }).bind(this));
     }

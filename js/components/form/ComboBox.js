@@ -18,9 +18,9 @@ ComboBox.prototype.createField = function () {
         '<select field style="width: ' + this.itemConfig.width + 'px;">' +
         '</select>';
 
-    this.domElement.insertAdjacentHTML('beforeend', fieldHtml);
+    this.el.insertAdjacentHTML('beforeend', fieldHtml);
 
-    var fieldEl = getEl(this.domElement, 'field');
+    var fieldEl = getEl(this.el, 'field');
     fieldEl.addEventListener('change', (function () {
         this.dispatchChangeEvent();
     }).bind(this));
@@ -30,7 +30,7 @@ ComboBox.prototype.createField = function () {
  * Установка вариантов выбора.
  */
 ComboBox.prototype.setOptions = function (options) {
-    var fieldEl = getEl(this.domElement, 'field'),
+    var fieldEl = getEl(this.el, 'field'),
         option,
         optionHtml;
 
@@ -49,7 +49,7 @@ ComboBox.prototype.setOptions = function (options) {
  * @param value Значение элемента формы.
  */
 ComboBox.prototype.setValue = function (value) {
-    var fieldEl = getEl(this.domElement, 'field');
+    var fieldEl = getEl(this.el, 'field');
     fieldEl.value = value;
 
     FormItem.prototype.setValue.apply(this, arguments)
@@ -60,6 +60,6 @@ ComboBox.prototype.setValue = function (value) {
  * @return Значение элемента формы.
  */
 ComboBox.prototype.getValue = function () {
-    var fieldEl = getEl(this.domElement, 'field');
+    var fieldEl = getEl(this.el, 'field');
     return fieldEl.value;
 };

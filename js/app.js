@@ -12,28 +12,13 @@ function windowLoadEventHandler (event) {
  * Инициализация приложения.
  */
 function initApplication () {
-	window.IDG = idGenerator();
-
 	Notifier.getInstance().init();
 	PopUp.getInstance().init();
 
-	var journalModule = ModuleManager.getInstance().getModule(Consts.JOURNAL);
-	journalModule.view.render();
+	// TODO: попробовать Service сделать singleton-ом
+	new Service().loadConfig('config.json').then(function (response) {
+		Settings.getInstance().config = response;
 
-	return;
-	var form = new ProvisionsItemForm();
-
-	var wnd = new FormWindow('Форма', form.getDomElement(), [
-		{btn: 'Сохранить', close: false, role: 'save'},
-		{btn: 'Отмена'}
-	], (function (btn) {
-		switch (btn) {
-			case 'Сохранить':
-				break;
-			case 'Отмена':
-				break;
-		}
-	}).bind(this));
-
-	PopUp.getInstance().show(wnd.getDomElement());
+		new Main();
+	});
 };

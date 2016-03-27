@@ -50,7 +50,6 @@ nav, section, footer {
 
 .lastDutyInfo {
 	float: left;
-
 }
 
 .activeDutyInfo {
@@ -75,7 +74,8 @@ nav, section, footer {
 	border-color: #000000;
 }
 
-#navigation .menuItem {
+#navigation a {
+	display: block;
 	padding: 3px 3px;
 }
 
@@ -332,7 +332,7 @@ nav, section, footer {
 
 .fieldLabel {
 	display: inline-block;
-	text-align: right;
+	text-align: left;
 	margin-right: 3px;
 }
 

@@ -87,6 +87,12 @@ switch ($request) {
 	case 'saveProvisionsItem':
 		$result = $requestHandler->saveProvisionsItem($item, $sort);
 		break;
+	case 'getAccumulators':
+		$result = $requestHandler->getAccumulators(json_decode($sort, true));
+		break;
+	case 'saveAccumulator':
+		$result = $requestHandler->saveAccumulator($item, $sort);
+		break;
 	default:
 		trigger_error('Unknow method "' . $request . '"', E_USER_ERROR);
 }

@@ -139,6 +139,65 @@ class RequestHandler {
 	}
 
 	/**
+	 * Получение списка аккумуляторов.
+	 * @param $sort Параметры сортировки.
+	 */
+	public function getAccumulators ($sort) {
+		$accumulators = $this->db->getAccumulators($sort);
+
+		for ($i = 0; $i < count($accumulators); $i++) {
+			$accumulator = $accumulators[$i];
+			$accumulators[$i]['start_exploitation'] = $this->dateToSeconds($accumulator['start_exploitation']);
+			if (!empty($accumulator['end_exploitation'])) {
+				$accumulators[$i]['end_exploitation'] = $this->dateToSeconds($accumulator['end_exploitation']);
+			}
+		}
+
+		return array (
+			'data' => $accumulators,
+			'sort' => $sort
+		);
+	}
+
+	private function dateToSeconds ($date) {
+		$dateTime = new DateTime($date);
+		$result = $dateTime->getTimestamp();
+		if (!$result) {
+			$result = null;
+		}
+		return $result;
+	}
+
+	/**
+	 * Сохранение аккумулятора.
+	 * @param $item Данные об аккумуляторе.
+	 * @param $sort Параметры сортировки списка аккумуляторов,
+	 * который после сохранения будет обновлён и возвращён в ответе.
+	 */
+	public function saveAccumulator ($item, $sort) {
+		if (!empty($item['start_exploitation'])) {
+			$item['start_exploitation'] = $this->timestampToDbDate($item['start_exploitation']);
+		}
+		if (!empty($item['end_exploitation'])) {
+			$item['end_exploitation'] = $this->timestampToDbDate($item['end_exploitation']);
+		}
+
+		if (empty($item['id'])) {
+			$this->db->addAccumulator($item);
+		} else {
+			$this->db->updateAccumulator($item);
+		}
+		return $this->getAccumulators($sort);
+	}
+
+	private function timestampToDbDate ($timestamp) {
+		$dateTime = new DateTime();
+		$dateTime->setTimestamp($timestamp);
+		$dbDateString = $dateTime->format('Y-m-d H:i:s');
+		return $dbDateString;
+	}
+
+	/**
 	 * Конфигурация активного дежурства в списке боевых дежурств.
 	 * @param $dutyList Список боевых дежурств.
 	 * @return $dutyList Модифицированный список боевых дежурств.

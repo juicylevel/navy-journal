@@ -44,6 +44,35 @@ function createUrl (parameters) {
 };
 
 /**
+ * Получение значения hash без #.
+ */
+function getHash () {
+	var hash = window.location.hash;
+	if (!isEmpty(hash)) {
+		return hash.substring(1);
+	}
+};
+
+/**
+ * Установка значения hash.
+ */
+function setHash (hash) {
+	window.location.hash = hash;
+};
+
+/**
+ * Отправка глобального события.
+ * @param eventType Тип события.
+ * @param params Параметры (объект).
+ */
+function dispatchGlobalEvent (eventType, params) {
+	var globalEvent = new CustomEvent(eventType, {
+		detail: params
+	});
+	window.dispatchEvent(globalEvent);
+};
+
+/**
  * Преобразование объекта в json-строку.
  */
 function objectToJsonString (object) {
@@ -141,20 +170,50 @@ function clone (source) {
  * Получение строки даты в формате d.m.Y H:i
  * @param date Объект Date или timestamp.
  */
-function getDateString (date) {
+function getDateString (date, withTime) {
 	if (isEmpty(date)) return '-';
 
 	if (typeof date === 'number') {
 		date = new Date(date * 1000);
 	}
 
+	var result;
+
 	var day     = formatDoubleDigit(date.getDate());
 	var month   = formatDoubleDigit(date.getMonth() + 1);
 	var year    = date.getFullYear();
-	var hours   = formatDoubleDigit(date.getHours());
-	var minutes = formatDoubleDigit(date.getMinutes());
 
-	return day + '.' + month + '.' + year + ' ' + hours + ':' + minutes;
+	result = day + '.' + month + '.' + year;
+
+	if (withTime) {
+		var hours   = formatDoubleDigit(date.getHours());
+		var minutes = formatDoubleDigit(date.getMinutes());
+
+		result += ' ' + hours + ':' + minutes;
+	}
+
+	return result;
+};
+
+/**
+ * Преобразование строки даты dd.mm.yyyy в timestamp.
+ * @param dateString Строка даты dd.mm.yyyy.
+ * @return timestamp
+ */
+function dateStringToTime (dateString) {
+	var dateSplited = dateString.split('.');
+	var day   = parseInt(dateSplited[0]);
+	var mouth = parseInt(dateSplited[1]) - 1;
+	var year  = parseInt(dateSplited[2]);//27.03.2016
+
+	var result = null;
+	var date = new Date(year, mouth, day);
+
+	if (date != 'Invalid Date') {
+		result = date.getTime() / 1000;
+	}
+
+	return result;
 };
 
 /**

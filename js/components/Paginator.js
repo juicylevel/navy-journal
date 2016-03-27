@@ -10,6 +10,8 @@ function Paginator (maxPageSize) {
     this.pageSize = 0;
 	this.offset = 0;
 	this.currentPage = 1;
+
+    this.render();
 };
 
 extend(Paginator, Widget);
@@ -43,9 +45,9 @@ Paginator.prototype.render = function () {
 	    	'Всего: <span total></span>' +
 	    '</div>';
 
-	this.domElement = document.createElement('div');
-	this.domElement.className = 'paginator';
-	this.domElement.innerHTML = paginatorHtml;
+	this.el = document.createElement('div');
+	this.el.className = 'paginator';
+	this.el.innerHTML = paginatorHtml;
 
     this.addEventListeners({
 		'firstPageButton': 'click',
@@ -73,7 +75,7 @@ Paginator.prototype.refresh = function () {
  */
 Paginator.prototype.addEventListeners = function (eventElementsConfig) {
     for (var elementAttribute in eventElementsConfig) {
-        var element = getEl(this.domElement, elementAttribute);
+        var element = getEl(this.el, elementAttribute);
         var eventType = eventElementsConfig[elementAttribute];
         var handlerName = 'on' + capitalize(eventType) + capitalize(elementAttribute);
 		element.addEventListener(eventType, this[handlerName].bind(this));
@@ -147,7 +149,7 @@ Paginator.prototype.onClickRefreshGridButton = function () {
  * Обработка события клика на кнопку "Перейти".
  */
 Paginator.prototype.onClickGoToPageButton = function () {
-	var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
+	var currentPageInputEl = getEl(this.el, 'currentPageInput');
 	var value = currentPageInputEl.value;
 
 	var minPage = 1;
@@ -197,10 +199,10 @@ Paginator.prototype.onKeypressCurrentPageInput = function (event) {
  * Обновление отображаемых значений на панели компонента.
  */
 Paginator.prototype.updateDisplayValues = function () {
-    var currentPageInputEl = getEl(this.domElement, 'currentPageInput');
-    var totalEl = getEl(this.domElement, 'total');
-    var fromRecordEl = getEl(this.domElement, 'fromRecord');
-    var toRecordEl = getEl(this.domElement, 'toRecord');
+    var currentPageInputEl = getEl(this.el, 'currentPageInput');
+    var totalEl = getEl(this.el, 'total');
+    var fromRecordEl = getEl(this.el, 'fromRecord');
+    var toRecordEl = getEl(this.el, 'toRecord');
 
     this.currentPage = Math.ceil((this.offset + 1) / this.getPageSize());
     currentPageInputEl.value = this.currentPage;
@@ -214,7 +216,7 @@ Paginator.prototype.updateDisplayValues = function () {
  * @return Количество записей на текущей странице.
  */
 Paginator.prototype.getPageSize = function () {
-	var pageSizeInputEl = getEl(this.domElement, 'pageSizeInput');
+	var pageSizeInputEl = getEl(this.el, 'pageSizeInput');
 	var value = pageSizeInputEl.value;
 
 	if (isEmpty(value) || isNaN(parseInt(value))) {
@@ -241,15 +243,11 @@ Paginator.prototype.getPageSize = function () {
  * Отправка сообщения об изменении страницы.
  */
 Paginator.prototype.dispatchChangePageEvent = function () {
-	var event = new CustomEvent(
-        EventTypes.CHANGE_PAGE,
-        {
-            detail: {
-                offset: this.offset,
-                pageSize: this.getPageSize()
-            },
-            bubbles: true
+	var changePageEvent = new CustomEvent('changepage', {
+        detail: {
+            offset: this.offset,
+            pageSize: this.getPageSize()
         }
-    );
-	this.domElement.dispatchEvent(event);
+    });
+	this.el.dispatchEvent(changePageEvent);
 };

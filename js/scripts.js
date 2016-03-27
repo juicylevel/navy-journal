@@ -3,25 +3,14 @@ var scripts = [
 	'utils/baseUtils',
 	'utils/arrayUtils',
 
+	'events/EventTypes',
+
 	'settings/Settings',
 
-	'core/Dispatcher',
-	'core/Receiver',
-	'core/Notification',
-	'core/Model',
-	'core/View',
-	'core/Controller',
-
-	'types/Notifications',
-	'types/EventTypes',
-	'types/Consts',
-
-	'components/JournalLayout',
 	'components/Notifier',
 	'components/PopUp',
 	'components/Dialog',
 	'components/Widget',
-	'components/ViewFrame',
 	'components/Paginator',
 	'components/Window',
 	'components/Button',
@@ -31,38 +20,38 @@ var scripts = [
 	'components/grid/RemoveColumn',
 	'components/grid/EditColumn',
 	'components/grid/CustomRow',
+	'components/grid/DateColumn',
 	'components/form/Form',
 	'components/form/FormWindow',
 	'components/form/FormItem',
 	'components/form/TextField',
 	'components/form/ComboBox',
+	'components/form/DateField',
 
 	'service/Service',
 
-	'modules/base/Module',
-	'modules/base/Bus',
-	'modules/base/ModuleManager',
-	'modules/base/ModuleView',
+	'core/View',
+	'core/ViewController',
 
-	'modules/index/IndexView',
-	'modules/index/IndexModel',
-	'modules/index/IndexController',
-	'modules/index/frames/DutyListFrame',
-	'modules/index/frames/ActiveDutyRow',
+	'app/main/JournalLayout',
+	'app/main/Main',
+	'app/main/MainController',
 
-	'modules/journal/JournalView',
-	'modules/journal/JournalModel',
-	'modules/journal/JournalController',
+	'app/browser/Browser',
+	'app/browser/BrowserController',
 
-	'modules/duty/DutyView',
-	'modules/duty/DutyModel',
-	'modules/duty/DutyController',
+	'app/duties/Duties',
+	'app/duties/DutiesController',
+	'app/duties/ActiveDutyRow',
 
-	'modules/dictionary/DictionaryView',
-	'modules/dictionary/DictionaryModel',
-	'modules/dictionary/DictionaryController',
-	'modules/dictionary/frames/ProvisionsFrame',
-	'modules/dictionary/frames/ProvisionsItemForm',
+	'app/provisions/Provisions',
+	'app/provisions/ProvisionsController',
+	'app/provisions/ProvisionsForm',
+
+	'app/accumulators/Accumulators',
+	'app/accumulators/AccumulatorsController',
+	'app/accumulators/AccumulatorForm',
+	'app/accumulators/AccumulatorRow',
 
 	'app'
 ];

@@ -1,172 +1,130 @@
-/**
- * Компонент для взаимодействия с сервером.
- */
-function Service () {
-	Dispatcher.apply(this, arguments);
-};
+function Service () {};
 
-extend(Service, Dispatcher);
-
-/**
- * Загрузка конфигурации приложения.
- */
 Service.prototype.loadConfig = function (url) {
-	this.sendRequest('GET', Notifications.LOAD_CONFIG_COMPLETE, {
+	return this.sendRequest('GET', 'Загрузка файла конфигурации', {
 		request: 'loadFile',
-		url: url,
-		message: 'Загрузка файла конфигурации'
+		url: url
 	});
 };
 
-/**
- * Получение статуса журнала.
- */
 Service.prototype.getJournalStatus = function () {
-	this.sendRequest('GET', Notifications.LOAD_JOURNAL_STATUS, {
-		request: 'getJournalStatus',
-		message: 'Определение статуса журнала'
-	});
+    return this.sendRequest('GET', 'Определение статуса журнала', {
+        request: 'getJournalStatus'
+    });
 };
 
-/**
- * Создание боевого дежурства.
- */
 Service.prototype.createDuty = function () {
-	this.sendRequest('POST', Notifications.CREATE_DUTY_COMPLETE, {
-		request: 'createDuty',
-		message: 'Создание боевого дежурства'
+	return this.sendRequest('POST', 'Создание боевого дежурства', {
+		request: 'createDuty'
 	});
 };
 
-/**
- * Завершение подготовки к дежурству.
- */
 Service.prototype.completeRunUp = function () {
-	this.sendRequest('POST', Notifications.RUN_UP_COMPLETE, {
-		request: 'completeRunUp',
-		message: 'Завершение подготовки к дежурству'
+	return this.sendRequest('POST', 'Завершение подготовки к дежурству', {
+		request: 'completeRunUp'
 	});
 };
 
-/**
- * Завершение боевого дежурства.
- */
 Service.prototype.completeDuty = function () {
-	this.sendRequest('POST', Notifications.DUTY_COMPLETE, {
-		request: 'completeDuty',
-		message: 'Завершение боевого дежурства'
+	return this.sendRequest('POST', 'Завершение боевого дежурства', {
+		request: 'completeDuty'
 	});
 };
 
-/**
- * Загрузка списка боевых дежурств.
- * @param options
- */
 Service.prototype.getDutyList = function (options) {
-	this.sendRequest('GET', Notifications.LOAD_DUTY_LIST, {
+	return this.sendRequest('GET', 'Загрузка списка боевых дежурств', {
 		request: 'getDutyList',
 		offset: options.offset,
 		pageSize: options.pageSize,
-		sort: objectToJsonString(options.sort),
-		message: 'Загрузка списка боевых дежурств'
+		sort: objectToJsonString(options.sort)
 	});
 };
 
-/**
- * Получение информации об элементах и типах провизии.
- * @param options
- */
 Service.prototype.getProvisionsData = function (options) {
-    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_DATA, {
+    return this.sendRequest('GET', 'Загрузка информации об элементах и типах провизии', {
 		request: 'getProvisionsData',
-		sort:  objectToJsonString(options.sort),
-		message: 'Загрузка информации об элементах и типах провизии'
+		sort: objectToJsonString(options.sort)
 	});
 };
 
-/**
- * Получение списка элементов провизии.
- * @param options
- */
 Service.prototype.getProvisionsItems = function (options) {
-    this.sendRequest('GET', Notifications.LOAD_PROVISIONS_ITEMS, {
+    return this.sendRequest('GET', 'Загрузка списка элементов провизии', {
 		request: 'getProvisionsItems',
-		sort:  objectToJsonString(options.sort),
-		message: 'Загрузка списка элементов провизии'
+		sort: objectToJsonString(options.sort)
 	});
 };
 
-/**
- * Сохранение элемента провизии.
- * @param item Элемент провизии.
- * @param sort Текущая конфигурация сортировки таблицы элементов провизии.
- */
 Service.prototype.saveProvisionsItem = function (item, sort) {
-	this.sendRequest('POST', Notifications.COMPLATE_SAVE_PROVISIONS_ITEM, {
+	return this.sendRequest('POST', 'Сохранение элемента провизии', {
 		request: 'saveProvisionsItem',
 		item: item,
-		sort: sort,
-		message: 'Сохранение элемента провизии'
+		sort: sort
 	});
 };
 
-/**
- * Отправка запроса на сервер.
- */
-Service.prototype.sendRequest = function (method, notification, parameters) {
-	if (isEmpty(url)) {
-		url = Settings.getInstance().config.serviceUrl;
-	}
+Service.prototype.getAccumulators = function (options) {
+    return this.sendRequest('GET', 'Загрузка списка аккумуляторов', {
+		request: 'getAccumulators',
+		sort: objectToJsonString(options.sort)
+	});
+};
 
-	var url, request, message, sendData = null;
+Service.prototype.saveAccumulator = function (item, sort) {
+	return this.sendRequest('POST', 'Сохранение аккумулятора', {
+		request: 'saveAccumulator',
+		item: item,
+		sort: sort
+	});
+};
 
-	if (!isEmpty(parameters.message)) {
-		message = parameters.message;
-		delete parameters.message;
-	} else {
-		message = 'Загрузка данных';
-	}
+Service.prototype.sendRequest = function (method, message, parameters) {
+    return new Promise (function (resolve, reject) {
+        var url, request, message, sendData = null;
 
-	parameters.time = new Date().getTime();
+    	if (isEmpty(message)) message = 'Загрузка данных';
 
-	if (parameters.request == 'loadFile') {
-		url = parameters.url;
-	} else {
-		url = Settings.getInstance().config.serviceUrl;
-		if (method == 'GET') {
-			url += '?' + createUrl(parameters);
-		} else if (method == 'POST') {
-			sendData = JSON.stringify(parameters);
-		}
-	}
+    	parameters.time = new Date().getTime();
 
-	var self = this;
-	var xhr = new XMLHttpRequest();
-	xhr.parameters = parameters;
-	xhr.notification = notification;
-
-	xhr.onreadystatechange = function() {
-		// TODO: handle error response
-		if (this.readyState == 4 && this.status == 200) {
-			Notifier.getInstance().hideProgress(this.progressEl);
-
-    		var response = JSON.parse(this.responseText);
-			if (!isEmpty(response.result)) {
-				self.sendNotification(new Notification(this.notification, response.result));
-			} else if (parameters.request == 'loadFile') {
-				self.sendNotification(new Notification(this.notification, response));
-			} else {
-				Notifier.getInstance().showError('Произошла ошибка, приносим свои извинения.', response.error);
-			}
+    	if (parameters.request == 'loadFile') {
+    		url = parameters.url;
+    	} else {
+    		url = Settings.getInstance().config.serviceUrl;
+    		if (method == 'GET') {
+    			url += '?' + createUrl(parameters);
+    		} else if (method == 'POST') {
+    			sendData = JSON.stringify(parameters);
+    		}
     	}
-	}
-	xhr.open(method, url, true);
 
-	if (method == 'POST') {
-		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-	}
+    	var self = this;
+    	var xhr = new XMLHttpRequest();
+    	xhr.parameters = parameters;
 
-	xhr.progressEl = Notifier.getInstance().showProgress(message);
+    	xhr.onreadystatechange = function() {
+    		// TODO: handle error response
+    		if (this.readyState == 4 && this.status == 200) {
+    			Notifier.getInstance().hideProgress(this.progressEl);
 
-	xhr.send(sendData);
-}
+        		var response = JSON.parse(this.responseText);
+    			if (!isEmpty(response.result)) {
+    				resolve(response.result);
+    			} else if (parameters.request == 'loadFile') {
+    				resolve(response);
+    			} else {
+    				Notifier.getInstance().showError('Произошла ошибка, приносим свои извинения.', response.error);
+                    reject(response);
+    			}
+        	}
+    	}
+
+    	xhr.open(method, url, true);
+
+    	if (method == 'POST') {
+    		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    	}
+
+    	xhr.progressEl = Notifier.getInstance().showProgress(message);
+
+    	xhr.send(sendData);
+    });
+};

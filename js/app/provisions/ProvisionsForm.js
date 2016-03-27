@@ -1,16 +1,16 @@
 /**
  * Форма редактирования элементов провизии.
  */
-function ProvisionsItemForm () {
+function ProvisionsForm () {
     Form.apply(this, arguments);
 };
 
-extend(ProvisionsItemForm, Form);
+extend(ProvisionsForm, Form);
 
 /**
  * Получение конфигурации элементов формы.
  */
-ProvisionsItemForm.prototype.getFormItemsConfig = function () {
+ProvisionsForm.prototype.getFormItemsConfig = function () {
     return [
         {
             field: 'name',
@@ -34,6 +34,6 @@ ProvisionsItemForm.prototype.getFormItemsConfig = function () {
  * Установка списка типов провизии.
  * @param provisionsTypes Список типов провизии.
  */
-ProvisionsItemForm.prototype.setProvisionsTypes = function (provisionsTypes) {
+ProvisionsForm.prototype.setProvisionsTypes = function (provisionsTypes) {
     this.getItem('type_id').setOptions(provisionsTypes);
 };

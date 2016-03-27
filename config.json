@@ -20,6 +20,13 @@
 			"name": "Наименование",
 			"type_name": "Тип"
 		},
+		"accumulatorsColumns": {
+			"name": "Наименование",
+			"voltage": "Напряжение (вольты)",
+			"capacity": "Ёмкость (мАч)",
+			"start_exploitation": "Начало эксплуатации",
+			"end_exploitation": "Завершение эксплуатации"
+		},
 		"weatherCondition": [
 			{"id": 1, "name": "Солнечно", "apiCode": ["01"]},
 			{"id": 2, "name": "Переменная облачность", "apiCode": ["02"]},

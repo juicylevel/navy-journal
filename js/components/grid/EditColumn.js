@@ -17,7 +17,7 @@ EditColumn.prototype.createCellElement = function (rowData) {
 	cellEl.innerHTML = '<div class="editCell"></div>';
 
     cellEl.addEventListener('click', (function () {
-        this.dispatchActionEvent(this.actionEventType, {rowData: rowData});
+        this.dispatchActionEvent('editrow', {rowData: rowData});
     }).bind(this));
 
 	return cellEl;

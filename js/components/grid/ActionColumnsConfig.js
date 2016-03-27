@@ -1,16 +1,14 @@
 /**
  * Конфигурация расположения специальных колонок в таблице.
  * @param grid Целевая таблица.
- * @param leftList Список колонок, располагающихся слева от колонок данных.
- * @param rightList Список колонок, располагающихся справа от колонок данных.
+ * @param leftColumns Список классов колонок, располагающихся слева от колонок данных.
+ * @param rightColumns Список классов колонок, располагающихся справа от колонок данных.
  */
-function ActionColumnsConfig (grid, leftList, rightList) {
+function ActionColumnsConfig (grid, leftColumns, rightColumns) {
     this.grid = grid;
-    this.left = leftList;
-    this.right = rightList;
 
-    this.setGridToColumns(this.left);
-    this.setGridToColumns(this.right);
+    this.setGridToColumns(leftColumns);
+    this.setGridToColumns(rightColumns);
 };
 
 /**
@@ -20,8 +18,9 @@ function ActionColumnsConfig (grid, leftList, rightList) {
 ActionColumnsConfig.prototype.setGridToColumns = function (columnsList) {
     if (!isEmpty(columnsList)) {
         for (var i = 0; i < columnsList.length; i++) {
-            var column = columnsList[i];
+            var columnClass = columnsList[i];
+            var column = new columnClass();
             column.setGrid(this.grid);
         }
     }
-}
+};

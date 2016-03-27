@@ -33,7 +33,7 @@ var Dialog = (function () {
 
 			var window = new Window(title, messageEl, buttons, handler);
 
-            PopUp.getInstance().show(window.getDomElement());
+            PopUp.getInstance().show(window.el);
         }
 	};
 

@@ -184,6 +184,42 @@ class DataBase {
     }
 
     /**
+	 * Получение списка аккумуляторов.
+     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+	 */
+    public function getAccumulators ($sort) {
+        $sortSql = $this->getSortSql($sort, false);
+        $sql = 'SELECT * FROM accumulator ' . (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+	 * Добавление нового аккумулятора.
+	 * @param $item Новый элемент провизии.
+	 */
+    public function addAccumulator ($item) {
+        $sql = 'INSERT INTO accumulator (' . $this->getInsertedFieldsList($item, false) . ') ' .
+               'VALUES (' . $this->getInsertedFieldsList($item, true) . ')';
+        $stmt = $this->pdo->prepare($sql);
+        $data = $this->getInsertedValuesList($item);
+        $result = $stmt->execute($data);
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Обновление значений полей аккумулятора.
+     * @param $item Элемент провизии.
+     */
+    public function updateAccumulator ($item) {
+        $id = $item['id'];
+        $sql = 'UPDATE accumulator SET ' . $this->getUpdatedFieldsList($item) . ' WHERE id = ?';
+        $stmt = $this->pdo->prepare($sql);
+        $data = $this->getUpdatedValues($item);
+        return $stmt->execute($data);
+    }
+
+    /**
      * Получение строки сортировки по заданным колонкам и направлению.
      * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
      */

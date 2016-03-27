@@ -2,14 +2,7 @@
  * Базовый класс виджета.
  */
 function Widget () {
-    this.domElement = null;
-};
-
-/**
- * Получение DOM-элемента виджета.
- */
-Widget.prototype.getDomElement = function () {
-    return this.domElement;
+    this.el = null;
 };
 
 /**
@@ -40,5 +33,5 @@ Widget.prototype.setData = function (data) {
  */
 Widget.prototype.setVisible = function (visible) {
     var display = visible ? 'block' : 'none';
-    this.domElement.style.display = display;
+    this.el.style.display = display;
 };

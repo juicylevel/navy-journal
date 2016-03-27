@@ -18,8 +18,8 @@ extend(FormItem, Widget);
  * Отрисовка элемента формы.
  */
 FormItem.prototype.render = function () {
-    this.domElement = document.createElement('div');
-    this.domElement.className = 'formItem';
+    this.el = document.createElement('div');
+    this.el.className = 'formItem';
 
     this.createFieldLabel();
     this.createField();
@@ -36,7 +36,7 @@ FormItem.prototype.createFieldLabel = function () {
         '<label class="fieldLabel" style="width: ' + widthStyle + '">' +
             this.itemConfig.fieldLabel + ':' +
         '</label>';
-    this.domElement.insertAdjacentHTML('beforeend', fieldLabelHtml);
+    this.el.insertAdjacentHTML('beforeend', fieldLabelHtml);
 };
 
 /**
@@ -52,7 +52,7 @@ FormItem.prototype.createField = function () {
 FormItem.prototype.createRequiredMarker = function () {
     if (this.itemConfig.required) {
         var requiredHtml = '<span class="required"></span>';
-        this.domElement.insertAdjacentHTML('beforeend', requiredHtml);
+        this.el.insertAdjacentHTML('beforeend', requiredHtml);
     }
 };
 
@@ -79,7 +79,7 @@ FormItem.prototype.getValue = function () {
  * Очистка элемента формы.
  */
 FormItem.prototype.clear = function () {
-    var fieldEl = getEl(this.domElement, 'field');
+    var fieldEl = getEl(this.el, 'field');
     fieldEl.value = '';    
     this.dispatchChangeEvent();
 };
@@ -116,5 +116,5 @@ FormItem.prototype.dispatchChangeEvent = function () {
 			bubbles: false
 		}
 	);
-	this.domElement.dispatchEvent(changeEvent);
+	this.el.dispatchEvent(changeEvent);
 }

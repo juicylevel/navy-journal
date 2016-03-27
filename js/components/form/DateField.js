@@ -1,16 +1,13 @@
-/**
- * Поле ввода текста.
- */
-function TextField () {
+function DateField () {
     FormItem.apply(this, arguments);
 };
 
-extend(TextField, FormItem);
+extend(DateField, FormItem);
 
 /**
  * Создание поля ввода значения.
  */
-TextField.prototype.createField = function () {
+DateField.prototype.createField = function () {
     var placeholder = this.itemConfig.placeholder;
     if (isEmpty(placeholder)) {
         placeholder = '';
@@ -28,9 +25,10 @@ TextField.prototype.createField = function () {
  * Установка значения.
  * @param value Значение элемента формы.
  */
-TextField.prototype.setValue = function (value) {
+DateField.prototype.setValue = function (value) {
     var fieldEl = getEl(this.el, 'field');
-    fieldEl.value = value;
+    var fieldValue = !isEmpty(value) ? getDateString(value) : '';
+    fieldEl.value = fieldValue;
 
     FormItem.prototype.setValue.apply(this, arguments);
 };
@@ -39,7 +37,14 @@ TextField.prototype.setValue = function (value) {
  * Получение значения.
  * @return Значение элемента формы.
  */
-TextField.prototype.getValue = function () {
+DateField.prototype.getValue = function () {
     var fieldEl = getEl(this.el, 'field');
-    return fieldEl.value;
+    var fieldValue = fieldEl.value;
+
+    var timeValue = null;
+    if (!isEmpty(fieldValue)) {
+        timeValue = dateStringToTime(fieldValue);
+    }
+
+    return timeValue;
 };

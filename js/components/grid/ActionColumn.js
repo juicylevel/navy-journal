@@ -1,12 +1,10 @@
 /**
  * Колонка в таблице для выполнения операций над записями.
- * @param actionEventType Тип события.
  * @param column Наименование (ключ) колонки.
  * @param field Надпись колонки.
  */
-function ActionColumn (actionEventType, column, name) {
+function ActionColumn (column, name) {
     this.actionColumn = true;
-    this.actionEventType = actionEventType;
     this.column = column || 'remove';
     this.name = name || '';
 };
@@ -50,5 +48,5 @@ ActionColumn.prototype.dispatchActionEvent = function (type, payload) {
         detail: payload,
         bubbles: true
     });
-    this.grid.getDomElement().dispatchEvent(event);
+    this.grid.el.dispatchEvent(event);
 };

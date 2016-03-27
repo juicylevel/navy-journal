@@ -31,6 +31,8 @@ function DataGrid (emptyGridMessage, columnName, columnField) {
 	 * Объект типа {column1: ASC, column2: DESC}.
 	 */
 	this.sort = null;
+
+	this.render();
 };
 
 extend(DataGrid, Widget);
@@ -43,14 +45,14 @@ extend(DataGrid, Widget);
  * Отрисовка таблицы.
  */
 DataGrid.prototype.render = function () {
-	this.domElement = document.createElement('div');
-	this.domElement.className = 'dataGrid';
+	this.el = document.createElement('div');
+	this.el.className = 'dataGrid';
 
 	var tableEl = document.createElement('table');
 	tableEl.setAttribute(this.TABLE_ATTR, '');
-	this.domElement.appendChild(tableEl);
+	this.el.appendChild(tableEl);
 
-	return this.domElement;
+	return this.el;
 };
 
 /**
@@ -58,7 +60,7 @@ DataGrid.prototype.render = function () {
  * @return DOM-элемент таблиуы.
  */
 DataGrid.prototype.getTableEl = function () {
-	return getEl(this.domElement, this.TABLE_ATTR);
+	return getEl(this.el, this.TABLE_ATTR);
 };
 
 /**
@@ -212,14 +214,11 @@ DataGrid.prototype.onSortButton = function (event) {
 	if (isEmpty(this.sort) || this.sort[columnKey] != sortElDirection) {
 		sort = {}; sort[columnKey] = sortElDirection;
 	}
-	var sortEvent = new CustomEvent(
-		EventTypes.SORT_GRID,
-		{
-			detail: sort,
-			bubbles: true
-		}
-	);
-	this.domElement.dispatchEvent(sortEvent);
+	var sortEvent = new CustomEvent('sort', {
+		detail: sort,
+		bubbles: true
+	});
+	this.el.dispatchEvent(sortEvent);
 };
 
 /**
@@ -231,7 +230,7 @@ DataGrid.prototype.updateColumnsSort = function () {
 		columnData = this.columnsData[i];
 		if (!columnData.actionColumn) {
 			columnKey = columnData[this.COLUMN_NAME];
-			columnEl = getEl(this.domElement, this.COLUMN_ATTR, columnKey);
+			columnEl = getEl(this.el, this.COLUMN_ATTR, columnKey);
 			ascButtonEl = getEl(columnEl, 'sort', 'ASC');
 			descButtonEl = getEl(columnEl, 'sort', 'DESC');
 			direction = !isEmpty(this.sort) ? this.sort[columnKey] : null;
@@ -442,17 +441,13 @@ DataGrid.prototype.onRowClick = function (event) {
 	rowEl.selected = !rowEl.selected;
 	rowEl.className = rowEl.baseCls + ' ' + (rowEl.selected ? rowEl.selectedBgCls : rowEl.defaultBgCls);
 
-	var selectRowEvent = new CustomEvent(
-		EventTypes.SELECT_GRID_ROW,
-		{
-			detail: {
-				data: rowEl.data,
-				selected: rowEl.selected
-			},
-			bubbles: false
+	var selectRowEvent = new CustomEvent('selectrow', {
+		detail: {
+			data: rowEl.data,
+			selected: rowEl.selected
 		}
-	);
-	this.domElement.dispatchEvent(selectRowEvent);
+	});
+	this.el.dispatchEvent(selectRowEvent);
 };
 
 /**

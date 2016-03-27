@@ -49,6 +49,15 @@ var Settings = (function () {
 		},
 
 		/**
+		 * Получение колонок таблицы аккумуляторов.
+		 * @return {column: label} Список колонок аккумуляторов.
+		 */
+		getAccumulatorsColumns: function () {
+			var accumulatorsColumns = this.config.meta.accumulatorsColumns;
+			return this.getColumns(accumulatorsColumns);
+		},
+
+		/**
 		 * Получение текста диалогового окна завершения подготовки к дежурству.
 		 */
 		getCompleteRunUpDialog: function () {

@@ -27,8 +27,8 @@ Form.prototype.getFormItemsConfig = function () {
  * Отрисовка формы.
  */
 Form.prototype.render = function () {
-    this.domElement = document.createElement('div');
-    this.domElement.style.display = this.display;
+    this.el = document.createElement('div');
+    this.el.style.display = this.display;
 
     this.createFields();
 };
@@ -44,11 +44,10 @@ Form.prototype.createFields = function () {
     for (var i = 0; i < items.length; i++) {
         var itemConfig = items[i];
         var itemUI = new itemConfig.ui(itemConfig);
-        var itemEl = itemUI.getDomElement();
-        itemEl.className = itemClass;
+        itemUI.el.className = itemClass;
 
-        this.domElement.appendChild(itemEl);
-        itemEl.addEventListener(EventTypes.CHANGE_VALUE, this.onChangeValueFormItem.bind(this));
+        this.el.appendChild(itemUI.el);
+        itemUI.el.addEventListener(EventTypes.CHANGE_VALUE, this.onChangeValueFormItem.bind(this));
         this.formItems.push(itemUI);
     }
 };
@@ -172,5 +171,5 @@ Form.prototype.dispatchChangeEvent = function () {
             bubbles: false
         }
     );
-    this.domElement.dispatchEvent(validationEvent);
+    this.el.dispatchEvent(validationEvent);
 };
