@@ -80,7 +80,7 @@ FormItem.prototype.getValue = function () {
  */
 FormItem.prototype.clear = function () {
     var fieldEl = getEl(this.el, 'field');
-    fieldEl.value = '';    
+    fieldEl.value = '';
     this.dispatchChangeEvent();
 };
 
@@ -107,14 +107,10 @@ FormItem.prototype.isValid = function () {
  * Отправка события об изменении значения.
  */
 FormItem.prototype.dispatchChangeEvent = function () {
-    var changeEvent = new CustomEvent(
-		EventTypes.CHANGE_VALUE,
-		{
-			detail: {
-                value: this.getValue()
-            },
-			bubbles: false
-		}
-	);
+    var changeEvent = new CustomEvent('changevalue', {
+		detail: {
+            value: this.getValue()
+        }
+	});
 	this.el.dispatchEvent(changeEvent);
 }

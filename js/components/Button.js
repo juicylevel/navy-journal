@@ -40,7 +40,7 @@ Button.prototype.render = function () {
  */
 Button.prototype.configure = function () {
     if (!isEmpty(this.bindFormEl)) {
-        this.bindFormEl.addEventListener(EventTypes.CHANGE_FROM, (function (event) {
+        this.bindFormEl.addEventListener('changeform', (function (event) {
             if (this.role == 'save') {
                 this.el.disabled = !event.detail.valid || !event.detail.dirty;
             }

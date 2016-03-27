@@ -3,8 +3,6 @@ var scripts = [
 	'utils/baseUtils',
 	'utils/arrayUtils',
 
-	'events/EventTypes',
-
 	'settings/Settings',
 
 	'components/Notifier',
@@ -20,7 +18,6 @@ var scripts = [
 	'components/grid/RemoveColumn',
 	'components/grid/EditColumn',
 	'components/grid/CustomRow',
-	'components/grid/DateColumn',
 	'components/form/Form',
 	'components/form/FormWindow',
 	'components/form/FormItem',
@@ -51,7 +48,6 @@ var scripts = [
 	'app/accumulators/Accumulators',
 	'app/accumulators/AccumulatorsController',
 	'app/accumulators/AccumulatorForm',
-	'app/accumulators/AccumulatorRow',
 
 	'app'
 ];

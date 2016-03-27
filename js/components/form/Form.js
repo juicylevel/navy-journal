@@ -47,7 +47,7 @@ Form.prototype.createFields = function () {
         itemUI.el.className = itemClass;
 
         this.el.appendChild(itemUI.el);
-        itemUI.el.addEventListener(EventTypes.CHANGE_VALUE, this.onChangeValueFormItem.bind(this));
+        itemUI.el.addEventListener('changevalue', this.onChangeValueFormItem.bind(this));
         this.formItems.push(itemUI);
     }
 };
@@ -160,16 +160,12 @@ Form.prototype.isDirty = function () {
  * Отправка события валидации.
  */
 Form.prototype.dispatchChangeEvent = function () {
-    var validationEvent = new CustomEvent(
-        EventTypes.CHANGE_FROM,
-        {
-            detail: {
-                valid: this.isValid(),
-                dirty: this.isDirty(),
-                empty: this.isEmpty()
-            },
-            bubbles: false
+    var changeform = new CustomEvent('changeform', {
+        detail: {
+            valid: this.isValid(),
+            dirty: this.isDirty(),
+            empty: this.isEmpty()
         }
-    );
-    this.el.dispatchEvent(validationEvent);
+    });
+    this.el.dispatchEvent(changeform);
 };
