@@ -17,8 +17,8 @@ function DataGrid (emptyGridMessage, columnName, columnField) {
 	this.EMPTY_CELL = 'emptyCell';
 	this.EMPTY_ROW_TEXT = emptyGridMessage || 'Список пуст';
 
-	this.COLUMN_NAME = columnName || 'column';
-	this.COLUMN_FIELD = columnField || 'name';
+	this.COLUMN_NAME = columnName || 'name';
+	this.COLUMN_FIELD = columnField || 'label';
 
 	this.columnsData = [];
 	this.rowsData = [];
@@ -159,26 +159,18 @@ DataGrid.prototype.createColumn = function (columnData) {
 	var columnEl = document.createElement('td');
 	columnEl.setAttribute(this.COLUMN_ATTR, columnKey);
 
-	var sortHtml = '';
-	if (!columnData.actionColumn) { // TODO: duplicate check actionColumn
-		sortHtml = '' +
-			'<div class="columnSort" columnSort style="display: none;">' +
-				'<div sort="ASC" class="sortAscOff"></div>' +
-				'<div sort="DESC" class="sortDescOff"></div>' +
+	if (!columnData.actionColumn) {
+		var title = columnData[this.COLUMN_FIELD];
+		var columnHtml = '' +
+			'<div class="columnContainer">' +
+				'<div title class="columnTitle">' + title + '</div>' +
+				'<div class="columnSort" columnSort style="display: none;">' +
+					'<div sort="ASC" class="sortAscOff"></div>' +
+					'<div sort="DESC" class="sortDescOff"></div>' +
+				'</div>' +
+				'<div class="clearBoth"></div>' +
 			'</div>';
-	}
-
-	var title = columnData[this.COLUMN_FIELD];
-	var columnHtml = '' +
-		'<div class="columnContainer">' +
-			'<div title class="columnTitle">' + title + '</div>' +
-			sortHtml +
-			'<div class="clearBoth"></div>' +
-		'</div>';
-
-	columnEl.innerHTML = columnHtml;
-
-	if (!columnData.actionColumn) { // TODO: duplicate check actionColumn
+		columnEl.innerHTML = columnHtml;
 		this.configureSortButtons(columnEl, columnKey);
 	}
 
@@ -484,7 +476,7 @@ DataGrid.prototype.createRowCells = function (rowData, rowEl) {
 		else {
 			var columnKey = columnData[this.COLUMN_NAME];
 			var value = rowData[columnKey];
-			cellEl = this.createCell(value, columnKey);
+			cellEl = this.createCell(value, columnData);
 		}
 		rowEl.appendChild(cellEl);
 	}
@@ -495,9 +487,30 @@ DataGrid.prototype.createRowCells = function (rowData, rowEl) {
  * @param value Значение ячейки.
  * @return DOM-элемент ячейки таблицы.
  */
-DataGrid.prototype.createCell = function (value, columnKey) {
+DataGrid.prototype.createCell = function (value, columnData) {
 	var cellEl = document.createElement('td');
-	cellEl.setAttribute(this.CELL_ATTR, columnKey);
-	cellEl.innerHTML = value;
+	cellEl.setAttribute(this.CELL_ATTR, columnData[this.COLUMN_NAME]);
+	cellEl.innerHTML = this.formatValue(value, columnData);
 	return cellEl;
+};
+
+/**
+ * Форматирование отображаемого значения.
+ * @param value Исходное значение.
+ * @param columnData Тип данных.
+ * @return Форматированное значение.
+ */
+DataGrid.prototype.formatValue = function (value, columnData) {
+	var formattedValue;
+	switch (columnData['type']) {
+		case 'date':
+			formattedValue = getDateString(value, columnData['withTime']);
+			break;
+		case 'time':
+			formattedValue = getDurationString(value);
+			break;
+		default:
+			formattedValue = value;
+	}
+	return formattedValue;
 };

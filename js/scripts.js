@@ -25,6 +25,8 @@ var scripts = [
 	'components/form/ComboBox',
 	'components/form/DateField',
 	'components/form/NumberField',
+	'components/form/TextArea',
+	'components/form/Time',
 
 	'service/Service',
 
@@ -41,6 +43,10 @@ var scripts = [
 	'app/duties/Duties',
 	'app/duties/DutiesController',
 	'app/duties/ActiveDutyRow',
+
+	'app/duty/Duty',
+	'app/duty/DutyController',
+	'app/duty/DutyForm',
 
 	'app/search/Search',
 	'app/search/SearchController',

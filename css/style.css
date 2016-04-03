@@ -336,6 +336,10 @@ nav, section, footer {
 	margin-right: 3px;
 }
 
+label, textarea{
+    vertical-align: top;
+}
+
 .required {
 	display: inline-block;
 	vertical-align: middle;

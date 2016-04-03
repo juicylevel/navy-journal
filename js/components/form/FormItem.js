@@ -19,7 +19,6 @@ extend(FormItem, Widget);
  */
 FormItem.prototype.render = function () {
     this.el = document.createElement('div');
-    this.el.className = 'formItem';
 
     this.createFieldLabel();
     this.createField();

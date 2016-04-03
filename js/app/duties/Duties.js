@@ -64,11 +64,3 @@ Duties.prototype.onDutiesChangePage = function (event) {
         sort: this.grid.sort
     });
 };
-
-Duties.prototype.onEditDuty = function (event) {
-
-};
-
-Duties.prototype.onRemoveDuty = function (event) {
-
-};

@@ -34,7 +34,9 @@ class Settings {
      * Получение колонок таблицы боевых дежурств.
      */
     public function getDutyListColumns () {
-        return array_keys($this->config['meta']['dutyGridColumns']);
+        $meta = $this->config['meta']['dutyGridColumns'];
+        $columns = array_column($meta, 'name');
+        return $meta;//$columns;
     }
 }
 

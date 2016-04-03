@@ -17,3 +17,12 @@ DutiesController.prototype.onUpdateDutiesList = function (options) {
 DutiesController.prototype.onChangeActiveDuty = function (event) {
     this.view.updateDutiesList();
 };
+
+DutiesController.prototype.onEditDuty = function (event) {
+    var dutyId = event.detail.id;
+    setHash('duty/' + dutyId);
+};
+
+DutiesController.prototype.onRemoveDuty = function (event) {
+    var dutyId = event.detail.id;
+};

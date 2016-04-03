@@ -9,24 +9,24 @@
 		"completeDuty": "Вы точно хотите завершить дежурство?"
 	},
 	"meta": {
-		"dutyGridColumns": {
-			"id": "id",
-			"name": "Наименование",
-			"start_date": "Начало дежурства",
-			"runup_time": "Время подготовки",
-			"end_date": "Завершение дежурства"
-		},
-		"provisionsItemColumns": {
-			"name": "Наименование",
-			"type_name": "Тип"
-		},
-		"accumulatorsColumns": {
-			"name": "Наименование",
-			"voltage": "Напряжение (вольты)",
-			"capacity": "Ёмкость (мАч)",
-			"start_exploitation": "Начало эксплуатации",
-			"end_exploitation": "Завершение эксплуатации"
-		},
+		"dutyGridColumns": [
+			{"name": "id", "label": "id", "type": "number"},
+			{"name": "name", "label": "Наименование", "type": "string"},
+			{"name": "start_date", "label": "Начало дежурства", "type": "date", "withTime": true},
+			{"name": "runup_time", "label": "Время подготовки", "type": "time"},
+			{"name": "end_date", "label": "Завершение дежурства", "type": "date", "withTime": true}
+		],
+		"provisionsItemColumns": [
+			{"name": "name", "label": "Наименование", "type": "string"},
+			{"name": "type_name", "label": "Тип", "type": "string"}
+		],
+		"accumulatorsColumns": [
+			{"name": "name", "label": "Наименование", "type": "string"},
+			{"name": "voltage", "label": "Напряжение (вольты)", "type": "number"},
+			{"name": "capacity", "label": "Ёмкость (мАч)", "type": "number"},
+			{"name": "start_exploitation", "label": "Начало эксплуатации", "type": "date"},
+			{"name": "end_exploitation", "label": "Завершение эксплуатации", "type": "date"}
+		],
 		"weatherCondition": [
 			{"id": 1, "name": "Солнечно", "apiCode": ["01"]},
 			{"id": 2, "name": "Переменная облачность", "apiCode": ["02"]},

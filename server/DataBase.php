@@ -105,7 +105,22 @@ class DataBase {
      */
     public function getDutyList ($dutyListColumns, $offset, $pageSize, $sort) {
         // список запрашиваемых колонок
-        $columns = implode(', ', $dutyListColumns);
+        //$columns = implode(', ', $dutyListColumns);
+
+        $columns = array();
+
+        foreach ($dutyListColumns as $key => $value) {
+            $column = $value['name'];
+            if ($value['type'] == 'date') {
+                $column = 'UNIX_TIMESTAMP(' . $column . ') as ' . $value['name'];
+            } else if ($value['type'] == 'time') {
+                $column = 'TIME_TO_SEC(' . $column . ') as ' . $value['name'];
+            }
+            $columns[] = $column;
+        }
+
+        $columns = implode(', ', $columns);
+        //print_r($columns);
 
         // сортировка по заданным колонкам и направлению сортировки
         $sortSql = $this->getSortSql($sort, true);

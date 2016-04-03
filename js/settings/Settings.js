@@ -35,8 +35,9 @@ var Settings = (function () {
 		 * @return {column: label} Список боевых дежкрств.
 		 */
 		getDutyListColumns: function () {
-			var dutyGridColumns = this.config.meta.dutyGridColumns;
-			return this.getColumns(dutyGridColumns);
+			return this.config.meta.dutyGridColumns;
+			//var dutyGridColumns = this.config.meta.dutyGridColumns;
+			//return this.getColumns(dutyGridColumns);
 		},
 
 		/**
@@ -44,8 +45,9 @@ var Settings = (function () {
 		 * @return {column: label} Список колонок элементов провизии.
 		 */
 		getProvisionsItemColumns: function () {
-			var provisionsItemColumns = this.config.meta.provisionsItemColumns;
-			return this.getColumns(provisionsItemColumns);
+			return this.config.meta.provisionsItemColumns;
+			//var provisionsItemColumns = this.config.meta.provisionsItemColumns;
+			//return this.getColumns(provisionsItemColumns);
 		},
 
 		/**
@@ -53,8 +55,9 @@ var Settings = (function () {
 		 * @return {column: label} Список колонок аккумуляторов.
 		 */
 		getAccumulatorsColumns: function () {
-			var accumulatorsColumns = this.config.meta.accumulatorsColumns;
-			return this.getColumns(accumulatorsColumns);
+			return this.config.meta.accumulatorsColumns;
+			//var accumulatorsColumns = this.config.meta.accumulatorsColumns;
+			//return this.getColumns(accumulatorsColumns);
 		},
 
 		/**

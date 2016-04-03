@@ -43,12 +43,17 @@ Form.prototype.createFields = function () {
     var items = this.getFormItemsConfig();
     for (var i = 0; i < items.length; i++) {
         var itemConfig = items[i];
-        var itemUI = new itemConfig.ui(itemConfig);
-        itemUI.el.className = itemClass;
 
-        this.el.appendChild(itemUI.el);
-        itemUI.el.addEventListener('changevalue', this.onChangeValueFormItem.bind(this));
-        this.formItems.push(itemUI);
+        if (itemConfig.field) {
+            var itemUI = new itemConfig.ui(itemConfig);
+            itemUI.el.className = itemClass;
+            this.el.appendChild(itemUI.el);
+            itemUI.el.addEventListener('changevalue', this.onChangeValueFormItem.bind(this));
+            this.formItems.push(itemUI);
+        }
+        else if (itemConfig.html) {
+            this.el.insertAdjacentHTML('beforeend', itemConfig.html);
+        }
     }
 };
 
