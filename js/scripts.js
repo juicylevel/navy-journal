@@ -26,7 +26,8 @@ var scripts = [
 	'components/form/DateField',
 	'components/form/NumberField',
 	'components/form/TextArea',
-	'components/form/Time',
+	'components/form/TimeField',
+	'components/form/DateTime',
 
 	'service/Service',
 

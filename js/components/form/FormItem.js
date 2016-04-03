@@ -5,7 +5,7 @@
 function FormItem (itemConfig) {
     Widget.apply(this, arguments);
 
-    this.itemConfig = itemConfig;
+    this.itemConfig = itemConfig || {};
     this.originalValue = null;
     this.value = null;
 
@@ -30,13 +30,15 @@ FormItem.prototype.render = function () {
  * Создание элемента наименования поля.
  */
 FormItem.prototype.createFieldLabel = function () {
-    var labelWidth = this.itemConfig.labelWidth;
-    var widthStyle = !isEmpty(labelWidth) ? labelWidth + 'px;' : 'auto;';
-    var fieldLabelHtml = '' +
-        '<label class="fieldLabel" style="width: ' + widthStyle + '">' +
-            this.itemConfig.fieldLabel + ':' +
-        '</label>';
-    this.el.insertAdjacentHTML('beforeend', fieldLabelHtml);
+    if (this.itemConfig.fieldLabel) {
+        var labelWidth = this.itemConfig.labelWidth;
+        var widthStyle = !isEmpty(labelWidth) ? labelWidth + 'px;' : 'auto;';
+        var fieldLabelHtml = '' +
+            '<label class="fieldLabel" style="width: ' + widthStyle + '">' +
+                this.itemConfig.fieldLabel + ':' +
+            '</label>';
+        this.el.insertAdjacentHTML('beforeend', fieldLabelHtml);
+    }
 };
 
 /**

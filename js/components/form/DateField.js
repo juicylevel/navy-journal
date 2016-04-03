@@ -1,17 +1,44 @@
 function DateField () {
-    TextField.apply(this, arguments);
+    FormItem.apply(this, arguments);
 };
 
-extend(DateField, TextField);
+extend(DateField, FormItem);
+
+DateField.prototype.createField = function () {
+    var fieldHtml = '' +
+        '<select day>'   + this.getDateOptions(1, 31, 'дд') + '</select>' +
+        '<span style="padding: 3px;">.</span>' +
+        '<select month>' + this.getDateOptions(1, 12, 'мм') + '</select>' +
+        '<span style="padding: 3px;">.</span>' +
+        '<select year>' + this.getDateOptions(2012, 2050, 'гггг') + '</select>';
+    this.el.insertAdjacentHTML('beforeend', fieldHtml);
+};
+
+DateField.prototype.getDateOptions = function (from, to, placeholder) {
+    var options = '<option value="">' + placeholder;
+    for (var i = from; i <= to; i++) {
+        options += '<option value="' + i + '">' + formatDoubleDigit(i) + '</option>';
+    }
+    return options;
+};
 
 /**
  * Установка значения.
  * @param value Значение элемента формы.
  */
 DateField.prototype.setValue = function (value) {
-    var fieldEl = getEl(this.el, 'field');
-    var fieldValue = !isEmpty(value) ? getDateString(value) : '';
-    fieldEl.value = fieldValue;
+    var day = '', month = '', year = '';
+
+    if (!isEmpty(value)) {
+        var date = new Date(value * 1000);
+        day = date.getDate();
+        month = date.getMonth() + 1;
+        year = date.getFullYear();
+    }
+
+    getEl(this.el, 'day').value = day;
+    getEl(this.el, 'month').value = month;
+    getEl(this.el, 'year').value = year;
 
     FormItem.prototype.setValue.apply(this, arguments);
 };
@@ -21,13 +48,15 @@ DateField.prototype.setValue = function (value) {
  * @return Значение элемента формы.
  */
 DateField.prototype.getValue = function () {
-    var fieldEl = getEl(this.el, 'field');
-    var fieldValue = fieldEl.value;
+    var value = null;
 
-    var timeValue = null;
-    if (!isEmpty(fieldValue)) {
-        timeValue = dateStringToTime(fieldValue);
+    var day = getEl(this.el, 'day').value;
+    var month = getEl(this.el, 'month').value;
+    var year = getEl(this.el, 'year').value;
+
+    if (!isEmpty(day) && !isEmpty(month) && !isEmpty(year)) {
+        value = new Date(year, month, day).getTime() / 1000;
     }
 
-    return timeValue;
+    return value;
 };

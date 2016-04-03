@@ -55,7 +55,7 @@ DutyForm.prototype.getFormItemsConfig = function () {
             field: 'start_date',
             fieldLabel: 'Начало дежурства',
             placeholder: '',
-            ui: TextField, //TODO: datetime
+            ui: DateTime,
             width: 300,
             labelWidth: 154,
             required: true
@@ -64,7 +64,7 @@ DutyForm.prototype.getFormItemsConfig = function () {
             field: 'runup_time',
             fieldLabel: 'Время подготовки',
             placeholder: '',
-            ui: TextField, //TODO: time
+            ui: TimeField,
             width: 300,
             labelWidth: 154,
             required: true
@@ -73,7 +73,7 @@ DutyForm.prototype.getFormItemsConfig = function () {
             field: 'end_date',
             fieldLabel: 'Завершение дежурства',
             placeholder: '',
-            ui: TextField, //TODO: datetime
+            ui: DateTime,
             width: 300,
             labelWidth: 154,
             required: true
