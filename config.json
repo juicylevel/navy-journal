@@ -27,7 +27,7 @@
 			{"name": "start_exploitation", "label": "Начало эксплуатации", "type": "date"},
 			{"name": "end_exploitation", "label": "Завершение эксплуатации", "type": "date"}
 		],
-		"weatherCondition": [
+		"weatherConditions": [
 			{"id": 1, "name": "Солнечно", "apiCode": ["01"]},
 			{"id": 2, "name": "Переменная облачность", "apiCode": ["02"]},
 			{"id": 3, "name": "Пасмурно", "apiCode": ["03", "04"]},
@@ -36,6 +36,7 @@
 			{"id": 6, "name": "Гроза", "apiCode": ["11"]},
 			{"id": 7, "name": "Снег", "apiCode": ["13"]},
 			{"id": 8, "name": "Туман", "apiCode": ["50"]}
-		]
+		],
+		"windDirections": []
 	}
 }

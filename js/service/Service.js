@@ -105,7 +105,13 @@ Service.prototype.sendRequest = function (method, message, parameters) {
     		if (this.readyState == 4 && this.status == 200) {
     			Notifier.getInstance().hideProgress(this.progressEl);
 
-        		var response = JSON.parse(this.responseText);
+        		var response = {};
+				try {
+					response = JSON.parse(this.responseText);
+				} catch (error) {
+					response.error = this.responseText;
+				}
+
     			if (!isEmpty(response.result)) {
     				resolve(response.result);
     			} else if (parameters.request == 'loadFile') {

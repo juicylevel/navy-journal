@@ -211,7 +211,7 @@ function dateStringToTime (dateString) {
  * @param time Длительность в секундах.
  */
 function getDurationString (time) {
-	if (isEmpty(time)) return '-';
+	if (isEmpty(time)) return '';
 
 	var totalSeconds = time;
 

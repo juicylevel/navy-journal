@@ -96,9 +96,12 @@ DutyForm.prototype.getFormItemsConfig = function () {
             field: 'weather_condition',
             fieldLabel: 'Погода',
             placeholder: '',
-            ui: TextField,
-            width: 300,
-            labelWidth: 154
+            ui: ComboBox,
+            width: 304,
+            labelWidth: 154,
+            displayField: 'name',
+            valueField: 'id',
+            options: Settings.getInstance().getWeatherConditions()
         },
         {
             field: 'temperature',
@@ -114,7 +117,9 @@ DutyForm.prototype.getFormItemsConfig = function () {
             placeholder: '',
             ui: NumberField,
             width: 300,
-            labelWidth: 154
+            labelWidth: 154,
+            min: 0,
+            max: 100
         },
         {
             field: 'pressure',
@@ -136,9 +141,10 @@ DutyForm.prototype.getFormItemsConfig = function () {
             field: 'wind_direction',
             fieldLabel: 'Направление ветра',
             placeholder: '',
-            ui: TextField,
-            width: 300,
-            labelWidth: 154
+            ui: ComboBox,
+            width: 304,
+            labelWidth: 154,
+            options: Settings.getInstance().getWindDirections()
         },
         {
             field: 'water_level',

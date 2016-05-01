@@ -82,7 +82,7 @@ Main.prototype.setActiveDuty = function (activeDuty) {
         this.durationTimer = setInterval(function () {
             duration++;
             dutyDurationEl.innerHTML = getDurationString(duration);
-            if (activeDuty.runUpTime === 0) {
+            if (isEmpty(activeDuty.runUpTime)) {
                 runUpTimeEl.innerHTML = getDurationString(duration);
             }
         }, 1000);

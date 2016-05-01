@@ -24,8 +24,7 @@ class DataBase {
             $mysql_password,
             array(
                 PDO::ATTR_PERSISTENT => TRUE,
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;SET time_zone = 'Europe/Moscow'"
             )
         );
     }
@@ -34,7 +33,9 @@ class DataBase {
      * Получение информации о последнем завершённом дежурстве.
      */
     public function getLastCompleteDuty () {
-        $sql = 'SELECT id, start_date, end_date FROM duty ' .
+        $sql = 'SELECT id, name, UNIX_TIMESTAMP(start_date) as start_date, ' .
+               'TIME_TO_SEC(runup_time) as runup_time, '.
+               'UNIX_TIMESTAMP(end_date) as end_date FROM duty ' .
                'WHERE end_date = (SELECT MAX(end_date) FROM duty)';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
@@ -44,21 +45,22 @@ class DataBase {
      * Получение информации об активном (текущем) дежурстве.
      */
     public function getActiveDuty () {
-        $sql = 'SELECT * FROM duty WHERE end_date IS NULL';
+        $sql = 'SELECT id, name, UNIX_TIMESTAMP(start_date) as start_date, ' .
+               'TIME_TO_SEC(runup_time) as runup_time, '.
+               'UNIX_TIMESTAMP(end_date) as end_date FROM duty WHERE end_date IS NULL';
         $stmt = $this->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     /**
      * Создание боевого дежурства.
-     * @param $startDate Время начала боевого дежурства.
      * @param $name Наименование боевого дежурства.
      * @return int Ижентификатор созданного боевого дежурства.
      */
-    public function createDuty ($startDate, $name) {
-        $sql = 'INSERT INTO duty (start_date, name) VALUES (:startDate, :name)';
+    public function createDuty ($name) {
+        $sql = 'INSERT INTO duty (name) VALUES (:name)';
         $stmt = $this->pdo->prepare($sql);
-        $data = array(':startDate' => $startDate, ':name' => $name);
+        $data = array(':name' => $name);
         $result = $stmt->execute($data);
         return $this->pdo->lastInsertId();
     }
@@ -69,86 +71,65 @@ class DataBase {
      * @param $runUpTime Время подготовки к боевому дежурству.
      */
     public function saveRunUpTime ($dutyId, $runUpTime) {
-        $sql = 'UPDATE duty SET runup_time = ? WHERE id = ?';
+        $sql = 'UPDATE duty SET runup_time = SEC_TO_TIME(?) WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
         $data = array($runUpTime, $dutyId);
         return $stmt->execute($data);
     }
 
     /**
+     * FROM_UNIXTIME
      * Сохранение времени завершения боевого дежурства.
      * @param $dutyId Идентификатор боевого дежурства.
-     * @param $endDate Время завершения боевого дежурства.
      */
-    public function saveDutyEndDate ($dutyId, $endDate) {
-        $sql = 'UPDATE duty SET end_date = ? WHERE id = ?';
+    public function saveDutyEndDate ($dutyId) {
+        $sql = 'UPDATE duty SET end_date = NOW() WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
-        $data = array($endDate, $dutyId);
+        $data = array($dutyId);
         return $stmt->execute($data);
     }
 
     /**
      * Получение общего количества боевых дежурств.
      */
-    public function getDutyCount () {
-        $sql = 'SELECT * FROM duty';
+    public function getDutyTotal () {
+        $sql = 'SELECT COUNT(*) as total FROM duty';
         $stmt = $this->pdo->query($sql);
-        return $stmt->rowCount();
+        return $stmt->fetch(PDO::FETCH_OBJ)->total;
     }
 
     /**
      * Получение списка боевых дежурств.
-     * @param $dutyListColumns Список колонок таблицы боевых дежурств.
      * @param $offset Номер записи, с которой начинается выборка.
      * @param $pageSize Номер записи, которой заканчивается выборка.
-     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+     * @param $sort Объект сортировки.
      */
-    public function getDutyList ($dutyListColumns, $offset, $pageSize, $sort) {
-        // список запрашиваемых колонок
-        //$columns = implode(', ', $dutyListColumns);
-
-        $columns = array();
-
-        foreach ($dutyListColumns as $key => $value) {
-            $column = $value['name'];
-            if ($value['type'] == 'date') {
-                $column = 'UNIX_TIMESTAMP(' . $column . ') as ' . $value['name'];
-            } else if ($value['type'] == 'time') {
-                $column = 'TIME_TO_SEC(' . $column . ') as ' . $value['name'];
-            }
-            $columns[] = $column;
-        }
-
-        $columns = implode(', ', $columns);
-        //print_r($columns);
-
-        // сортировка по заданным колонкам и направлению сортировки
-        $sortSql = $this->getSortSql($sort, true);
-
+    public function getDutyList ($offset, $pageSize, $sort) {
         // сортировка: сначала идёт текущее оевое дежурство
         // (то, у которого duty_end_date = NULL), затем идут
-        // завершённые дежурства, отосортированные в соответствии с $sortSql
-        $sql = 'SELECT ' . $columns . ' FROM duty ' .
+        // завершённые дежурства, отосортированные в соответствии с $sort
+        $sql = 'SELECT id, name, UNIX_TIMESTAMP(start_date) as start_date, ' .
+               'TIME_TO_SEC(runup_time) as runup_time, '.
+               'UNIX_TIMESTAMP(end_date) as end_date FROM duty ' .
                'ORDER BY ISNULL(end_date) DESC' .
-               $sortSql .
+               (!empty($sort) ? ', ' . $this->createSort($sort) . ' ' : '') .
                'LIMIT ' . $offset . ',' . $pageSize;
+
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
 	 * Получение элементов провизии.
-     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+     * @param $sort Объект сортировки.
 	 */
 	public function getProvisionsItems ($sort) {
-        $sortSql = $this->getSortSql($sort, false);
-        // INNER JOIN
         $sql = 'SELECT provisions_item.id, provisions_item.name,
                 provisions_type.id as type_id,
                 provisions_type.name as type_name ' .
                'FROM provisions_item, provisions_type ' .
-               'WHERE provisions_item.type_id = provisions_type.id ' .
-               (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
+               'WHERE provisions_item.type_id = provisions_type.id' .
+               (!empty($sort) ? ' ORDER BY ' . $this->createSort($sort) : '');
 
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -200,11 +181,10 @@ class DataBase {
 
     /**
 	 * Получение списка аккумуляторов.
-     * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+     * @param $sort Объект сортировки.
 	 */
     public function getAccumulators ($sort) {
-        $sortSql = $this->getSortSql($sort, false);
-        $sql = 'SELECT * FROM accumulator ' . (!empty($sortSql) ? 'ORDER BY ' . $sortSql : '');
+        $sql = 'SELECT * FROM accumulator' . (!empty($sort) ? ' ORDER BY ' . $this->createSort($sort) : '');
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -237,16 +217,14 @@ class DataBase {
     /**
      * Получение строки сортировки по заданным колонкам и направлению.
      * @param $sort Объект сортировки (ключ - наименование колонки, значение - направление сортировки).
+     * @return Строка сортировки.
      */
-    private function getSortSql ($sort, $isNext) {
-        $sortSql = '';
-        if (!empty($sort)) {
-            foreach ($sort as $key => $value) {
-                $sortSql .= ($isNext ? ', ' : ' ') . $key . ' ' . $value;
-            }
-            $sortSql .= ' ';
+    private function createSort ($sort) {
+        $sortList = array();
+        foreach ($sort as $column => $direction) {
+            $sortList[] = $column . ' ' . $direction;
         }
-        return $sortSql;
+        return join(', ', $sortList);
     }
 
     /**

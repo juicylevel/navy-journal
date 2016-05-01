@@ -36,8 +36,6 @@ var Settings = (function () {
 		 */
 		getDutyListColumns: function () {
 			return this.config.meta.dutyGridColumns;
-			//var dutyGridColumns = this.config.meta.dutyGridColumns;
-			//return this.getColumns(dutyGridColumns);
 		},
 
 		/**
@@ -46,8 +44,6 @@ var Settings = (function () {
 		 */
 		getProvisionsItemColumns: function () {
 			return this.config.meta.provisionsItemColumns;
-			//var provisionsItemColumns = this.config.meta.provisionsItemColumns;
-			//return this.getColumns(provisionsItemColumns);
 		},
 
 		/**
@@ -56,8 +52,6 @@ var Settings = (function () {
 		 */
 		getAccumulatorsColumns: function () {
 			return this.config.meta.accumulatorsColumns;
-			//var accumulatorsColumns = this.config.meta.accumulatorsColumns;
-			//return this.getColumns(accumulatorsColumns);
 		},
 
 		/**
@@ -75,16 +69,17 @@ var Settings = (function () {
 		},
 
 		/**
-		 * Получение колонок из метаданных.
-		 * @param columnsMeta Метаинформация о колонках.
-		 * @return {column: columnKey, name: columnName}
+		 * Получение списка состояний погоды (Облачно, солнечно, дождь..).
 		 */
-		getColumns: function (columnsMeta) {
-			var columns = [];
-			for (var column in columnsMeta) {
-				columns.push({column: column, name: columnsMeta[column]});
-			}
-			return columns;
+		getWeatherConditions: function () {
+			return this.config.meta.weatherConditions;
+		},
+
+		/**
+		 * Получение списка направлений ветра.
+		 */
+		getWindDirections: function () {
+			return this.config.meta.windDirections;
 		}
 	};
 

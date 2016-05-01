@@ -1,11 +1,12 @@
 /**
  * Комбобокс.
  */
-function ComboBox () {
-    FormItem.apply(this, arguments);
+function ComboBox (itemConfig) {
+    this.valueField = itemConfig.valueField || 'id';
+    this.displayField = itemConfig.displayField || 'name';
+    this.options = itemConfig.options || [];
 
-    this.valueField = this.itemConfig.valueField || 'id';
-    this.displayField = this.itemConfig.displayField || 'name';
+    FormItem.apply(this, arguments);
 };
 
 extend(ComboBox, FormItem);
@@ -24,6 +25,10 @@ ComboBox.prototype.createField = function () {
     fieldEl.addEventListener('change', (function () {
         this.dispatchChangeEvent();
     }).bind(this));
+
+    if (!isEmpty(this.options)) {
+        this.setOptions(this.options);
+    }
 };
 
 /**

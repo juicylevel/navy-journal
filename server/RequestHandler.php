@@ -34,10 +34,9 @@ class RequestHandler {
 	 * Создание боевого дежурства.
 	 */
 	public function createDuty () {
-		$startDate = new DateTime();
-		$startDateString = $startDate->format('Y-m-d H:i:s');
-		$name = 'Боевое дежурство ' . $startDateString;
-		$this->db->createDuty($startDateString, $name);
+		$now = new DateTime();
+		$name = 'Боевое дежурство ' . $now->format('d.m.Y H:i:s');
+		$this->db->createDuty($name);
 		return $this->getActiveDuty();
 	}
 
@@ -46,9 +45,8 @@ class RequestHandler {
 	 */
 	public function completeRunUp () {
 		$activeDuty = $this->db->getActiveDuty();
-		$startDate = new DateTime($activeDuty->start_date);
-		$runUpTime = time() - $startDate->format('U');
-		$this->db->saveRunUpTime($activeDuty->id, secondsToTimeString($runUpTime));
+		$runUpTime = time() - $activeDuty->start_date;
+		$this->db->saveRunUpTime($activeDuty->id, $runUpTime);
 		return $this->getActiveDuty();
 	}
 
@@ -57,15 +55,13 @@ class RequestHandler {
 	 */
 	public function completeDuty () {
 		$activeDuty = $this->db->getActiveDuty();
-		$endDate = new DateTime();
-		$endDateString = $endDate->format('Y-m-d H:i:s');
 
-		$runUpTime = timeStringToSeconds($activeDuty->runup_time);
-		if ($runUpTime == 0) {
+		if (empty($activeDuty->runup_time)) {
 			$this->completeRunUp();
 		}
 
-		$this->db->saveDutyEndDate($activeDuty->id, $endDateString);
+		$this->db->saveDutyEndDate($activeDuty->id);
+
 		return $this->getJournalStatus();
 	}
 
@@ -76,20 +72,28 @@ class RequestHandler {
 	 * @param $sort
 	 */
 	public function getDutyList ($offset, $pageSize, $sort) {
-		$dutyListColumns = Settings::getInstance()->getDutyListColumns();
-
 		if (empty($sort)) {
 			$sort = array('end_date' => 'DESC');
 		}
 
-		$dutyList = $this->db->getDutyList($dutyListColumns, $offset, $pageSize, $sort);
+		$dutyList = $this->db->getDutyList($offset, $pageSize, $sort);
+		$activeDuty = $this->db->getActiveDuty();
+		$count = $this->db->getDutyTotal();
 
-		$dutyList = $this->configureActiveDutyInList($dutyList);
+		if (!empty($activeDuty) && !empty($dutyList)) {
+			foreach ($dutyList as $key => $duty) {
+				if ($activeDuty->id == $duty['id']) {
+					$duty['activeDuty'] = true;
+					$dutyList[$key] = $duty;
+					break;
+				}
+			}
+		}
 
 		return array (
 			'offset' => $offset,
 			'pageSize' => $pageSize,
-			'count' => $this->db->getDutyCount(),
+			'count' => $count,
 			'data' => $dutyList,
 			'sort' => $sort
 		);
@@ -145,27 +149,10 @@ class RequestHandler {
 	public function getAccumulators ($sort) {
 		$accumulators = $this->db->getAccumulators($sort);
 
-		for ($i = 0; $i < count($accumulators); $i++) {
-			$accumulator = $accumulators[$i];
-			$accumulators[$i]['start_exploitation'] = $this->dateToSeconds($accumulator['start_exploitation']);
-			if (!empty($accumulator['end_exploitation'])) {
-				$accumulators[$i]['end_exploitation'] = $this->dateToSeconds($accumulator['end_exploitation']);
-			}
-		}
-
 		return array (
 			'data' => $accumulators,
 			'sort' => $sort
 		);
-	}
-
-	private function dateToSeconds ($date) {
-		$dateTime = new DateTime($date);
-		$result = $dateTime->getTimestamp();
-		if (!$result) {
-			$result = null;
-		}
-		return $result;
 	}
 
 	/**
@@ -175,51 +162,12 @@ class RequestHandler {
 	 * который после сохранения будет обновлён и возвращён в ответе.
 	 */
 	public function saveAccumulator ($item, $sort) {
-		if (!empty($item['start_exploitation'])) {
-			$item['start_exploitation'] = $this->timestampToDbDate($item['start_exploitation']);
-		}
-		if (!empty($item['end_exploitation'])) {
-			$item['end_exploitation'] = $this->timestampToDbDate($item['end_exploitation']);
-		}
-
 		if (empty($item['id'])) {
 			$this->db->addAccumulator($item);
 		} else {
 			$this->db->updateAccumulator($item);
 		}
 		return $this->getAccumulators($sort);
-	}
-
-	private function timestampToDbDate ($timestamp) {
-		$dateTime = new DateTime();
-		$dateTime->setTimestamp($timestamp);
-		$dbDateString = $dateTime->format('Y-m-d H:i:s');
-		return $dbDateString;
-	}
-
-	/**
-	 * Конфигурация активного дежурства в списке боевых дежурств.
-	 * @param $dutyList Список боевых дежурств.
-	 * @return $dutyList Модифицированный список боевых дежурств.
-	 */
-	private function configureActiveDutyInList ($dutyList) {
-		$activeDuty = $this->getActiveDuty();
-		if (!empty($activeDuty) && !empty($dutyList)) {
-			foreach ($dutyList as $key => $duty) {
-				if ($activeDuty['dutyId'] == $duty['id']) {
-					$duty['activeDuty'] = array(
-						'columns' => array('end_date'),
-						'duration' => $activeDuty['duration']
-					);
-					if ($activeDuty['runUpTime'] == 0) {
-						$duty['activeDuty']['columns'][] = 'runup_time';
-					}
-					$dutyList[$key] = $duty;
-					break;
-				}
-			}
-		}
-		return $dutyList;
 	}
 
 	/**
@@ -230,12 +178,12 @@ class RequestHandler {
 		$lastCompleteDuty = $this->db->getLastCompleteDuty();
 
 		if (!empty($lastCompleteDuty)) {
-			$startDate = new DateTime($lastCompleteDuty->start_date);
-			$endDate = new DateTime($lastCompleteDuty->end_date);
-			$duration = date_diff($startDate, $endDate);
+			$startDate = $lastCompleteDuty->start_date;
+			$endDate = $lastCompleteDuty->end_date;
+			$duration = $endDate - $startDate;
 			$result = array(
-				'date' => $startDate->format('U'),
-				'duration' => dateIntervalToSeconds($duration)
+				'date' => $startDate,
+				'duration' => $duration
 			);
 		}
 
@@ -250,14 +198,14 @@ class RequestHandler {
 		$activeDuty = $this->db->getActiveDuty();
 
 		if (!empty($activeDuty)) {
-			$startDate = new DateTime($activeDuty->start_date);
-			$duration = date_diff($startDate, new DateTime());
+			$startDate = $activeDuty->start_date;
+			$duration = time() - $startDate;
 			$runUpTime = $activeDuty->runup_time;
 			$result = array(
 				'dutyId' => $activeDuty->id,
-				'date' => $startDate->format('U'),
-				'duration' => dateIntervalToSeconds($duration),
-				'runUpTime' => timeStringToSeconds($runUpTime)
+				'date' => $startDate,
+				'duration' => $duration,
+				'runUpTime' => $runUpTime
 			);
 		}
 
