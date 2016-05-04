@@ -4,6 +4,13 @@ header('Access-Control-Allow-Origin: *');
 header('Content-type: application/json; charset=utf-8');
 date_default_timezone_set('Europe/Moscow');
 
+
+function error_handler($errno, $errstr, $errfile, $errline) {
+    throw new Exception($errstr . ' file: ' . $errfile . ', line: ' . $errline);
+}
+
+set_error_handler('error_handler', E_ALL);
+
 require_once 'RequestHandler.php';
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];

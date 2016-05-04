@@ -28,15 +28,24 @@
 			{"name": "end_exploitation", "label": "Завершение эксплуатации", "type": "date"}
 		],
 		"weatherConditions": [
-			{"id": 1, "name": "Солнечно", "apiCode": ["01"]},
-			{"id": 2, "name": "Переменная облачность", "apiCode": ["02"]},
-			{"id": 3, "name": "Пасмурно", "apiCode": ["03", "04"]},
-			{"id": 4, "name": "Слабый дождь", "apiCode": ["09"]},
-			{"id": 5, "name": "Дождь", "apiCode": ["10"]},
-			{"id": 6, "name": "Гроза", "apiCode": ["11"]},
-			{"id": 7, "name": "Снег", "apiCode": ["13"]},
-			{"id": 8, "name": "Туман", "apiCode": ["50"]}
+			{"code": "clear", "name": "Солнечно", "serviceCode": ["01"]},
+			{"code": "cloudy", "name": "Переменная облачность", "serviceCode": ["02"]},
+			{"code": "overcast", "name": "Пасмурно", "serviceCode": ["03", "04"]},
+			{"code": "shower", "name": "Ливень", "serviceCode": ["09"]},
+			{"code": "rain", "name": "Дождь", "serviceCode": ["10"]},
+			{"code": "storm", "name": "Гроза", "serviceCode": ["11"]},
+			{"code": "snow", "name": "Снег", "serviceCode": ["13"]},
+			{"code": "mist", "name": "Туман", "serviceCode": ["50"]}
 		],
-		"windDirections": []
+		"windDirections": [
+			{"code": "N", "name": "Северный", "serviceCode": ["N"]},
+			{"code": "NE", "name": "Северо-восточный", "serviceCode": ["NNE", "NE", "ENE"]},
+			{"code": "E", "name": "Восточный", "serviceCode": ["E"]},
+			{"code": "SE", "name": "Юго-восточный", "serviceCode": ["ESE", "SE", "SSE"]},
+			{"code": "S", "name": "Южный", "serviceCode": ["S"]},
+			{"code": "SW", "name": "Юго-западный", "serviceCode": ["SSW", "SW", "WSW"]},
+			{"code": "W", "name": "Западный", "serviceCode": ["W"]},
+			{"code": "NW", "name": "Северо-западный", "serviceCode": ["WNW", "NW", "NNW"]}
+		]
 	}
 }

@@ -26,7 +26,8 @@ class RequestHandler {
     public function getJournalStatus () {
 		return array(
 			'lastDuty' => $this->getLastCompleteDuty(),
-			'activeDuty' => $this->getActiveDuty()
+			'activeDuty' => $this->getActiveDuty(),
+            'weather' => $this->getWeatherFromService()
 		);
     }
 
@@ -34,9 +35,13 @@ class RequestHandler {
 	 * Создание боевого дежурства.
 	 */
 	public function createDuty () {
-		$now = new DateTime();
-		$name = 'Боевое дежурство ' . $now->format('d.m.Y H:i:s');
-		$this->db->createDuty($name);
+		$name = 'Боевое дежурство ' . (new DateTime())->format('d.m.Y H:i:s');
+
+        $weather = $this->getWeatherFromService();
+        $meteoId = $this->db->addMeteoData($weather);
+
+        $this->db->createDuty($name, $meteoId);
+
 		return $this->getActiveDuty();
 	}
 
@@ -214,11 +219,30 @@ class RequestHandler {
 
 	/**
 	 * Получение параметров погоды из сервиса.
+     * http://api.openweathermap.org
+     * CITYID = 498817
+     * APIID = a61d94e24a6ea5c6adca71cd69256c39 (juicylevel, epictrain)
 	 */
 	private function getWeatherFromService () {
-		// CITYID = 498817
-		// APIID = a61d94e24a6ea5c6adca71cd69256c39 (juicylevel, epictrain)
-		// LINK = http://api.openweathermap.org/data/2.5/weather?id=498817&APPID=a61d94e24a6ea5c6adca71cd69256c39&lang=ru&mode=xml&units=metric
+        try {
+            $serviceUrl = "http://api.openweathermap.org/data/2.5/weather?id=498817&APPID=a61d94e24a6ea5c6adca71cd69256c39&lang=ru&mode=xml&units=metric";
+    		$response = sendRequest($serviceUrl);
+    		$serviceData = xmlstring2array($response);
+
+    		$weather = array(
+    			'temperature' => $serviceData['temperature']['@attributes']['value'],
+    			'humidity' => $serviceData['humidity']['@attributes']['value'],
+                'pressure' => round($serviceData['pressure']['@attributes']['value'] * 0.75006375541921),
+                'wind_speed' => $serviceData['wind']['speed']['@attributes']['value'],
+                'wind_direction' => Settings::getInstance()->getWindDirection($serviceData['wind']['direction']['@attributes']['code'])['code'],
+                'weather_condition' => Settings::getInstance()->getWeatherCondition(substr($serviceData['weather']['@attributes']['icon'], 0, -1))['code']
+                //'lastupdate' => (new DateTime($serviceData['lastupdate']['@attributes']['value']))->format('U')
+    		);
+        } catch (Exception $exception) {
+            $weather = array();
+        }
+
+        return $weather;
 	}
 }
 

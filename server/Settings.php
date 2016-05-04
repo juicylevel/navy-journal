@@ -31,12 +31,33 @@ class Settings {
     }
 
     /**
-     * Получение колонок таблицы боевых дежурств.
+     * Получение информации о направлении ветра по коду.
+     * @param $serviceCode Код направления ветра, зарегистрированный в сервисе,
+     * предоставляющего информацию о погоде.
+     * @return assoc array
      */
-    public function getDutyListColumns () {
-        $meta = $this->config['meta']['dutyGridColumns'];
-        $columns = array_column($meta, 'name');
-        return $meta;//$columns;
+    public function getWindDirection ($serviceCode) {
+        $directions = $this->config['meta']['windDirections'];
+        foreach ($directions as $key => $direction) {
+            if (in_array($serviceCode, $direction['serviceCode'])) {
+                return $direction;
+            }
+        }
+    }
+
+    /**
+     * Получение информации о погоде по коду.
+     * @param $serviceCode Код состояния погоды, зарегистрированный в сервисе,
+     * предоставляющего информацию о погоде.
+     * @return assoc array
+     */
+    public function getWeatherCondition ($serviceCode) {
+        $weatherConditions = $this->config['meta']['weatherConditions'];
+        foreach ($weatherConditions as $key => $weatherCondition) {
+            if (in_array($serviceCode, $weatherCondition['serviceCode'])) {
+                return $weatherCondition;
+            }
+        }
     }
 }
 

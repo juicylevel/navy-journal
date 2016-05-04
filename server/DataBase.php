@@ -24,6 +24,7 @@ class DataBase {
             $mysql_password,
             array(
                 PDO::ATTR_PERSISTENT => TRUE,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;SET time_zone = 'Europe/Moscow'"
             )
         );
@@ -57,10 +58,24 @@ class DataBase {
      * @param $name Наименование боевого дежурства.
      * @return int Ижентификатор созданного боевого дежурства.
      */
-    public function createDuty ($name) {
-        $sql = 'INSERT INTO duty (name) VALUES (:name)';
+    public function createDuty ($name, $meteoId) {
+        $sql = 'INSERT INTO duty (name, meteo_id) VALUES (:name, :meteo_id)';
         $stmt = $this->pdo->prepare($sql);
-        $data = array(':name' => $name);
+        $data = array(':name' => $name, ':meteo_id' => $meteoId);
+        $result = $stmt->execute($data);
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Добавление записи метеоданных.
+     * @param $meteo Метеоданные.
+     * @return Идентификатор добавленной записи в таблице meteo.
+     */
+    public function addMeteoData ($meteo) {
+        $sql = 'INSERT INTO meteo (' . $this->getInsertedFieldsList($meteo, false) . ') ' .
+               'VALUES (' . $this->getInsertedFieldsList($meteo, true) . ')';
+        $stmt = $this->pdo->prepare($sql);
+        $data = $this->getInsertedValuesList($meteo);
         $result = $stmt->execute($data);
         return $this->pdo->lastInsertId();
     }
